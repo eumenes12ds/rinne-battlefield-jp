@@ -11,7 +11,7 @@
  */
 (function () {
     'use strict';
-    var STATUS_BAR_VERSION = '1.1.0-JP-inline';
+    var STATUS_BAR_VERSION = '1.1.1-JP-inline';
     try { console.log('%c[主神端末] ⚡ 輪廻端末 v2 接続中...', 'color:#8f9fff;font-weight:bold'); } catch (e) {}
 
     /* ===== 1. 親ウィンドウへのリダイレクト ===== */
@@ -1874,6 +1874,49 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     var inlinePanel = null;
     var inlineObserver = null;
     var inlineMountFrame = 0;
+    function fitStatusDialog() {
+        var modal = document.getElementById('samsara-modal');
+        if (!modal || !modal.classList.contains('open')) return;
+        var viewport = GS_PARENT.visualViewport;
+        var top = viewport ? viewport.offsetTop : 0;
+        var bottom = top + (viewport ? viewport.height : GS_PARENT.innerHeight);
+        var header = document.getElementById('library-chat-header');
+        var composer = document.getElementById('send_form');
+        if (header && header.getClientRects().length) {
+            var head = header.getBoundingClientRect();
+            if (head.height > 0 && head.top <= top + 8) top = Math.max(top, head.bottom);
+        }
+        if (composer && composer.getClientRects().length) {
+            var input = composer.getBoundingClientRect();
+            if (input.height > 0 && input.top < bottom && input.top > top + 120) bottom = Math.min(bottom, input.top);
+        }
+        // ST の transform が固定要素の基準を変えても、可視領域に合わせる。
+        modal.style.top = '0px';
+        var origin = modal.getBoundingClientRect().top;
+        modal.style.top = (top - origin) + 'px';
+        modal.style.height = Math.max(0, bottom - top) + 'px';
+    }
+    function observeStatusDialog() {
+        var viewport = GS_PARENT.visualViewport;
+        GS_PARENT.addEventListener('resize', fitStatusDialog);
+        if (viewport) {
+            viewport.addEventListener('resize', fitStatusDialog);
+            viewport.addEventListener('scroll', fitStatusDialog);
+        }
+        var observer = new GS_PARENT.ResizeObserver(fitStatusDialog);
+        ['library-chat-header', 'send_form'].forEach(function(id) {
+            var element = document.getElementById(id);
+            if (element) observer.observe(element);
+        });
+        trackStatusBarSubscription({stop: function() {
+            GS_PARENT.removeEventListener('resize', fitStatusDialog);
+            if (viewport) {
+                viewport.removeEventListener('resize', fitStatusDialog);
+                viewport.removeEventListener('scroll', fitStatusDialog);
+            }
+            observer.disconnect();
+        }});
+    }
     function findInlineStatusTarget() {
         try {
             if (GS_PARENT.kiosk && GS_PARENT.kiosk.getState().mode !== 'playing') return null;
@@ -1933,7 +1976,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var portrait = document.createElement('div'); portrait.id = 'samsara-portrait-viewer';
         portrait.innerHTML = '<img id="sam-pv-img" alt=""><div id="sam-pv-label"></div>'; document.body.appendChild(portrait);
         STATUS_BAR_RUNTIME.nodes = [panel, parking, modal, portrait];
-        bindUIEvents(); bindPortraitEvents(); observeInlineStatus(); mountInlineStatus();
+        bindUIEvents(); bindPortraitEvents(); observeInlineStatus(); mountInlineStatus(); observeStatusDialog();
     }
 
     /* ===== 13. ダイアログ ===== */
@@ -1944,6 +1987,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         $m.html('<div class="sam-modal-box"><div class="sam-modal-head"><span>'+esc(title)+'</span><span class="sam-modal-close">✕</span></div><div class="sam-modal-body">'+bodyHtml+'</div></div>');
         $m[0].scrollTop = 0;
         $m.addClass('open');
+        fitStatusDialog();
         $m.off('click.samModal').on("click.samModal.rinneInlineStatus", '.sam-modal-close', closeModal);
         $m.off('click.samModalBg');
         if (!noBgClose) $m.on("click.samModalBg.rinneInlineStatus", function(e) { if (e.target === this) closeModal(); });

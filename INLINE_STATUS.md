@@ -4,6 +4,8 @@ The terminal is displayed once, after the latest assistant message body, includi
 
 The original tabs, detail dialogs, edit operations and MVU readers/writers are retained. The terminal follows page scrolling, uses a wrapping horizontal tab bar and expands to its content height. There is no floating ball, drag handler, close control or saved open-state requirement. Detail dialogs remain dialogs.
 
+Dialogs use the visible viewport between the host navigation and composer. Their close control remains reachable when the header, viewport or keyboard changes; dialog resize subscriptions are removed with the owning runtime. This was added after actual 8090 acceptance exposed a header overlap absent from the initial isolated host fixture.
+
 Message rendering, swipes, deletion and MVU updates keep the single terminal attached to the current message. Runtime disposal disconnects the observer, cancels refresh work, unsubscribes events and removes only that instance's DOM. All delegated jQuery listeners share an instance cleanup namespace. A retired instance does not remove a replacement instance.
 
 The character-creation greeting hides the update-mode explanation while retaining automatic main-only synchronization. `主AI追従出力` enforcement, stable preset identifiers and worldbook linkage are unchanged.
