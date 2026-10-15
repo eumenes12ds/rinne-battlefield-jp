@@ -108,7 +108,7 @@ $(async () => {
         await chat_level_transition;
         await stopAll(chat_level_stop_list);
         await stopAll(stop_list);
-        registerAsUniqueScript('MVU变量框架').unregister();
+        registerAsUniqueScript("MVU変数フレームワーク").unregister();
     });
 });
 

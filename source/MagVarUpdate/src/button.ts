@@ -1,9 +1,6 @@
+import { migrateMvuData } from '@/card_protocol';
 import { createEmptyGameData, loadInitVarData } from '@/function/initvar/variable_init';
-import { isExtraModelSupported } from '@/function/is_extra_model_supported';
-import { isFunctionCallingSupported } from '@/function/is_function_calling_supported';
 import { cleanUpMetadata, reconcileAndApplySchema } from '@/function/schema';
-import { onMessageReceived } from '@/function/update/on_message_received';
-import { isPiMultiproviderEnabled } from '@/function/update/pi/feature_flag';
 import { handleVariablesInMessage, updateVariables } from '@/function/update_variables';
 import { tr, type MessageKey } from '@/i18n';
 import { useDataStore } from '@/store';
@@ -242,7 +239,7 @@ export const buttons: Button[] = [
             // @ts-expect-error 该函数可用
             await setChatMessage({}, message_id);
 
-            if (useDataStore().effective_settings.兼容性.更新到聊天变量) {
+            if (useDataStore().effective_settings.互換性.チャット変数に更新) {
                 await replaceVariables(merged_data, { type: 'chat' });
             }
 
@@ -351,10 +348,10 @@ export const buttons: Button[] = [
             //进行重演
             //这个变量将会在每次重演的过程一直更新。
             const recur_variable_data = klona(
-                getVariables({
+                migrateMvuData(getVariables({
                     type: 'message',
                     message_id: recur_intial_message_id,
-                })
+                }))
             );
             if (
                 recur_variable_data === undefined ||
@@ -430,119 +427,13 @@ export const buttons: Button[] = [
             );
         },
     },
-    {
-        name: '追加モデルの解析を再試行',
-        label_key: 'panel.button.retryExtraModelParsing',
-        /** 按所选来源校验重试入口；Pi 使用自身能力预检，旧来源继续检查酒馆助手工具支持。 */
-        function: async () => {
-            const store = useDataStore();
-            if (store.effective_settings.更新方式 === '随AI输出') {
-                toastr.info(
-                    tr('runtime.button.extraModelNotEnabled'),
-                    tr('runtime.button.extraModelRetryTitle'),
-                    {
-                        timeOut: 3000,
-                    }
-                );
-                return;
-            } else if (
-                store.settings.额外模型解析配置.模型来源 === '更多' &&
-                !isPiMultiproviderEnabled()
-            ) {
-                toastr.info(
-                    tr('runtime.pi.featureDisabled'),
-                    tr('runtime.button.extraModelRetryTitle'),
-                    { timeOut: 3000 }
-                );
-                return;
-            } else if (
-                store.settings.额外模型解析配置.应答格式 === '工具调用' &&
-                store.settings.额外模型解析配置.模型来源 !== '更多' &&
-                !isFunctionCallingSupported()
-            ) {
-                toastr.info(
-                    tr('runtime.button.extraModelToolCallingUnsupported'),
-                    tr('runtime.button.extraModelRetryTitle'),
-                    {
-                        timeOut: 3000,
-                    }
-                );
-                return;
-            } else if (!(await isExtraModelSupported())) {
-                toastr.info(
-                    tr('runtime.button.extraModelUnsupportedByCard'),
-                    tr('runtime.button.extraModelRetryTitle'),
-                    {
-                        timeOut: 3000,
-                    }
-                );
-                return;
-            }
-            const last_msg = getLastMessageId();
-            const current_chatmsg = getChatMessages(last_msg).at(-1);
-            const current_chat_content = current_chatmsg?.message ?? '';
-            const begin_pos = current_chat_content.lastIndexOf('<UpdateVariable>');
-            if (begin_pos >= 0) {
-                //裁剪掉已有的变量更新块
-                const end_pos = current_chat_content.lastIndexOf('</UpdateVariable>');
-                let filtered_string = '';
-                if (end_pos === -1) {
-                    //没有找到，裁剪掉后面的所有内容
-                    filtered_string = current_chat_content.slice(0, begin_pos);
-                } else {
-                    //找到了，还需要拼接 </UpdateVariable> 后的内容
-                    filtered_string =
-                        current_chat_content.slice(0, begin_pos) +
-                        current_chat_content.slice(end_pos + 17);
-                }
-                //更新聊天记录
-                await setChatMessages(
-                    [
-                        {
-                            message_id: last_msg,
-                            message: filtered_string,
-                        },
-                    ],
-                    {
-                        refresh: 'none',
-                    }
-                );
-                //需要将当前楼层的变量重置为上一层的样子，才能保证在重试时发出的内容是对的。
-                //不能直接删除，因为世界书条目中会取当前楼层的变量。
-                const last_valid_msg = getLastValidMessageId(last_msg);
-                if (last_valid_msg !== -1) {
-                    const last_variable_data = klona(
-                        getVariables({
-                            type: 'message',
-                            message_id: last_valid_msg,
-                        })
-                    );
-                    //还原上一次更新的变量，如果有
-                    await updateVariablesWith(
-                        variables => {
-                            _.set(variables, `stat_data`, last_variable_data?.stat_data);
-                            _.set(variables, `delta_data`, last_variable_data?.delta_data);
-                            _.set(variables, `display_data`, last_variable_data?.display_data);
-                            _.set(variables, `schema`, last_variable_data?.schema);
-                            return variables;
-                        },
-                        { type: 'message', message_id: last_msg }
-                    );
-                }
-            }
-            await onMessageReceived(last_msg, { force: true });
-            toastr.info(
-                tr('runtime.button.extraModelParsingCompleted'),
-                tr('runtime.button.extraModelRetryTitle')
-            );
-        },
-    },
+    
     {
         name: '古い階層の変数をクリア',
         label_key: 'panel.button.clearOldFloorVariables',
         is_legacy: true,
         function: async () => {
-            const snapshot_interval = useDataStore().settings.自动清理变量.快照保留间隔;
+            const snapshot_interval = useDataStore().settings.自動クリーンアップ変数.スナップショット保持間隔;
             const result = (await SillyTavern.callGenericPopup(
                 tr('runtime.button.cleanupPrompt', { interval: snapshot_interval }),
                 SillyTavern.POPUP_TYPE.INPUT,

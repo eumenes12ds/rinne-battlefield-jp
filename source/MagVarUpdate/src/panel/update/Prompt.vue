@@ -14,7 +14,7 @@
                 <OverrideBadge v-if="has_active_character_whitelist" kind="additive" />
             </template>
             <input
-                v-model="store.settings.额外模型解析配置.世界书条目白名单正则"
+                v-model="store.settings.追加モデル解析設定.ワールドブックエントリホワイトリスト正規表現"
                 type="text"
                 class="text_pole"
                 :placeholder="t('panel.prompt.whitelistPlaceholder', { or: '|' })"
@@ -36,7 +36,7 @@
                 <OverrideBadge v-if="has_active_character_blacklist" kind="additive" />
             </template>
             <input
-                v-model="store.settings.额外模型解析配置.世界书条目黑名单正则"
+                v-model="store.settings.追加モデル解析設定.ワールドブックエントリブラックリスト正規表現"
                 type="text"
                 class="text_pole"
                 :placeholder="t('panel.prompt.blacklistPlaceholder', { or: '|' })"
@@ -75,22 +75,22 @@ function getRegexError(value: string) {
 }
 
 const whitelist_regex_error = computed(() =>
-    getRegexError(store.settings.额外模型解析配置.世界书条目白名单正则)
+    getRegexError(store.settings.追加モデル解析設定.ワールドブックエントリホワイトリスト正規表現)
 );
 const blacklist_regex_error = computed(() =>
-    getRegexError(store.settings.额外模型解析配置.世界书条目黑名单正则)
+    getRegexError(store.settings.追加モデル解析設定.ワールドブックエントリブラックリスト正規表現)
 );
 const has_active_character_whitelist = computed(() => {
-    const value = store.get_character_settings_override('额外模型解析配置.世界书条目白名单正则');
+    const value = store.get_character_settings_override("追加モデル解析設定.ワールドブックエントリホワイトリスト正規表現");
     return typeof value === 'string' && compileEntryCommentRegex(value).regex !== undefined;
 });
 const has_active_character_blacklist = computed(() => {
-    const value = store.get_character_settings_override('额外模型解析配置.世界书条目黑名单正则');
+    const value = store.get_character_settings_override("追加モデル解析設定.ワールドブックエントリブラックリスト正規表現");
     return typeof value === 'string' && compileEntryCommentRegex(value).regex !== undefined;
 });
 
 function showLastFilteredEntriesPopup() {
-    const result = store.runtimes.上次世界书条目过滤结果;
+    const result = store.runtimes.前回の世界書エントリー選別結果;
     const content = document.createElement('div');
     const heading = document.createElement('h3');
     heading.textContent = t('panel.prompt.filtered.title');
@@ -171,9 +171,9 @@ function getLoreLabel(lore: string): string {
 }
 
 function getReasonLabel(reason: string): string {
-    return reason === '白名单'
+    return reason === "許可リスト"
         ? t('panel.prompt.filtered.whitelistReason')
-        : reason === '黑名单'
+        : reason === "拒否リスト"
           ? t('panel.prompt.filtered.blacklistReason')
           : reason;
 }
@@ -187,15 +187,15 @@ function getFilterSources(entry: unknown): string {
     const labels = sources
         .filter((source): source is string => typeof source === 'string')
         .map(source => {
-            if (source === '用户全局配置') {
+            if (source === "ユーザー共通設定") {
                 return t('panel.prompt.filtered.globalConfig');
             }
-            if (source === '角色卡配置') {
+            if (source === "キャラクターカード設定") {
                 return t('panel.prompt.filtered.characterConfig');
             }
             return source;
         });
-    return labels.length > 0 ? labels.join(locale.value === 'zh-CN' ? '、' : ', ') : '—';
+    return labels.length > 0 ? labels.join(locale.value === "ja-JP" ? '、' : ', ') : '—';
 }
 </script>
 

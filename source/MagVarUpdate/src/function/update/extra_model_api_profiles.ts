@@ -9,21 +9,21 @@ import { resolvePiCredentialReferences, type PiCredentialReferences } from './pi
 export type ExtraModelApiProfileBackend = 'custom' | 'pi';
 
 export type ExtraModelApiRequestFields = {
-    破限方案: '使用内置破限' | '使用当前预设' | '使用其他预设';
-    其他预设名称: string;
-    随机头部: boolean;
-    应答格式: '聊天消息' | '工具调用' | '格式化输出' | '格式化输出(v4兼容)';
-    关闭thinking: boolean;
-    兼容假流式: boolean;
+    脱獄方案: "内蔵脱獄を使用" | "現在のプリセットを使用" | "その他のプリセットを使用";
+    その他プリセット名: string;
+    ランダムヘッダー: boolean;
+    応答フォーマット: "チャットメッセージ" | "ツール呼び出し" | "フォーマット出力" | "フォーマット出力(v4互換)";
+    thinking無効: boolean;
+    疑似ストリーミング互換: boolean;
 };
 
 const API_REQUEST_FIELDS = [
-    '破限方案',
-    '其他预设名称',
-    '随机头部',
-    '应答格式',
-    '关闭thinking',
-    '兼容假流式',
+    "脱獄方案",
+    "その他プリセット名",
+    "ランダムヘッダー",
+    "応答フォーマット",
+    "thinking無効",
+    "疑似ストリーミング互換",
 ] as const satisfies readonly (keyof ExtraModelApiRequestFields)[];
 
 /** 提取已配置的请求选项，保留缺失字段，供方案保存和旧方案补全使用。 */
@@ -61,23 +61,23 @@ export type ExtraModelPiSettings = ExtraModelPiConnectionFields & {
 
 export type ExtraModelApiProfile = Partial<ExtraModelApiRequestFields> & {
     [key: string]: unknown;
-    名称: string;
+    名前: string;
     backend?: ExtraModelApiProfileBackend;
-    api地址: string;
-    密钥: string;
-    模型名称: string;
+    apiアドレス: string;
+    APIキー: string;
+    モデル名: string;
     pi?: ExtraModelPiConnectionFields;
 };
 
 export type ExtraModelApiProfileFields = Partial<ExtraModelApiRequestFields> & {
-    模型来源?: '与插头相同' | '自定义' | '更多';
-    api地址: string;
-    密钥: string;
+    モデル出典?: "プラグと同じ" | "カスタム" | "その他";
+    apiアドレス: string;
+    APIキー: string;
     customApiKey?: string;
-    模型名称: string;
+    モデル名: string;
     pi?: ExtraModelPiSettings;
-    api方案列表: ExtraModelApiProfile[];
-    当前api方案: string;
+    apiプロファイル一覧: ExtraModelApiProfile[];
+    現在のapiプロファイル: string;
 };
 
 export const DEFAULT_EXTRA_MODEL_API_PROFILE_NAME = '默认';
@@ -111,7 +111,7 @@ export function normalizeExtraModelPiProfileContextWindow(value: unknown): numbe
 function getExtraModelApiProfileBackend(
     config: ExtraModelApiProfileFields
 ): ExtraModelApiProfileBackend {
-    return config.模型来源 === '更多' ? 'pi' : 'custom';
+    return config.モデル出典 === "その他" ? 'pi' : 'custom';
 }
 
 /**
@@ -222,7 +222,7 @@ function hasValidPiApiKeyTarget(
 function normalizeExtraModelApiProfile(profile: ExtraModelApiProfile): ExtraModelApiProfile {
     const cloned = klona(profile);
     delete cloned.customApiKey;
-    cloned.名称 = normalizeExtraModelApiProfileName(cloned.名称);
+    cloned.名前 = normalizeExtraModelApiProfileName(cloned.名前);
     const backend: ExtraModelApiProfileBackend = cloned.backend === 'pi' ? 'pi' : 'custom';
     cloned.backend = backend;
 
@@ -234,13 +234,13 @@ function normalizeExtraModelApiProfile(profile: ExtraModelApiProfile): ExtraMode
     if (backend === 'pi') {
         // These legacy top-level fields belong to the hidden Custom source. Pi owns its endpoint
         // and model inside `pi`, so importing or saving them here must never overwrite that cache.
-        cloned.api地址 = '';
-        cloned.模型名称 = '';
+        cloned.apiアドレス = '';
+        cloned.モデル名 = '';
 
         // A profile-level key has wire meaning only for a registry-backed, normalizable API-key
         // target. OAuth and malformed/future targets retain metadata but never a dormant secret.
         if (!hasValidPiApiKeyTarget(cloned.pi)) {
-            cloned.密钥 = '';
+            cloned.APIキー = '';
         }
     }
     return cloned;
@@ -254,10 +254,10 @@ function normalizeExtraModelApiProfileList(
     const normalized_profiles: ExtraModelApiProfile[] = [];
     for (const profile of profiles) {
         const normalized_profile = normalizeExtraModelApiProfile(profile);
-        if (normalized_profile.名称 === '' || names.has(normalized_profile.名称)) {
+        if (normalized_profile.名前 === '' || names.has(normalized_profile.名前)) {
             continue;
         }
-        names.add(normalized_profile.名称);
+        names.add(normalized_profile.名前);
         normalized_profiles.push(normalized_profile);
     }
     return normalized_profiles;
@@ -310,13 +310,13 @@ export function extractExtraModelApiProfileFields(
         throw new Error(tr('runtime.apiProfile.piConfigRequired'));
     }
     return {
-        名称:
-            normalizeExtraModelApiProfileName(config.当前api方案) ||
+        名前:
+            normalizeExtraModelApiProfileName(config.現在のapiプロファイル) ||
             DEFAULT_EXTRA_MODEL_API_PROFILE_NAME,
         backend,
-        api地址: backend === 'pi' ? '' : config.api地址,
-        密钥: backend === 'pi' && !hasValidPiApiKeyTarget(pi_snapshot) ? '' : config.密钥,
-        模型名称: backend === 'pi' ? '' : config.模型名称,
+        apiアドレス: backend === 'pi' ? '' : config.apiアドレス,
+        APIキー: backend === 'pi' && !hasValidPiApiKeyTarget(pi_snapshot) ? '' : config.APIキー,
+        モデル名: backend === 'pi' ? '' : config.モデル名,
         ...extractApiRequestFields(config),
         ...(backend === 'pi' && pi_snapshot !== undefined ? { pi: pi_snapshot } : {}),
     };
@@ -334,13 +334,13 @@ export function applyExtraModelApiProfile(
     const result: ExtraModelApiProfileFields = {
         ...config,
         ...extractApiRequestFields(normalized_profile),
-        模型来源: normalized_profile.backend === 'pi' ? '更多' : '自定义',
-        密钥: normalized_profile.密钥,
-        当前api方案: normalized_profile.名称,
+        モデル出典: normalized_profile.backend === 'pi' ? "その他" : "カスタム",
+        APIキー: normalized_profile.APIキー,
+        現在のapiプロファイル: normalized_profile.名前,
         ...(normalized_profile.backend === 'custom'
             ? {
-                  api地址: normalized_profile.api地址,
-                  模型名称: normalized_profile.模型名称,
+                  apiアドレス: normalized_profile.apiアドレス,
+                  モデル名: normalized_profile.モデル名,
               }
             : {}),
     };
@@ -351,7 +351,7 @@ export function applyExtraModelApiProfile(
             // Never combine a malformed Pi profile's key with the previously active provider,
             // endpoint, or model. Preserve credentials, but disable the connection until the
             // user repairs and saves a complete snapshot.
-            result.密钥 = '';
+            result.APIキー = '';
             if (config.pi !== undefined) {
                 result.pi = clearPiConnectionFields(config.pi);
             }
@@ -365,7 +365,7 @@ export function upsertExtraModelApiProfile(
     profiles: ExtraModelApiProfile[],
     profile: ExtraModelApiProfile
 ): ExtraModelApiProfile[] {
-    const normalized_name = normalizeExtraModelApiProfileName(profile.名称);
+    const normalized_name = normalizeExtraModelApiProfileName(profile.名前);
     if (!normalized_name) {
         throw new Error(tr('runtime.apiProfile.nameRequired'));
     }
@@ -373,9 +373,9 @@ export function upsertExtraModelApiProfile(
     const normalized_profiles = normalizeExtraModelApiProfileList(profiles);
     const next_profile = {
         ...normalizeExtraModelApiProfile(profile),
-        名称: normalized_name,
+        名前: normalized_name,
     };
-    const existing_index = normalized_profiles.findIndex(item => item.名称 === normalized_name);
+    const existing_index = normalized_profiles.findIndex(item => item.名前 === normalized_name);
     if (existing_index === -1) {
         return [...normalized_profiles, next_profile];
     }
@@ -395,7 +395,7 @@ export function removeExtraModelApiProfile(
 ): ExtraModelApiProfile[] {
     const normalized_name = normalizeExtraModelApiProfileName(profile_name);
     return normalizeExtraModelApiProfileList(profiles).filter(
-        profile => profile.名称 !== normalized_name
+        profile => profile.名前 !== normalized_name
     );
 }
 
@@ -406,19 +406,19 @@ export function hasExtraModelApiProfile(
 ): boolean {
     const normalized_name = normalizeExtraModelApiProfileName(profile_name);
     return normalizeExtraModelApiProfileList(profiles).some(
-        profile => profile.名称 === normalized_name
+        profile => profile.名前 === normalized_name
     );
 }
 
 /** 比较活动方案与当前连接、密钥及请求选项，判断是否存在未保存修改。 */
 export function isActiveExtraModelApiProfileDirty(config: ExtraModelApiProfileFields): boolean {
-    const active_name = normalizeExtraModelApiProfileName(config.当前api方案);
+    const active_name = normalizeExtraModelApiProfileName(config.現在のapiプロファイル);
     if (!active_name) {
         return false;
     }
 
-    const profile = normalizeExtraModelApiProfileList(config.api方案列表).find(
-        item => item.名称 === active_name
+    const profile = normalizeExtraModelApiProfileList(config.apiプロファイル一覧).find(
+        item => item.名前 === active_name
     );
     if (!profile) {
         return false;
@@ -426,7 +426,7 @@ export function isActiveExtraModelApiProfileDirty(config: ExtraModelApiProfileFi
 
     const normalized_profile = normalizeExtraModelApiProfile(profile);
     const backend = getExtraModelApiProfileBackend(config);
-    if (normalized_profile.backend !== backend || normalized_profile.密钥 !== config.密钥) {
+    if (normalized_profile.backend !== backend || normalized_profile.APIキー !== config.APIキー) {
         return true;
     }
 
@@ -442,8 +442,8 @@ export function isActiveExtraModelApiProfileDirty(config: ExtraModelApiProfileFi
 
     if (
         backend === 'custom' &&
-        (normalized_profile.api地址 !== config.api地址 ||
-            normalized_profile.模型名称 !== config.模型名称)
+        (normalized_profile.apiアドレス !== config.apiアドレス ||
+            normalized_profile.モデル名 !== config.モデル名)
     ) {
         return true;
     }
@@ -457,14 +457,14 @@ export function isActiveExtraModelApiProfileDirty(config: ExtraModelApiProfileFi
 export function clearUnboundExtraModelApiProfileFields(
     config: ExtraModelApiProfileFields
 ): ExtraModelApiProfileFields {
-    const preserve_hidden_custom_fields = config.模型来源 === '更多';
+    const preserve_hidden_custom_fields = config.モデル出典 === "その他";
     return {
         ...config,
-        当前api方案: '',
-        api地址: preserve_hidden_custom_fields ? config.api地址 : '',
-        密钥: '',
-        模型名称: preserve_hidden_custom_fields ? config.模型名称 : '',
-        ...(config.模型来源 === '更多' && config.pi !== undefined
+        現在のapiプロファイル: '',
+        apiアドレス: preserve_hidden_custom_fields ? config.apiアドレス : '',
+        APIキー: '',
+        モデル名: preserve_hidden_custom_fields ? config.モデル名 : '',
+        ...(config.モデル出典 === "その他" && config.pi !== undefined
             ? { pi: clearPiConnectionFields(config.pi) }
             : {}),
     };
@@ -476,31 +476,31 @@ export function reconcileExtraModelApiProfileSelection<T extends ExtraModelApiPr
 ): T {
     const normalized_config = {
         ...config,
-        api方案列表: normalizeExtraModelApiProfileList(config.api方案列表),
-        当前api方案: normalizeExtraModelApiProfileName(config.当前api方案),
+        apiプロファイル一覧: normalizeExtraModelApiProfileList(config.apiプロファイル一覧),
+        現在のapiプロファイル: normalizeExtraModelApiProfileName(config.現在のapiプロファイル),
     } as T;
-    const active_name = normalized_config.当前api方案;
+    const active_name = normalized_config.現在のapiプロファイル;
     if (!active_name) {
         return normalized_config;
     }
 
-    if (hasExtraModelApiProfile(normalized_config.api方案列表, active_name)) {
+    if (hasExtraModelApiProfile(normalized_config.apiプロファイル一覧, active_name)) {
         return normalized_config;
     }
 
-    if (normalized_config.api方案列表.length === 0) {
+    if (normalized_config.apiプロファイル一覧.length === 0) {
         return {
             ...normalized_config,
-            当前api方案: '',
+            現在のapiプロファイル: '',
         };
     }
 
     return applyExtraModelApiProfile(
         {
             ...normalized_config,
-            api方案列表: normalized_config.api方案列表,
+            apiプロファイル一覧: normalized_config.apiプロファイル一覧,
         },
-        normalized_config.api方案列表[0]
+        normalized_config.apiプロファイル一覧[0]
     ) as T;
 }
 
@@ -512,24 +512,24 @@ export function deleteActiveExtraModelApiProfile(
     const normalized_name = normalizeExtraModelApiProfileName(profile_name);
     if (
         normalized_name === '' ||
-        normalized_name !== normalizeExtraModelApiProfileName(config.当前api方案) ||
-        !hasExtraModelApiProfile(config.api方案列表, normalized_name)
+        normalized_name !== normalizeExtraModelApiProfileName(config.現在のapiプロファイル) ||
+        !hasExtraModelApiProfile(config.apiプロファイル一覧, normalized_name)
     ) {
         return config;
     }
 
-    const remaining = removeExtraModelApiProfile(config.api方案列表, profile_name);
+    const remaining = removeExtraModelApiProfile(config.apiプロファイル一覧, profile_name);
     if (remaining.length === 0) {
         return {
             ...clearUnboundExtraModelApiProfileFields(config),
-            api方案列表: [],
+            apiプロファイル一覧: [],
         };
     }
 
     return applyExtraModelApiProfile(
         {
             ...config,
-            api方案列表: remaining,
+            apiプロファイル一覧: remaining,
         },
         remaining[0]
     );
@@ -549,8 +549,8 @@ export async function deleteActiveExtraModelApiProfileWithConfirmation(
     const normalized_name = normalizeExtraModelApiProfileName(profile_name);
     if (
         normalized_name === '' ||
-        normalized_name !== normalizeExtraModelApiProfileName(config.当前api方案) ||
-        !hasExtraModelApiProfile(config.api方案列表, normalized_name)
+        normalized_name !== normalizeExtraModelApiProfileName(config.現在のapiプロファイル) ||
+        !hasExtraModelApiProfile(config.apiプロファイル一覧, normalized_name)
     ) {
         return config;
     }
@@ -586,8 +586,8 @@ export function migrateExtraModelApiProfiles<T extends ExtraModelApiProfileField
               }),
         // Old profiles only stored connection fields. Copy the current request options into
         // every profile once; saved per-profile values must survive subsequent loads/imports.
-        api方案列表: normalizeExtraModelApiProfileList(
-            config.api方案列表.map(profile => ({
+        apiプロファイル一覧: normalizeExtraModelApiProfileList(
+            config.apiプロファイル一覧.map(profile => ({
                 ...profile,
                 ...(profile.backend === 'pi' && profile.pi !== undefined
                     ? {
@@ -604,35 +604,35 @@ export function migrateExtraModelApiProfiles<T extends ExtraModelApiProfileField
                 ...extractApiRequestFields(profile),
             }))
         ),
-        当前api方案: normalizeExtraModelApiProfileName(config.当前api方案),
+        現在のapiプロファイル: normalizeExtraModelApiProfileName(config.現在のapiプロファイル),
     } as T;
 
     // The shared root key has wire meaning only for a registry-backed, normalizable API-key target.
     // Clear stale imported values even when there is no active profile (and before legacy-profile
     // detection), while retaining the source-specific Custom/API-key caches and OAuth store.
     if (
-        migrated.模型来源 === '更多' &&
+        migrated.モデル出典 === "その他" &&
         resolvePiConnectionApiKeyScope(migrated.pi) === '' &&
-        migrated.密钥 !== ''
+        migrated.APIキー !== ''
     ) {
         migrated = {
             ...migrated,
-            密钥: '',
+            APIキー: '',
         } as T;
     }
 
-    const active_profile = migrated.api方案列表.find(
-        profile => profile.名称 === migrated.当前api方案
+    const active_profile = migrated.apiプロファイル一覧.find(
+        profile => profile.名前 === migrated.現在のapiプロファイル
     );
     if (active_profile?.backend === 'pi' && !hasConfiguredPiConnectionSnapshot(active_profile.pi)) {
         migrated = applyExtraModelApiProfile(migrated, active_profile) as T;
     }
 
-    if (migrated.api方案列表.length === 0) {
+    if (migrated.apiプロファイル一覧.length === 0) {
         const has_legacy_custom_api =
-            migrated.api地址.trim().length > 0 ||
-            migrated.密钥.trim().length > 0 ||
-            migrated.模型名称.trim().length > 0;
+            migrated.apiアドレス.trim().length > 0 ||
+            migrated.APIキー.trim().length > 0 ||
+            migrated.モデル名.trim().length > 0;
         if (has_legacy_custom_api) {
             // A newly selected but not yet configured Pi source may still carry legacy root
             // Custom fields. Do not turn those unrelated fields into a sendable Pi profile.
@@ -645,13 +645,13 @@ export function migrateExtraModelApiProfiles<T extends ExtraModelApiProfileField
             const profile = extractExtraModelApiProfileFields(migrated);
             migrated = {
                 ...migrated,
-                api方案列表: [
+                apiプロファイル一覧: [
                     {
                         ...profile,
-                        名称: DEFAULT_EXTRA_MODEL_API_PROFILE_NAME,
+                        名前: DEFAULT_EXTRA_MODEL_API_PROFILE_NAME,
                     },
                 ],
-                当前api方案: migrated.当前api方案 || DEFAULT_EXTRA_MODEL_API_PROFILE_NAME,
+                現在のapiプロファイル: migrated.現在のapiプロファイル || DEFAULT_EXTRA_MODEL_API_PROFILE_NAME,
             };
         }
     }
@@ -665,8 +665,8 @@ export function selectExtraModelApiProfile(
     profile_name: string
 ): ExtraModelApiProfileFields {
     const normalized_name = normalizeExtraModelApiProfileName(profile_name);
-    const normalized_profiles = normalizeExtraModelApiProfileList(config.api方案列表);
-    const profile = normalized_profiles.find(item => item.名称 === normalized_name);
+    const normalized_profiles = normalizeExtraModelApiProfileList(config.apiプロファイル一覧);
+    const profile = normalized_profiles.find(item => item.名前 === normalized_name);
     if (!profile) {
         throw new Error(
             tr('runtime.apiProfile.notFound', {
@@ -677,7 +677,7 @@ export function selectExtraModelApiProfile(
     return applyExtraModelApiProfile(
         {
             ...config,
-            api方案列表: normalized_profiles,
+            apiプロファイル一覧: normalized_profiles,
         },
         profile
     );
@@ -688,14 +688,14 @@ export function saveCurrentExtraModelApiProfile(
     config: ExtraModelApiProfileFields,
     profile_name?: string
 ): ExtraModelApiProfileFields {
-    const target_name = normalizeExtraModelApiProfileName(profile_name ?? config.当前api方案);
+    const target_name = normalizeExtraModelApiProfileName(profile_name ?? config.現在のapiプロファイル);
     if (!target_name) {
         throw new Error(tr('runtime.apiProfile.selectOrEnterName'));
     }
 
     if (
-        hasExtraModelApiProfile(config.api方案列表, target_name) &&
-        normalizeExtraModelApiProfileName(config.当前api方案) !== target_name
+        hasExtraModelApiProfile(config.apiプロファイル一覧, target_name) &&
+        normalizeExtraModelApiProfileName(config.現在のapiプロファイル) !== target_name
     ) {
         throw new Error(
             tr('runtime.apiProfile.alreadyExists', {
@@ -704,16 +704,16 @@ export function saveCurrentExtraModelApiProfile(
         );
     }
 
-    const normalized_profiles = normalizeExtraModelApiProfileList(config.api方案列表);
+    const normalized_profiles = normalizeExtraModelApiProfileList(config.apiプロファイル一覧);
     const source_profile = normalized_profiles.find(
-        item => item.名称 === normalizeExtraModelApiProfileName(config.当前api方案)
+        item => item.名前 === normalizeExtraModelApiProfileName(config.現在のapiプロファイル)
     );
     const normalized_source_profile =
         source_profile === undefined ? undefined : normalizeExtraModelApiProfile(source_profile);
     const profile: ExtraModelApiProfile = {
         ...normalized_source_profile,
         ...extractExtraModelApiProfileFields(config),
-        名称: target_name,
+        名前: target_name,
     };
     if (profile.backend !== 'pi') {
         delete profile.pi;
@@ -721,7 +721,7 @@ export function saveCurrentExtraModelApiProfile(
     return applyExtraModelApiProfile(
         {
             ...config,
-            api方案列表: upsertExtraModelApiProfile(normalized_profiles, profile),
+            apiプロファイル一覧: upsertExtraModelApiProfile(normalized_profiles, profile),
         },
         profile
     );
@@ -736,7 +736,7 @@ export function saveAsNewExtraModelApiProfile(
     if (!target_name) {
         throw new Error(tr('runtime.apiProfile.enterNewName'));
     }
-    if (hasExtraModelApiProfile(config.api方案列表, target_name)) {
+    if (hasExtraModelApiProfile(config.apiプロファイル一覧, target_name)) {
         throw new Error(
             tr('runtime.apiProfile.alreadyExists', {
                 name: target_name,

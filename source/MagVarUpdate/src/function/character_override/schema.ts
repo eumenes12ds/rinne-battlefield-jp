@@ -9,19 +9,19 @@ export const CHARACTER_SETTINGS_OVERRIDE_ENTRY_NAME = '[config_override]';
 // loose 模式用于保留未来版本或其他扩展写入的未知配置字段。
 export const CharacterSettingsOverrideSchema = z
     .object({
-        更新方式: z.enum(['随AI输出', '额外模型解析']).optional(),
-        额外模型解析配置: z
+        更新方式: z.enum(["主AI追従出力", "追加モデル解析"]).optional(),
+        追加モデル解析設定: z
             .object({
-                启用自动请求: z.boolean().optional(),
-                世界书条目白名单正则: z.string().optional(),
-                世界书条目黑名单正则: z.string().optional(),
+                自動リクエスト有効: z.boolean().optional(),
+                ワールドブックエントリホワイトリスト正規表現: z.string().optional(),
+                ワールドブックエントリブラックリスト正規表現: z.string().optional(),
             })
             .loose()
             .optional(),
-        兼容性: z
+        互換性: z
             .object({
-                更新到聊天变量: z.boolean().optional(),
-                sendas不视为user消息: z.boolean().optional(),
+                チャット変数に更新: z.boolean().optional(),
+                sendasをuserメッセージとみなさない: z.boolean().optional(),
             })
             .loose()
             .optional(),
@@ -32,11 +32,11 @@ export type CharacterSettingsOverride = z.infer<typeof CharacterSettingsOverride
 
 export type CharacterSettingsOverridePath =
     | '更新方式'
-    | '额外模型解析配置.启用自动请求'
-    | '额外模型解析配置.世界书条目白名单正则'
-    | '额外模型解析配置.世界书条目黑名单正则'
-    | '兼容性.更新到聊天变量'
-    | '兼容性.sendas不视为user消息';
+    | "追加モデル解析設定.自動リクエスト有効"
+    | "追加モデル解析設定.ワールドブックエントリホワイトリスト正規表現"
+    | "追加モデル解析設定.ワールドブックエントリブラックリスト正規表現"
+    | "互換性.チャット変数に更新"
+    | "互換性.sendasをuserメッセージとみなさない";
 
 export type CharacterSettingsOverrideValue = string | boolean | undefined;
 
@@ -64,19 +64,19 @@ export function getCharacterSettingsOverrideValue(
 function removeEmptyKnownValues(draft: CharacterSettingsOverride): CharacterSettingsOverride {
     // “继承全局配置”在文件中表示字段不存在，而不是保存空字符串或空对象。
     const result = klona(draft);
-    const extra_model = result.额外模型解析配置;
+    const extra_model = result.追加モデル解析設定;
     if (extra_model) {
-        for (const key of ['世界书条目白名单正则', '世界书条目黑名单正则'] as const) {
+        for (const key of ["ワールドブックエントリホワイトリスト正規表現", "ワールドブックエントリブラックリスト正規表現"] as const) {
             if (extra_model[key]?.trim() === '') {
                 delete extra_model[key];
             }
         }
         if (Object.keys(extra_model).length === 0) {
-            delete result.额外模型解析配置;
+            delete result.追加モデル解析設定;
         }
     }
-    if (result.兼容性 && Object.keys(result.兼容性).length === 0) {
-        delete result.兼容性;
+    if (result.互換性 && Object.keys(result.互換性).length === 0) {
+        delete result.互換性;
     }
     return result;
 }
@@ -141,7 +141,7 @@ export function recoverCharacterSettingsOverridePassthrough(
     delete recovered.schema;
     delete recovered.更新方式;
 
-    const remove_known_nested_fields = (key: '额外模型解析配置' | '兼容性', fields: string[]) => {
+    const remove_known_nested_fields = (key: "追加モデル解析設定" | "互換性", fields: string[]) => {
         const nested = recovered[key];
         if (!_.isPlainObject(nested)) {
             delete recovered[key];
@@ -153,12 +153,12 @@ export function recoverCharacterSettingsOverridePassthrough(
             delete recovered[key];
         }
     };
-    remove_known_nested_fields('额外模型解析配置', [
-        '启用自动请求',
-        '世界书条目白名单正则',
-        '世界书条目黑名单正则',
+    remove_known_nested_fields("追加モデル解析設定", [
+        "自動リクエスト有効",
+        "ワールドブックエントリホワイトリスト正規表現",
+        "ワールドブックエントリブラックリスト正規表現",
     ]);
-    remove_known_nested_fields('兼容性', ['更新到聊天变量', 'sendas不视为user消息']);
+    remove_known_nested_fields("互換性", ["チャット変数に更新", "sendasをuserメッセージとみなさない"]);
 
     return CharacterSettingsOverrideSchema.parse(recovered);
 }
@@ -177,9 +177,9 @@ export function serializeCharacterSettingsOverride(draft: CharacterSettingsOverr
 export function hasActiveCharacterSettingsOverride(draft: CharacterSettingsOverride): boolean {
     const ordinary_paths: CharacterSettingsOverridePath[] = [
         '更新方式',
-        '额外模型解析配置.启用自动请求',
-        '兼容性.更新到聊天变量',
-        '兼容性.sendas不视为user消息',
+        "追加モデル解析設定.自動リクエスト有効",
+        "互換性.チャット変数に更新",
+        "互換性.sendasをuserメッセージとみなさない",
     ];
     if (ordinary_paths.some(path => hasOwnCharacterSettingsOverride(draft, path))) {
         return true;
@@ -187,9 +187,9 @@ export function hasActiveCharacterSettingsOverride(draft: CharacterSettingsOverr
 
     // 空白或无效正则不会参与过滤，也不应让界面显示为“覆盖中”。
     return (
-        compileEntryCommentRegex(draft.额外模型解析配置?.世界书条目白名单正则 ?? '').regex !==
+        compileEntryCommentRegex(draft.追加モデル解析設定?.ワールドブックエントリホワイトリスト正規表現 ?? '').regex !==
             undefined ||
-        compileEntryCommentRegex(draft.额外模型解析配置?.世界书条目黑名单正则 ?? '').regex !==
+        compileEntryCommentRegex(draft.追加モデル解析設定?.ワールドブックエントリブラックリスト正規表現 ?? '').regex !==
             undefined
     );
 }

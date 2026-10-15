@@ -235,7 +235,7 @@ export function registerFunction() {
             if (!store.should_enable || !store.runtimes.is_function_call_enabled) {
                 return false;
             }
-            return store.settings.额外模型解析配置.应答格式 === '工具调用';
+            return store.settings.追加モデル解析設定.応答フォーマット === "ツール呼び出し";
         },
         action: onVariableUpdatedCall,
         formatMessage: () => '',
@@ -288,8 +288,8 @@ export function registerFunction() {
 export function overrideToolRequest(generate_data: any) {
     const store = useDataStore();
     if (
-        store.effective_settings.更新方式 !== '额外模型解析' ||
-        store.settings.额外模型解析配置.应答格式 !== '工具调用'
+        store.effective_settings.更新方式 !== "追加モデル解析" ||
+        store.settings.追加モデル解析設定.応答フォーマット !== "ツール呼び出し"
     ) {
         return;
     }

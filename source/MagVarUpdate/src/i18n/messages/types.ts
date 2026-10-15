@@ -1,4 +1,4 @@
-export const APP_LOCALES = ['zh-CN', 'en', 'ja'] as const;
+export const APP_LOCALES = ["ja-JP", 'en', 'ja'] as const;
 
 export type AppLocale = (typeof APP_LOCALES)[number];
 

@@ -536,18 +536,10 @@
           <div class="variable-api-mode-head">
               <h2 class="variable-api-mode-title">配 · 変数更新方式</h2>
           </div>
-          <p class="variable-api-mode-intro">パネル変数を誰が更新するかを決めます。選択すると、キャラクター世界書と現在のプリセット内の対応エントリが自動で切り替わります。追加 API のアドレス・Key・モデルは MVU 拡張側で設定してください。</p>
+          <p class="variable-api-mode-intro">主AI追従出力に固定されています。本文と変数更新を同じ応答で処理します。</p>
           <div class="variable-api-mode-grid">
-              <button type="button" class="variable-api-mode-card" data-variable-api-mode="额外API" onclick="chooseVariableApiMode('额外API')">
-                  <div class="variable-api-mode-card-title">追加API出力 <span class="variable-api-mode-badge">推奨</span></div>
-                  <div class="variable-api-mode-desc">独立した追加モデルが変数更新ターンで変数を専用処理し、本文モデルは物語だけを担当します。長文でも安定し、本文が更新指示に汚染されにくくなります。</div>
-                  <div class="variable-api-mode-tags"><span class="variable-api-mode-tag">本文がよりクリーン</span><span class="variable-api-mode-tag">追加モデルの設定が必要</span></div>
-              </button>
-              <button type="button" class="variable-api-mode-card" data-variable-api-mode="随主API" onclick="chooseVariableApiMode('随主API')">
-                  <div class="variable-api-mode-card-title">主AI追従出力 <span class="variable-api-mode-badge">すぐに使える</span></div>
-                  <div class="variable-api-mode-desc">主モデルが物語を語る同じターンで変数更新も出力します。追加モデルの設定は不要ですが、本文と更新指示が同じターンに同居するため、長文では形式エラーが起きやすくなります。</div>
-                  <div class="variable-api-mode-tags"><span class="variable-api-mode-tag">追加設定は不要</span><span class="variable-api-mode-tag">長文で崩れやすい</span></div>
-              </button>
+              
+              
           </div>
           <div class="variable-api-mode-status" id="variable-api-mode-status"></div>
       </section>
@@ -555,11 +547,11 @@
       <h2 class="section-title">基本情報の入力</h2>
                 <div class="grid-2">
                     <div class="form-group"><label>コードネーム / 氏名</label><input type="text" class="form-control" id="f-name" placeholder="キャラクター名を入力..."></div>
-                    <div class="form-group"><label>性別</label><select class="form-control" id="f-gender"><option value="男">男性</option><option value="女">女性</option><option value="扶她">ふたなり</option><option value="男娘">男の娘</option><option value="药娘">薬娘</option><option value="太监">宦官</option><option value="无性别">無性</option></select></div>
+                    <div class="form-group"><label>性別</label><select class="form-control" id="f-gender"><option value="男">男性</option><option value="女">女性</option><option value="ふたなり">ふたなり</option><option value="男の娘">男の娘</option><option value="薬娘">薬娘</option><option value="宦官">宦官</option><option value="無性">無性</option></select></div>
                     <div class="form-group"><label>年齢</label><input type="number" class="form-control" id="f-age" value="20"></div>
                     <div class="form-group"><label>種族</label><input type="text" class="form-control" id="f-race" value="人類" placeholder="例：人類、エルフ..."></div>
                 </div>
-                <div class="form-group"><label>陣営身分 (五類のみ)</label><select class="form-control" id="f-identity" onchange="updateFactionDesc()"><option value="守护者">守護者</option><option value="篡夺者">簒奪者</option><option value="织梦者">夢織り</option><option value="残魂">残魂</option><option value="穿越者">穿越者</option></select></div>
+                <div class="form-group"><label>陣営身分 (五類のみ)</label><select class="form-control" id="f-identity" onchange="updateFactionDesc()"><option value="守護者">守護者</option><option value="簒奪者">簒奪者</option><option value="夢織り">夢織り</option><option value="残魂">残魂</option><option value="転移者">穿越者</option></select></div>
                 <div class="faction-desc" id="faction-desc"></div>
 
                 <div class="attributes-panel">
@@ -756,16 +748,16 @@
 
         // 装備タイプ 0-8
         equipTypes: [
-            {v:0,label:'刀剣類'},{v:1,label:'槍類'},{v:2,label:'棍棒類'},{v:3,label:'機械類'},{v:4,label:'弓弩類'},{v:5,label:'盾類'},{v:6,label:'短刀・匕首'},{v:7,label:'杖・魔導書'},{v:8,label:'聖典・権杖'},{v:9,label:'特殊武器'},
+            {v:0,label:'刀剣類'},{v:1,label:'槍類'},{v:2,label:'棍棒類'},{v:3,label:'機械類'},{v:4,label:'弓弩類'},{v:5,label:'盾類'},{v:6,label:"短刀・短剣"},{v:7,label:'杖・魔導書'},{v:8,label:'聖典・権杖'},{v:9,label:'特殊武器'},
             {v:10,label:'手'},{v:11,label:'頭'},{v:12,label:'胴'},{v:13,label:'脚'},{v:14,label:'靴'},{v:15,label:'マント'},{v:16,label:'アクセサリ'},{v:17,label:'世界の遺物'}
         ],
         sourceTags: ['主神空間','手工造物',"システム生成"],
         skillTypes: [{v:0,label:'アクティブ'},{v:1,label:'パッシブ'},{v:2,label:'特殊'}],
-        itemTypes: ['消費','材料','特殊'],
+        itemTypes: ['消費',"素材",'特殊'],
 
         itemCategories: [
-            { key:'equipment', label:'装備', source:'equipments', subTypes:[{v:0,label:'刀剣類'},{v:1,label:'槍類'},{v:2,label:'棍棒類'},{v:3,label:'機械類'},{v:4,label:'弓弩類'},{v:5,label:'盾類'},{v:6,label:'短刀・匕首'},{v:7,label:'杖・魔導書'},{v:8,label:'聖典・権杖'},{v:9,label:'特殊武器'},{v:10,label:'手'},{v:11,label:'頭'},{v:12,label:'胴'},{v:13,label:'脚'},{v:14,label:'靴'},{v:15,label:'マント'},{v:16,label:'アクセサリ'},{v:17,label:'世界の遺物'}] },
-            { key:'item',      label:'アイテム', source:'items',      subTypes:[{v:'消費',label:'消耗品'},{v:'材料',label:'素材'},{v:'特殊',label:'特殊'}] },
+            { key:'equipment', label:'装備', source:'equipments', subTypes:[{v:0,label:'刀剣類'},{v:1,label:'槍類'},{v:2,label:'棍棒類'},{v:3,label:'機械類'},{v:4,label:'弓弩類'},{v:5,label:'盾類'},{v:6,label:"短刀・短剣"},{v:7,label:'杖・魔導書'},{v:8,label:'聖典・権杖'},{v:9,label:'特殊武器'},{v:10,label:'手'},{v:11,label:'頭'},{v:12,label:'胴'},{v:13,label:'脚'},{v:14,label:'靴'},{v:15,label:'マント'},{v:16,label:'アクセサリ'},{v:17,label:'世界の遺物'}] },
+            { key:'item',      label:'アイテム', source:'items',      subTypes:[{v:'消費',label:'消耗品'},{v:"素材",label:'素材'},{v:'特殊',label:'特殊'}] },
             { key:'skill',     label:'スキル', source:'skills',     subTypes:[{v:0,label:'アクティブ'},{v:1,label:'パッシブ'},{v:2,label:'特殊'}] }
         ],
         rarityList: ['F','E','D','C','B','A','S','SS','SSS'],
@@ -775,19 +767,19 @@
         // ==========================================
         equipments: [
             // 0: 刀剣類
-            { id:'e0_1', name:'高周波切断刃', tier:'D', cost:750, type:0, source:'主神空間', tags:["刀剣","重装","物理","筋力","ダメージ"], attrs:{"ATK":"A"}, effects:{"高周波破甲":"命中時に目標の物理軽減率を15%無視する。"}, desc:'刃先が高周波で振動し、通常装甲を極めて強く切り裂く。', consume:"无" },
-            { id:'e0_2', name:'百錬精鋼剣', tier:'E', cost:200, type:0, source:'主神空間', tags:["刀剣","中型","物理","筋力","ダメージ"], attrs:{"ATK":"B"}, effects:{"百錬の鋒刃":"無甲または軽甲の目標への物理ダメージが8%上昇。"}, desc:'何度も鍛え直された鋼の長剣。刃には耐摩処理が施されている。', consume:"无" },
-            { id:'e0_3', name:'錆びた鉄剣', tier:'F', cost:50,  type:0, source:'主神空間', tags:["刀剣","物理","筋力","ダメージ"], attrs:{"ATK":"C"}, effects:{"欠け刃の強斬":"HPが最大値の50%未満の目標への物理ダメージが5%上昇。"}, desc:'廃墟で拾った鉄片。どうにか人を斬れる程度の代物。', consume:"无" },
+            { id:'e0_1', name:'高周波切断刃', tier:'D', cost:750, type:0, source:'主神空間', tags:["刀剣","重装","物理","筋力","ダメージ"], attrs:{"ATK":"A"}, effects:{"高周波破甲":"命中時に目標の物理軽減率を15%無視する。"}, desc:'刃先が高周波で振動し、通常装甲を極めて強く切り裂く。', consume:"なし" },
+            { id:'e0_2', name:'百錬精鋼剣', tier:'E', cost:200, type:0, source:'主神空間', tags:["刀剣","中型","物理","筋力","ダメージ"], attrs:{"ATK":"B"}, effects:{"百錬の鋒刃":"無甲または軽甲の目標への物理ダメージが8%上昇。"}, desc:'何度も鍛え直された鋼の長剣。刃には耐摩処理が施されている。', consume:"なし" },
+            { id:'e0_3', name:'錆びた鉄剣', tier:'F', cost:50,  type:0, source:'主神空間', tags:["刀剣","物理","筋力","ダメージ"], attrs:{"ATK":"C"}, effects:{"欠け刃の強斬":"HPが最大値の50%未満の目標への物理ダメージが5%上昇。"}, desc:'廃墟で拾った鉄片。どうにか人を斬れる程度の代物。', consume:"なし" },
             
             // 1: 槍類
-            { id:'e1_1', name:'プラズマ戦矛', tier:'D', cost:800, type:1, source:'主神空間', tags:["槍","重装","エネルギー","筋力","ダメージ"], attrs:{"ATK":"B","MATK":"D"}, effects:{"プラズマ灼熱":"命中でHP損耗を与えた後、2ターンの灼熱を付与し、毎ターン25のエネルギー火炎ダメージを受ける。体力対抗に成功すれば灼熱を回避できる。"}, desc:'穂先に高温のプラズマ場をまとう戦矛。', consume:"无" },
-            { id:'e1_2', name:'精鋼貫甲槍', tier:'E', cost:250, type:1, source:'主神空間', tags:["槍","重装","物理","筋力","ダメージ"], attrs:{"ATK":"A"}, effects:{"突撃刺し":"このターンに直線で3メートル以上移動してから突けば、命中ダメージが10%上昇。"}, desc:'古代の正規軍が装備した長槍。', consume:"无" },
-            { id:'e1_3', name:'削った木の棒', tier:'F', cost:30,  type:1, source:'主神空間', tags:["槍","物理","筋力","ダメージ"], attrs:{"ATK":"D"}, effects:{"長柄突き":"通常の近接攻撃距離が2メートルに伸びる。"}, desc:'村の王爺が削ってくれた木の棒。', consume:"无" },
+            { id:'e1_1', name:'プラズマ戦矛', tier:'D', cost:800, type:1, source:'主神空間', tags:["槍","重装","エネルギー","筋力","ダメージ"], attrs:{"ATK":"B","MATK":"D"}, effects:{"プラズマ灼熱":"命中でHP損耗を与えた後、2ターンの灼熱を付与し、毎ターン25のエネルギー火炎ダメージを受ける。体力対抗に成功すれば灼熱を回避できる。"}, desc:'穂先に高温のプラズマ場をまとう戦矛。', consume:"なし" },
+            { id:'e1_2', name:'精鋼貫甲槍', tier:'E', cost:250, type:1, source:'主神空間', tags:["槍","重装","物理","筋力","ダメージ"], attrs:{"ATK":"A"}, effects:{"突撃刺し":"このターンに直線で3メートル以上移動してから突けば、命中ダメージが10%上昇。"}, desc:'古代の正規軍が装備した長槍。', consume:"なし" },
+            { id:'e1_3', name:'削った木の棒', tier:'F', cost:30,  type:1, source:'主神空間', tags:["槍","物理","筋力","ダメージ"], attrs:{"ATK":"D"}, effects:{"長柄突き":"通常の近接攻撃距離が2メートルに伸びる。"}, desc:'村の王爺が削ってくれた木の棒。', consume:"なし" },
 
             // 2: 棍棒類
-            { id:'e2_1', name:'哭喪鎮魂棒', tier:'D', cost:800, type:2, source:'主神空間', tags:["棍棒","重装","物理","筋力","ダメージ"], attrs:{"ATK":"C","MATK":"B"}, effects:{"鎮魂":"非実体の霊体を直接攻撃できる；霊体へのダメージは精神ダメージに変換され10%上昇。"}, desc:'エンジュの木と白紙で作られ、魂を直接打つ。', consume:"无" },
-            { id:'e2_2', name:'高炭素鋼バット', tier:'E', cost:220, type:2, source:'主神空間', tags:["棍棒","重装","物理","筋力","ダメージ"], attrs:{"ATK":"A"}, effects:{"重撃ノックバック":"命中後に筋力対抗を行い、勝てば目標を2メートル弾き飛ばす。"}, desc:'街の喧嘩における神器。', consume:"无" },
-            { id:'e2_3', name:'鉄張り長角レンガ', tier:'F', cost:60,  type:2, source:'主神空間', tags:["棍棒","物理","筋力","ダメージ"], attrs:{"ATK":"B"}, effects:{"飛びレンガ":"8メートル以内の目標へ投擲攻撃でき、命中ダメージが10%上昇；投げた後は回収が必要。"}, desc:'鉄板を括り付けた赤レンガ。実にシンプルで粗暴。', consume:"无" },
+            { id:'e2_1', name:'哭喪鎮魂棒', tier:'D', cost:800, type:2, source:'主神空間', tags:["棍棒","重装","物理","筋力","ダメージ"], attrs:{"ATK":"C","MATK":"B"}, effects:{"鎮魂":"非実体の霊体を直接攻撃できる；霊体へのダメージは精神ダメージに変換され10%上昇。"}, desc:'エンジュの木と白紙で作られ、魂を直接打つ。', consume:"なし" },
+            { id:'e2_2', name:'高炭素鋼バット', tier:'E', cost:220, type:2, source:'主神空間', tags:["棍棒","重装","物理","筋力","ダメージ"], attrs:{"ATK":"A"}, effects:{"重撃ノックバック":"命中後に筋力対抗を行い、勝てば目標を2メートル弾き飛ばす。"}, desc:'街の喧嘩における神器。', consume:"なし" },
+            { id:'e2_3', name:'鉄張り長角レンガ', tier:'F', cost:60,  type:2, source:'主神空間', tags:["棍棒","物理","筋力","ダメージ"], attrs:{"ATK":"B"}, effects:{"飛びレンガ":"8メートル以内の目標へ投擲攻撃でき、命中ダメージが10%上昇；投げた後は回収が必要。"}, desc:'鉄板を括り付けた赤レンガ。実にシンプルで粗暴。', consume:"なし" },
 
             // 3: 機械類 
             { id:'e3_1', name:'ガウス電磁拳銃', tier:'D', cost:850, type:3, source:'主神空間', tags:["機械","遠隔","物理","敏捷","ダメージ"], attrs:{"ATK":"A"}, effects:{"電磁貫通":"射程80メートル；累計5ミリの普通鋼板を貫通でき、貫通後の攻撃はダメージの80%を保持する。"}, desc:'汎用型のハイテク護身手銃。', consume:"攻撃ごとに標準電磁弾を1発消費" },
@@ -801,70 +793,70 @@
             { id:'e4_3', name:'粗末な狩猟弓', tier:'F', cost:60,  type:4, source:'主神空間', tags:["弓弩","遠隔","物理","敏捷","ダメージ"], attrs:{"ATK":"C"}, effects:{"安定した弓":"このターンに移動していなければ、この射撃の敏捷判定修正+5。"}, desc:'獣の筋と普通の木材で作られた狩猟具。', consume:"攻撃ごとに粗末な木矢を1本消費" },
 
             // 5: 盾類
-            { id:'e5_1', name:'エネルギー偏向防暴盾', tier:'D', cost:850, type:5, source:'主神空間', tags:["盾","防御","筋力"], attrs:{"DEF":"C","MDEF":"A"}, effects:{"エネルギー偏向":"盾を構えている間、正面からのエネルギーダメージが20%減少。"}, desc:'弾を防ぐだけでなく、一部のレーザーを屈折させる。', consume:"无" },
-            { id:'e5_2', name:'警察用防爆盾', tier:'E', cost:200, type:5, source:'主神空間', tags:["盾","防御","筋力"], attrs:{"DEF":"A"}, effects:{"防暴架势":"盾を構えている間、正面からの物理ダメージが12%減少。"}, desc:'厚手のPC素材の盾。流れ弾を防ぐ。', consume:"无" },
-            { id:'e5_3', name:'ブリキのゴミ箱の蓋', tier:'F', cost:40,  type:5, source:'主神空間', tags:["盾","防御","筋力"], attrs:{"DEF":"C"}, effects:{"即席ガード":"戦闘ごとに最初に正面から物理攻撃を受けた時、そのダメージが8%減少。"}, desc:'どこのゴミ捨て場から拾ったか分からない蓋。', consume:"无" },
+            { id:'e5_1', name:'エネルギー偏向防暴盾', tier:'D', cost:850, type:5, source:'主神空間', tags:["盾","防御","筋力"], attrs:{"DEF":"C","MDEF":"A"}, effects:{"エネルギー偏向":"盾を構えている間、正面からのエネルギーダメージが20%減少。"}, desc:'弾を防ぐだけでなく、一部のレーザーを屈折させる。', consume:"なし" },
+            { id:'e5_2', name:'警察用防爆盾', tier:'E', cost:200, type:5, source:'主神空間', tags:["盾","防御","筋力"], attrs:{"DEF":"A"}, effects:{"防暴架势":"盾を構えている間、正面からの物理ダメージが12%減少。"}, desc:'厚手のPC素材の盾。流れ弾を防ぐ。', consume:"なし" },
+            { id:'e5_3', name:'ブリキのゴミ箱の蓋', tier:'F', cost:40,  type:5, source:'主神空間', tags:["盾","防御","筋力"], attrs:{"DEF":"C"}, effects:{"即席ガード":"戦闘ごとに最初に正面から物理攻撃を受けた時、そのダメージが8%減少。"}, desc:'どこのゴミ捨て場から拾ったか分からない蓋。', consume:"なし" },
 
             // 6: 短刀・匕首
-            { id:'e6_1', name:'血吮いの影刃', tier:'D', cost:750, type:6, source:'主神空間', tags:["短剣","軽量","物理","敏捷","ダメージ"], attrs:{"ATK":"A"}, effects:{"血への渇望":"近接物理ダメージを与えた時、ダメージ値の10%を自身のTHPに変換する。"}, desc:'刃は暗赤色で、生き物のように血を求める。', consume:"无" },
-            { id:'e6_2', name:'怨毒の骨削ぎ刀', tier:'E', cost:250, type:6, source:'主神空間', tags:["短剣","軽量","物理","敏捷","ダメージ"], attrs:{"ATK":"B"}, effects:{"骨削ぎ出血":"命中でHP損耗を与えた後、2ターンの出血を付与し、毎ターン10の物理ダメージを受ける。"}, desc:'肉屋が使っていた凶器。凄まじい煞気をまとう。', consume:"无" },
-            { id:'e6_3', name:'タクティカルフォールディングナイフ', tier:'F', cost:50,  type:6, source:'主神空間', tags:["短剣","軽量","物理","敏捷","ダメージ"], attrs:{"ATK":"C"}, effects:{"隠し刃":"収納または隠匿状態から最初に抜いて攻撃する時、この敏捷判定修正+5。"}, desc:'よくある多機能タクティカルナイフ。', consume:"无" },
+            { id:'e6_1', name:'血吮いの影刃', tier:'D', cost:750, type:6, source:'主神空間', tags:["短剣","軽量","物理","敏捷","ダメージ"], attrs:{"ATK":"A"}, effects:{"血への渇望":"近接物理ダメージを与えた時、ダメージ値の10%を自身のTHPに変換する。"}, desc:'刃は暗赤色で、生き物のように血を求める。', consume:"なし" },
+            { id:'e6_2', name:'怨毒の骨削ぎ刀', tier:'E', cost:250, type:6, source:'主神空間', tags:["短剣","軽量","物理","敏捷","ダメージ"], attrs:{"ATK":"B"}, effects:{"骨削ぎ出血":"命中でHP損耗を与えた後、2ターンの出血を付与し、毎ターン10の物理ダメージを受ける。"}, desc:'肉屋が使っていた凶器。凄まじい煞気をまとう。', consume:"なし" },
+            { id:'e6_3', name:'タクティカルフォールディングナイフ', tier:'F', cost:50,  type:6, source:'主神空間', tags:["短剣","軽量","物理","敏捷","ダメージ"], attrs:{"ATK":"C"}, effects:{"隠し刃":"収納または隠匿状態から最初に抜いて攻撃する時、この敏捷判定修正+5。"}, desc:'よくある多機能タクティカルナイフ。', consume:"なし" },
 
             // 7: 杖・魔導書
-            { id:'e7_1', name:'百年雷撃木の杖', tier:'D', cost:900, type:7, source:'主神空間', tags:["杖","エネルギー","精神","ダメージ"], attrs:{"MATK":"A","AP":"D"}, effects:{"雷引き":"雷電系スキルによるダメージが15%上昇。"}, desc:'天雷の威を宿した杖。', consume:"无" },
-            { id:'e7_2', name:'見習いの導能杖', tier:'E', cost:300, type:7, source:'主神空間', tags:["杖","エネルギー","精神","ダメージ"], attrs:{"MATK":"B","AP":"F"}, effects:{"導魔":"E級以下で固定EP消費を持つ術を行使する時、EP消費が2減少。"}, desc:'魔法学院が配布する初心者用の施術具。', consume:"无" },
-            { id:'e7_3', name:'破損した呪術書', tier:'F', cost:80,  type:7, source:'主神空間', tags:["魔導書","精神","ダメージ"], attrs:{"MATK":"A"}, effects:{"残巻の呪力":"呪いと精神系スキルによるダメージが5%上昇。"}, desc:'欠頁の激しい黒魔法の入門ノート。', consume:"无" },
+            { id:'e7_1', name:'百年雷撃木の杖', tier:'D', cost:900, type:7, source:'主神空間', tags:["杖","エネルギー","精神","ダメージ"], attrs:{"MATK":"A","AP":"D"}, effects:{"雷引き":"雷電系スキルによるダメージが15%上昇。"}, desc:'天雷の威を宿した杖。', consume:"なし" },
+            { id:'e7_2', name:'見習いの導能杖', tier:'E', cost:300, type:7, source:'主神空間', tags:["杖","エネルギー","精神","ダメージ"], attrs:{"MATK":"B","AP":"F"}, effects:{"導魔":"E級以下で固定EP消費を持つ術を行使する時、EP消費が2減少。"}, desc:'魔法学院が配布する初心者用の施術具。', consume:"なし" },
+            { id:'e7_3', name:'破損した呪術書', tier:'F', cost:80,  type:7, source:'主神空間', tags:["魔導書","精神","ダメージ"], attrs:{"MATK":"A"}, effects:{"残巻の呪力":"呪いと精神系スキルによるダメージが5%上昇。"}, desc:'欠頁の激しい黒魔法の入門ノート。', consume:"なし" },
 
             // 8: 聖典・権杖
-            { id:'e8_1', name:'異端の黙示録', tier:'D', cost:800, type:8, source:'主神空間', tags:["聖物","精神","強化","補助"], attrs:{"MATK":"C","MDEF":"A","魅力":"B"}, effects:{"蛊惑の黙示":"魅了・威圧・精神操作に関する判定を行う時、精神または魅力判定修正+15。"}, desc:'名状し難い知識を記した残本。', consume:"无" },
-            { id:'e8_2', name:'清心の銅鈴', tier:'E', cost:250, type:8, source:'主神空間', tags:["聖物","補助","精神"], attrs:{"MDEF":"B"}, effects:{"清音":"幻覚・催眠・精神干渉に抵抗する時、精神判定修正+10。"}, desc:'道士がよく使う安神の法器。', consume:"无" },
-            { id:'e8_3', name:'粗悪な十字架', tier:'F', cost:50,  type:8, source:'主神空間', tags:["聖物","補助","精神"], attrs:{"MDEF":"C"}, effects:{"簡易の祝祷":"恐怖に抵抗する時、精神判定修正+5。"}, desc:'木を削っただけの、観光客向けの工芸品。', consume:"无" },
+            { id:'e8_1', name:'異端の黙示録', tier:'D', cost:800, type:8, source:'主神空間', tags:["聖物","精神","強化","補助"], attrs:{"MATK":"C","MDEF":"A","魅力":"B"}, effects:{"蛊惑の黙示":"魅了・威圧・精神操作に関する判定を行う時、精神または魅力判定修正+15。"}, desc:'名状し難い知識を記した残本。', consume:"なし" },
+            { id:'e8_2', name:'清心の銅鈴', tier:'E', cost:250, type:8, source:'主神空間', tags:["聖物","補助","精神"], attrs:{"MDEF":"B"}, effects:{"清音":"幻覚・催眠・精神干渉に抵抗する時、精神判定修正+10。"}, desc:'道士がよく使う安神の法器。', consume:"なし" },
+            { id:'e8_3', name:'粗悪な十字架', tier:'F', cost:50,  type:8, source:'主神空間', tags:["聖物","補助","精神"], attrs:{"MDEF":"C"}, effects:{"簡易の祝祷":"恐怖に抵抗する時、精神判定修正+5。"}, desc:'木を削っただけの、観光客向けの工芸品。', consume:"なし" },
 
             // 9: 特殊武器
             { id:'e9_1', name:'携帯電磁ネットガン', tier:'D', cost:850, type:9, source:'主神空間', tags:["特殊武器","制御","敏捷"], attrs:{}, effects:{"電磁拘束":"射程15メートル；命中後に敏捷で目標の筋力と対抗し、勝てば目標を1ターン拘束する。"}, desc:'非致死兵器。高機動の目標を制限できる。', consume:"帯電拘束ネット1枚" },
-            { id:'e9_2', name:'縛魂の鎖', tier:'E', cost:350, type:9, source:'主神空間', tags:["特殊武器","物理","敏捷","ダメージ"], attrs:{"ATK":"C","MATK":"A"}, effects:{"縛魂":"非実体の霊体を直接攻撃できる；霊体へのダメージは精神ダメージに変換される。"}, desc:'冥府の役人がよく使う制式の鎖。', consume:"无" },
+            { id:'e9_2', name:'縛魂の鎖', tier:'E', cost:350, type:9, source:'主神空間', tags:["特殊武器","物理","敏捷","ダメージ"], attrs:{"ATK":"C","MATK":"A"}, effects:{"縛魂":"非実体の霊体を直接攻撃できる；霊体へのダメージは精神ダメージに変換される。"}, desc:'冥府の役人がよく使う制式の鎖。', consume:"なし" },
             { id:'e9_3', name:'棘付きの獣罠', tier:'F', cost:60,  type:9, source:'主神空間', tags:["罠","物理","敏捷","制御"], attrs:{}, effects:{"獣罠":"設置後に触れた者はDC30の敏捷判定を行い、失敗すると15の物理ダメージを受け1ターン拘束される。"}, desc:'猟師が猪を捕るための危険な罠。', consume:"なし；発動ごとに1回の行動で再設置が必要" },
 
             // 10: 手
-            { id:'e10_1', name:'動力重撃グローブ', tier:'D', cost:800, type:10, source:'主神空間', tags:["手","物理","防御"], attrs:{"ATK":"A","DEF":"D"}, effects:{"動力重撃":"素手攻撃を重装武器の打撃として扱い、物理ダメージが15%上昇。"}, desc:'スチームパンク風の油圧アシストグローブ。', consume:"无" },
-            { id:'e10_2', name:'影織りの手袋', tier:'E', cost:200, type:10, source:'主神空間', tags:["手","補助","防御"], attrs:{"敏捷":"A","DEF":"F"}, effects:{"巧みな編織":"鍵開け・分解組立・窃取など精密な手作業を行う時、敏捷判定修正+10。"}, desc:'手先の精密さを大幅に高める。', consume:"无" },
-            { id:'e10_3', name:'粗布のハンドラップ', tier:'F', cost:30,  type:10, source:'主神空間', tags:["手","防御"], attrs:{"DEF":"B"}, effects:{"手甲巻き":"素手攻撃による物理ダメージが5%上昇。"}, desc:'ボクサーが訓練に使うぼろ布。', consume:"无" },
+            { id:'e10_1', name:'動力重撃グローブ', tier:'D', cost:800, type:10, source:'主神空間', tags:["手","物理","防御"], attrs:{"ATK":"A","DEF":"D"}, effects:{"動力重撃":"素手攻撃を重装武器の打撃として扱い、物理ダメージが15%上昇。"}, desc:'スチームパンク風の油圧アシストグローブ。', consume:"なし" },
+            { id:'e10_2', name:'影織りの手袋', tier:'E', cost:200, type:10, source:'主神空間', tags:["手","補助","防御"], attrs:{"敏捷":"A","DEF":"F"}, effects:{"巧みな編織":"鍵開け・分解組立・窃取など精密な手作業を行う時、敏捷判定修正+10。"}, desc:'手先の精密さを大幅に高める。', consume:"なし" },
+            { id:'e10_3', name:'粗布のハンドラップ', tier:'F', cost:30,  type:10, source:'主神空間', tags:["手","防御"], attrs:{"DEF":"B"}, effects:{"手甲巻き":"素手攻撃による物理ダメージが5%上昇。"}, desc:'ボクサーが訓練に使うぼろ布。', consume:"なし" },
 
             // 11: 頭
             { id:'e11_1', name:'タクティカルホロゴーグル', tier:'D', cost:600, type:11, source:'主神空間', tags:["頭","知覚","防御"], attrs:{"DEF":"D","精神":"C"}, effects:{"サーモグラフィ":"起動すると1EP/分を消費し、30メートル以内の熱源の輪郭が見える；暗闇や煙の中で熱源を探す時、知覚判定修正+15。"}, desc:'赤外線とサーモグラフィを統合。', consume:"EP 1/分" },
-            { id:'e11_2', name:'清明のヘアバンド', tier:'E', cost:200, type:11, source:'主神空間', tags:["頭","補助","防御"], attrs:{"精神":"A","MDEF":"D"}, effects:{"清明":"恐怖・幻覚・催眠に抵抗する時、精神判定修正+10。"}, desc:'清心の訣を刺繍した絹のヘアバンド。', consume:"无" },
-            { id:'e11_3', name:'バイク用ヘルメット', tier:'F', cost:40,  type:11, source:'主神空間', tags:["頭","防御"], attrs:{"DEF":"A"}, effects:{"頭部緩衝":"頭部への直接命中の打撃を受けた時、その物理ダメージが8%減少。"}, desc:'普通のヘルメット。少し汗臭い。', consume:"无" },
+            { id:'e11_2', name:'清明のヘアバンド', tier:'E', cost:200, type:11, source:'主神空間', tags:["頭","補助","防御"], attrs:{"精神":"A","MDEF":"D"}, effects:{"清明":"恐怖・幻覚・催眠に抵抗する時、精神判定修正+10。"}, desc:'清心の訣を刺繍した絹のヘアバンド。', consume:"なし" },
+            { id:'e11_3', name:'バイク用ヘルメット', tier:'F', cost:40,  type:11, source:'主神空間', tags:["頭","防御"], attrs:{"DEF":"A"}, effects:{"頭部緩衝":"頭部への直接命中の打撃を受けた時、その物理ダメージが8%減少。"}, desc:'普通のヘルメット。少し汗臭い。', consume:"なし" },
 
             // 12: 胴
-            { id:'e12_1', name:'赤銅の護心甲', tier:'D', cost:750, type:12, source:'主神空間', tags:["胴","防御"], attrs:{"DEF":"A","MDEF":"C"}, effects:{"護心":"戦闘ごとに最初に胴へ物理ダメージを受けた時、そのダメージが25%減少。"}, desc:'命を守る陣法を刻んだ修仙界の外甲。', consume:"无" },
-            { id:'e12_2', name:'ケブラー防弾ベスト', tier:'E', cost:280, type:12, source:'主神空間', tags:["胴","防御"], attrs:{"DEF":"A"}, effects:{"防弾":"銃弾系の物理ダメージを受けた時、ダメージが12%減少。"}, desc:'軽量タクティカル防弾ベスト。', consume:"无" },
-            { id:'e12_3', name:'厚手のレザージャケット', tier:'F', cost:80,  type:12, source:'主神空間', tags:["胴","防御"], attrs:{"DEF":"B"}, effects:{"厚皮の保温":"寒冷や風雪による不利な状態に抵抗する時、体力判定修正+5。"}, desc:'バイカーが最も愛する旧式レザージャケット。', consume:"无" },
+            { id:'e12_1', name:'赤銅の護心甲', tier:'D', cost:750, type:12, source:'主神空間', tags:["胴","防御"], attrs:{"DEF":"A","MDEF":"C"}, effects:{"護心":"戦闘ごとに最初に胴へ物理ダメージを受けた時、そのダメージが25%減少。"}, desc:'命を守る陣法を刻んだ修仙界の外甲。', consume:"なし" },
+            { id:'e12_2', name:'ケブラー防弾ベスト', tier:'E', cost:280, type:12, source:'主神空間', tags:["胴","防御"], attrs:{"DEF":"A"}, effects:{"防弾":"銃弾系の物理ダメージを受けた時、ダメージが12%減少。"}, desc:'軽量タクティカル防弾ベスト。', consume:"なし" },
+            { id:'e12_3', name:'厚手のレザージャケット', tier:'F', cost:80,  type:12, source:'主神空間', tags:["胴","防御"], attrs:{"DEF":"B"}, effects:{"厚皮の保温":"寒冷や風雪による不利な状態に抵抗する時、体力判定修正+5。"}, desc:'バイカーが最も愛する旧式レザージャケット。', consume:"なし" },
 
             // 13: 脚
-            { id:'e13_1', name:'闇夜の歩行者用レッグガード', tier:'D', cost:700, type:13, source:'主神空間', tags:["脚","防御"], attrs:{"DEF":"C","敏捷":"A"}, effects:{"消音歩行":"通常移動時の足音と衣擦れの騒音が75%低下；隠密判定の修正+15。"}, desc:'特殊な吸音素材で作られたタクティカルレッグガード。', consume:"无" },
-            { id:'e13_2', name:'油圧アシストレッグアーマー', tier:'E', cost:300, type:13, source:'主神空間', tags:["脚","防御"], attrs:{"筋力":"C","DEF":"D","敏捷":"B"}, effects:{"油圧アシスト":"水平跳躍距離が3メートル、垂直跳躍高が1メートル増加。"}, desc:'油圧アシストを備えた軽量レッグアーマー。', consume:"无" },
-            { id:'e13_3', name:'ジーンズとニーパッド', tier:'F', cost:50,  type:13, source:'主神空間', tags:["脚","防御"], attrs:{"DEF":"B"}, effects:{"膝当て":"転倒・つまずき・脚部への衝撃に抵抗する時、敏捷判定修正+5。"}, desc:'労働者たちの知恵の結晶。', consume:"无" },
+            { id:'e13_1', name:'闇夜の歩行者用レッグガード', tier:'D', cost:700, type:13, source:'主神空間', tags:["脚","防御"], attrs:{"DEF":"C","敏捷":"A"}, effects:{"消音歩行":"通常移動時の足音と衣擦れの騒音が75%低下；隠密判定の修正+15。"}, desc:'特殊な吸音素材で作られたタクティカルレッグガード。', consume:"なし" },
+            { id:'e13_2', name:'油圧アシストレッグアーマー', tier:'E', cost:300, type:13, source:'主神空間', tags:["脚","防御"], attrs:{"筋力":"C","DEF":"D","敏捷":"B"}, effects:{"油圧アシスト":"水平跳躍距離が3メートル、垂直跳躍高が1メートル増加。"}, desc:'油圧アシストを備えた軽量レッグアーマー。', consume:"なし" },
+            { id:'e13_3', name:'ジーンズとニーパッド', tier:'F', cost:50,  type:13, source:'主神空間', tags:["脚","防御"], attrs:{"DEF":"B"}, effects:{"膝当て":"転倒・つまずき・脚部への衝撃に抵抗する時、敏捷判定修正+5。"}, desc:'労働者たちの知恵の結晶。', consume:"なし" },
 
             // 14: 靴
             { id:'e14_1', name:'風乗り青雲の靴', tier:'D', cost:650, type:14, source:'主神空間', tags:["靴","機動","防御"], attrs:{"敏捷":"A","DEF":"E"}, effects:{"踏風歩":"25EPを消費して追加で8メートル移動し、通常の溝や低い障害物をそのまま越えられる。"}, desc:'風系の霊力を注ぎ込んだ長靴。', consume:"踏風ごとにEP 25" },
-            { id:'e14_2', name:'静音タクティカルブーツ', tier:'E', cost:220, type:14, source:'主神空間', tags:["靴","機動","防御"], attrs:{"敏捷":"B","DEF":"D"}, effects:{"安定歩行":"濡れた地形・碎石・傾斜地を移動する時、敏捷判定修正+10。"}, desc:'特殊部隊の標準装備。', consume:"无" },
-            { id:'e14_3', name:'滑り止めの草鞋', tier:'F', cost:30,  type:14, source:'主神空間', tags:["靴","機動","防御"], attrs:{"敏捷":"C"}, effects:{"草履のグリップ":"泥地・湿地・碎石地を移動する時、敏捷判定修正+5。"}, desc:'そこそこ丈夫に編まれた草履。', consume:"无" },
+            { id:'e14_2', name:'静音タクティカルブーツ', tier:'E', cost:220, type:14, source:'主神空間', tags:["靴","機動","防御"], attrs:{"敏捷":"B","DEF":"D"}, effects:{"安定歩行":"濡れた地形・碎石・傾斜地を移動する時、敏捷判定修正+10。"}, desc:'特殊部隊の標準装備。', consume:"なし" },
+            { id:'e14_3', name:'滑り止めの草鞋', tier:'F', cost:30,  type:14, source:'主神空間', tags:["靴","機動","防御"], attrs:{"敏捷":"C"}, effects:{"草履のグリップ":"泥地・湿地・碎石地を移動する時、敏捷判定修正+5。"}, desc:'そこそこ丈夫に編まれた草履。', consume:"なし" },
 
             // 15: マント
-            { id:'e15_1', name:'魂引きの隠密マント', tier:'D', cost:800, type:15, source:'主神空間', tags:["マント","隠密","防御"], attrs:{"敏捷":"B","MDEF":"C"}, effects:{"隠匿":"低光量環境での隠密判定の修正+15；静止している間は自分の輪郭が肉眼で捉えにくくなる。"}, desc:'これを纏えば、あなたは生きた影になる。', consume:"无" },
-            { id:'e15_2', name:'避塵のマント', tier:'E', cost:250, type:15, source:'主神空間', tags:["マント","防御"], attrs:{"MDEF":"B","DEF":"D"}, effects:{"避塵":"粉塵・煙塵・毒霧など吸入性の環境影響に抵抗する時、体力判定修正+10。"}, desc:'修仙者が旅に常備する実用的なマント。', consume:"无" },
-            { id:'e15_3', name:'薄暗いレインコート', tier:'F', cost:60,  type:15, source:'主神空間', tags:["マント","防御"], attrs:{"DEF":"C"}, effects:{"防雨":"雨雪の中で寒冷と湿気の影響に抵抗する時、体力判定修正+5。"}, desc:'ゆったりした古いレインコート。多少の雨風は凌げる。', consume:"无" },
+            { id:'e15_1', name:'魂引きの隠密マント', tier:'D', cost:800, type:15, source:'主神空間', tags:["マント","隠密","防御"], attrs:{"敏捷":"B","MDEF":"C"}, effects:{"隠匿":"低光量環境での隠密判定の修正+15；静止している間は自分の輪郭が肉眼で捉えにくくなる。"}, desc:'これを纏えば、あなたは生きた影になる。', consume:"なし" },
+            { id:'e15_2', name:'避塵のマント', tier:'E', cost:250, type:15, source:'主神空間', tags:["マント","防御"], attrs:{"MDEF":"B","DEF":"D"}, effects:{"避塵":"粉塵・煙塵・毒霧など吸入性の環境影響に抵抗する時、体力判定修正+10。"}, desc:'修仙者が旅に常備する実用的なマント。', consume:"なし" },
+            { id:'e15_3', name:'薄暗いレインコート', tier:'F', cost:60,  type:15, source:'主神空間', tags:["マント","防御"], attrs:{"DEF":"C"}, effects:{"防雨":"雨雪の中で寒冷と湿気の影響に抵抗する時、体力判定修正+5。"}, desc:'ゆったりした古いレインコート。多少の雨風は凌げる。', consume:"なし" },
 
             // 16: アクセサリ
-            { id:'e16_1', name:'心拍生体モニター', tier:'D', cost:680, type:16, source:'主神空間', tags:["アクセサリ","補助","防御"], attrs:{"体力":"B","DEF":"F"}, effects:{"生命フィードバック":"HPが初めて30%未満になった時、自動で起動して80THPを獲得；戦闘ごとに1回発動。"}, desc:'ハイテクなチョーカー。身体機能をリアルタイムで監視する。', consume:"无" },
-            { id:'e16_2', name:'聚霊の玉佩', tier:'D', cost:700, type:16, source:'主神空間', tags:["アクセサリ","補助","魔法"], attrs:{"精神":"A","MDEF":"C"}, effects:{"聚霊":"D級以下で固定EP消費を持つ術を行使する時、EP消費が5減少。"}, desc:'施術のエネルギー損耗を減らす玉製の導流アクセサリ。', consume:"无" },
-            { id:'e16_3', name:'狂化の狼牙ペンダント', tier:'E', cost:280, type:16, source:'主神空間', tags:["アクセサリ","補助","防御"], attrs:{"筋力":"A","MDEF":"F"}, effects:{"狂化":"HPが50%未満の時、近接物理ダメージが10%上昇。"}, desc:'獣の気配を漂わせるペンダント。', consume:"无" },
-            { id:'e16_4', name:'幸運の銅貨', tier:'F', cost:50,  type:16, source:'主神空間', tags:["アクセサリ","補助","防御"], attrs:{"魅力":"C"}, effects:{"幸運":"戦闘ごとに1回、D100判定の確定前に+5修正を得られる。"}, desc:'使い込まれて光沢の出た古い銅貨。', consume:"无" },
+            { id:'e16_1', name:'心拍生体モニター', tier:'D', cost:680, type:16, source:'主神空間', tags:["アクセサリ","補助","防御"], attrs:{"体力":"B","DEF":"F"}, effects:{"生命フィードバック":"HPが初めて30%未満になった時、自動で起動して80THPを獲得；戦闘ごとに1回発動。"}, desc:'ハイテクなチョーカー。身体機能をリアルタイムで監視する。', consume:"なし" },
+            { id:'e16_2', name:'聚霊の玉佩', tier:'D', cost:700, type:16, source:'主神空間', tags:["アクセサリ","補助","魔法"], attrs:{"精神":"A","MDEF":"C"}, effects:{"聚霊":"D級以下で固定EP消費を持つ術を行使する時、EP消費が5減少。"}, desc:'施術のエネルギー損耗を減らす玉製の導流アクセサリ。', consume:"なし" },
+            { id:'e16_3', name:'狂化の狼牙ペンダント', tier:'E', cost:280, type:16, source:'主神空間', tags:["アクセサリ","補助","防御"], attrs:{"筋力":"A","MDEF":"F"}, effects:{"狂化":"HPが50%未満の時、近接物理ダメージが10%上昇。"}, desc:'獣の気配を漂わせるペンダント。', consume:"なし" },
+            { id:'e16_4', name:'幸運の銅貨', tier:'F', cost:50,  type:16, source:'主神空間', tags:["アクセサリ","補助","防御"], attrs:{"魅力":"C"}, effects:{"幸運":"戦闘ごとに1回、D100判定の確定前に+5修正を得られる。"}, desc:'使い込まれて光沢の出た古い銅貨。', consume:"なし" },
 
             // 17: 世界の遺物
             { id:'e17_1', name:'微型力場発生器・β型', tier:'D', cost:900, type:17, source:'主神空間', tags:["世界の遺物","防御","科学"], attrs:{}, effects:{"緊急力場":"30EPを消費し、自身に120THPを付与、3ターン持続。"}, desc:"ベルトに装着する短時間用の防護発生器。シールドには明確な容量がある。", consume:"起動ごとにEP 30" },
-            { id:'e17_2', name:'初級乾坤袋・訳あり品', tier:'E', cost:400, type:17, source:'主神空間', tags:["世界の遺物","補助","空間"], attrs:{}, effects:{"乾坤収納":"総体積0.5立方メートル、総質量50キロまでの非生命物体を収納できる；収納物は携行重量に含まれない。"}, desc:"容量と積載量に制限のある入門用の収納袋。内部の時間は正常に流れる。", consume:"无" },
-            { id:'e17_3', name:'旧型ガイガーカウンター・記念版', tier:'F', cost:80,  type:17, source:'主神空間', tags:["世界の遺物","補助","科学"], attrs:{}, effects:{"放射線警報":"起動すると30メートル以内の顕著な電離放射線を探知し、おおよその方向と強度を表示する。"}, desc:"現在位置の電離放射線量率を測る携帯計器。", consume:"无" }
+            { id:'e17_2', name:'初級乾坤袋・訳あり品', tier:'E', cost:400, type:17, source:'主神空間', tags:["世界の遺物","補助","空間"], attrs:{}, effects:{"乾坤収納":"総体積0.5立方メートル、総質量50キロまでの非生命物体を収納できる；収納物は携行重量に含まれない。"}, desc:"容量と積載量に制限のある入門用の収納袋。内部の時間は正常に流れる。", consume:"なし" },
+            { id:'e17_3', name:'旧型ガイガーカウンター・記念版', tier:'F', cost:80,  type:17, source:'主神空間', tags:["世界の遺物","補助","科学"], attrs:{}, effects:{"放射線警報":"起動すると30メートル以内の顕著な電離放射線を探知し、おおよその方向と強度を表示する。"}, desc:"現在位置の電離放射線量率を測る携帯計器。", consume:"なし" }
         ],
 
         // ==========================================
@@ -892,14 +884,14 @@
             { id:'i3_6', name:'ネットガン用電池パック', tier:'E', cost:90,  type:'消費', source:'主神空間', tags:['弾薬','補助','消費'], effects:{"ネットガン補給":"パッケージを開けると帯電拘束ネットを5枚得る。"}, desc:'瞬間的な高圧電撃を供給する特殊電池。', consume:"開封に電池パック1個を消費", cd:'0' },
 
             // 💎 素材 - 製作と合成
-            { id:'i4_1', name:'百年玄鉄インゴット', tier:'D', cost:250, type:'材料', source:'主神空間', tags:['鍛造','補助','材料'], effects:{"鍛造副資材":"D級以下の金属装備の生産に使用すると1インゴットを消費し、その鍛造判定修正+15。"}, desc:'極上の武器鋳造下地。重くて頑丈。', consume:"生産ごとに玄鉄インゴット1個を消費", cd:'0' },
-            { id:'i4_2', name:'高密度エネルギーバッテリー', tier:'E', cost:100, type:'材料', source:'主神空間', tags:['エネルギー','補助','材料'], effects:{"器具への給電":"対応する科学照明・探知・工具系設備に10時間分の定格運転エネルギーを補充する。"}, desc:'汎用の予備電源。', consume:"バッテリー1個", cd:'0' },
-            { id:'i4_3', name:'粗悪な黒色火薬の包み', tier:'F', cost:25,  type:'材料', source:'主神空間', tags:['材料','補助','火薬'], effects:{"鉄砂装薬":"パッケージを開けると鉄砂装薬を10個得る。"}, desc:'火薬は湿気に弱く、中には大きさの不揃いな鉄砂が混じっている。', consume:"開封に火薬包み1包を消費", cd:'0' },
+            { id:'i4_1', name:'百年玄鉄インゴット', tier:'D', cost:250, type:"素材", source:'主神空間', tags:['鍛造','補助',"素材"], effects:{"鍛造副資材":"D級以下の金属装備の生産に使用すると1インゴットを消費し、その鍛造判定修正+15。"}, desc:'極上の武器鋳造下地。重くて頑丈。', consume:"生産ごとに玄鉄インゴット1個を消費", cd:'0' },
+            { id:'i4_2', name:'高密度エネルギーバッテリー', tier:'E', cost:100, type:"素材", source:'主神空間', tags:['エネルギー','補助',"素材"], effects:{"器具への給電":"対応する科学照明・探知・工具系設備に10時間分の定格運転エネルギーを補充する。"}, desc:'汎用の予備電源。', consume:"バッテリー1個", cd:'0' },
+            { id:'i4_3', name:'粗悪な黒色火薬の包み', tier:'F', cost:25,  type:"素材", source:'主神空間', tags:["素材",'補助','火薬'], effects:{"鉄砂装薬":"パッケージを開けると鉄砂装薬を10個得る。"}, desc:'火薬は湿気に弱く、中には大きさの不揃いな鉄砂が混じっている。', consume:"開封に火薬包み1包を消費", cd:'0' },
             
             // 🔮 特殊 - 因果と空間の法則
             { id:'i5_1', name:"身代わり呪いの藁人形", tier:'D', cost:900, type:'特殊', source:'主神空間', tags:["防御","魔法"], effects:{"身代わり":"ダメージを受けた時に任意で発動でき、藁人形が最大180のダメージを代わりに負担する。超過分は本人が受ける；発動後は1つ消費する。"}, desc:"使い捨ての護身呪を草結びに編み込み、身代わりではなく有限のシールドを提供する。", consume:"藁人形1個", cd:'0' },
             { id:'i5_2', name:"タクティカルアンカービーコン", tier:'D', cost:850, type:'特殊', source:'主神空間', tags:["補助","科学"], effects:{"定点ビーコン":"設置後24時間持続；対応受信機を持つ者は5キロ以内でビーコンの方向と距離を読み取れる。"}, desc:"集合地点を示す時限式の航法ビーコン。", consume:"ビーコン1基", cd:'0' },
-            { id:'i5_3', name:'空間折り畳みカプセル', tier:'D', cost:600, type:'特殊', source:'主神空間', tags:['空間','補助'], effects:{"折り畳み収納":"総体積1立方メートル、総質量100キロまでの非生命物体を繰り返し出し入れできる；収納物は携行重量に含まれない。"}, desc:'生き物は収納できないが、重量超過の危機を大幅に解決する。', consume:"无", cd:'0' }
+            { id:'i5_3', name:'空間折り畳みカプセル', tier:'D', cost:600, type:'特殊', source:'主神空間', tags:['空間','補助'], effects:{"折り畳み収納":"総体積1立方メートル、総質量100キロまでの非生命物体を繰り返し出し入れできる；収納物は携行重量に含まれない。"}, desc:'生き物は収納できないが、重量超過の危機を大幅に解決する。', consume:"なし", cd:'0' }
         ],
 
         // ==========================================
@@ -926,19 +918,19 @@
 
             // パッシブスキル (type: 1)
             { id:'s2_1', name:'基礎銃器精通', tier:'D', cost:600, type:1, source:'主神空間', tags:["敏捷","補助","自身","科学"], 
-              effects:{"銃器専精":"動能銃器で攻撃判定を行う時、敏捷判定修正+15。"}, desc:'銃の扱いを筋肉に刻み込む。', consume:"无" },
+              effects:{"銃器専精":"動能銃器で攻撃判定を行う時、敏捷判定修正+15。"}, desc:'銃の扱いを筋肉に刻み込む。', consume:"なし" },
             { id:'s2_2', name:'【武道】基礎近接精通', tier:'D', cost:600, type:1, source:'主神空間', tags:["筋力","補助","自身","武道"], 
-              effects:{"近接専精":"刀剣・槍・棍棒で近接攻撃判定を行う時、筋力判定修正+15。"}, desc:'刀を握っても素人に見えなくなる。', consume:"无" },
+              effects:{"近接専精":"刀剣・槍・棍棒で近接攻撃判定を行う時、筋力判定修正+15。"}, desc:'刀を握っても素人に見えなくなる。', consume:"なし" },
             { id:'s2_3', name:"呼吸制御の専精", tier:'D', cost:850, type:1, source:'主神空間', tags:["体力","補助","自身"], 
-              effects:{"呼吸耐久":"息止め・長距離走・煙塵による咳き込みなどの体力判定の修正+15。"}, desc:"運動と息止めのための呼吸リズム技術。功法や修練の境地には属さない。", consume:"无" },
+              effects:{"呼吸耐久":"息止め・長距離走・煙塵による咳き込みなどの体力判定の修正+15。"}, desc:"運動と息止めのための呼吸リズム技術。功法や修練の境地には属さない。", consume:"なし" },
             { id:'s2_4', name:'弱点解析アルゴリズム', tier:'E', cost:400, type:1, source:'主神空間', tags:["敏捷","補助","自身","科学"], 
-              effects:{"弱点観測":"30メートル以内の目標を1回観察すると、その目標への次の遠隔攻撃判定の修正+10。"}, desc:'脳に補助チップを埋め込み、脆弱部位を赤く表示する。', consume:"无" },
+              effects:{"弱点観測":"30メートル以内の目標を1回観察すると、その目標への次の遠隔攻撃判定の修正+10。"}, desc:'脳に補助チップを埋め込み、脆弱部位を赤く表示する。', consume:"なし" },
             { id:'s2_5', name:'鋼鉄の意志', tier:'E', cost:350, type:1, source:'主神空間', tags:["精神","防御","自身"], 
-              effects:{"精神耐圧":"恐怖や魅了に抵抗する時、精神判定修正+10。"}, desc:'生死の狭間で鍛え上げた意志。決して容易には屈しない。', consume:"无" },
+              effects:{"精神耐圧":"恐怖や魅了に抵抗する時、精神判定修正+10。"}, desc:'生死の狭間で鍛え上げた意志。決して容易には屈しない。', consume:"なし" },
             { id:'s2_6', name:'軽やかな歩法', tier:'E', cost:300, type:1, source:'主神空間', tags:["敏捷","防御","自身","武道"], 
-              effects:{"回避歩法":"視認できる攻撃に対する敏捷回避判定の修正+10。"}, desc:'人よりほんの少し速く走れるようにする。', consume:"无" },
+              effects:{"回避歩法":"視認できる攻撃に対する敏捷回避判定の修正+10。"}, desc:'人よりほんの少し速く走れるようにする。', consume:"なし" },
             { id:'s2_7', name:"生存耐久トレーニング", tier:'F', cost:90,  type:1, source:'主神空間', tags:["体力","補助","自身"], 
-              effects:{"生存耐久":"疲労・脱水・疾病の侵襲に抵抗する時、体力判定修正+5。"}, desc:"訓練で身につけた生存対処の技術。種族や血統は変わらない。", consume:"无" },
+              effects:{"生存耐久":"疲労・脱水・疾病の侵襲に抵抗する時、体力判定修正+5。"}, desc:"訓練で身につけた生存対処の技術。種族や血統は変わらない。", consume:"なし" },
             
             // 特殊スキル (type: 2)
             { id:'s3_1', name:'陰陽霊視', tier:'D', cost:650, type:2, source:'主神空間', tags:["精神","補助","自身","魔法"], 
@@ -946,18 +938,18 @@
             { id:'s3_2', name:'戦地救急の専精', tier:'D', cost:500, type:2, source:'主神空間', tags:["精神","補助","治療","単体"], 
               effects:{"救急知識":"医療器具で創傷を処置する時、専門判定修正+15。","戦地処置":"24EPと止血の粗い包帯1巻を消費し、接触中の目標を120HP回復する。"}, desc:'あなたの包帯の腕前は、大半の研修医よりも専門的だ。', consume:"アクティブEP 24と止血の粗い包帯1巻；パッシブは消費なし" },
             { id:'s3_3', name:'ハッカー潜入の専精', tier:'D', cost:550, type:1, source:'主神空間', tags:["精神","補助","自身","科学"], 
-              effects:{"電子解錠":"実際に接続した計算機で電子錠や警備システムを破る時、専門判定修正+15。"}, desc:"電子警備に対する操作の専精。実際の工具と接続条件が必要。", consume:"无" },
+              effects:{"電子解錠":"実際に接続した計算機で電子錠や警備システムを破る時、専門判定修正+15。"}, desc:"電子警備に対する操作の専精。実際の工具と接続条件が必要。", consume:"なし" },
             { id:'s3_4', name:'危険感知', tier:'E', cost:350, type:1, source:'主神空間', tags:["精神","補助","自身"], 
-              effects:{"伏撃への警戒":"10メートル以内で音や動きの手掛かりがある伏撃に対する知覚判定の修正+10。"}, desc:"近距離の異常な物音や動きの手掛かりに警戒を保つ訓練。", consume:"无" }
+              effects:{"伏撃への警戒":"10メートル以内で音や動きの手掛かりがある伏撃に対する知覚判定の修正+10。"}, desc:"近距離の異常な物音や動きの手掛かりに警戒を保つ訓練。", consume:"なし" }
         ],
 
         // 陣営の説明
         factionInfo: {
-            '守护者': { title:'守護者 · 秩序と守衛', rows:[ {label:'行動準則', val:'秩序を守り、残魂と畸変の源を排除し、世界崩壊を阻止する。'}, {label:'主神形態', val:'純白光球。'} ], ability:'専用能力 · 平和維持活動：被害ゼロ/世界の高安定度で極めて高いボーナスを得る。' },
-            '篡夺者': { title:'簒奪者 · 混沌と略奪', rows:[ {label:'行動準則', val:'秩序の礎を覆し、核心の気運を奪う。'}, {label:'主神形態', val:'暗紅の核心。'} ], ability:'専用能力 · 首狩り略奪：ハイリスク・ハイリターン。世界崩壊の代償を顧みず略奪する。' },
-            '织梦者': { title:'夢織り · 認知と魂', rows:[ {label:'行動準則', val:'鍵となる因果を捻じ曲げ、極端な感情と信仰を刈り取る。'}, {label:'主神形態', val:'温和な暖色。'} ], ability:'専用能力 · 黒幕：認知操作。二重スパイの立場を好む。' },
-            '残魂': { title:'残魂 · 失敗者の影', rows:[ {label:'行動準則', val:'原住民に奪舎し、現役の輪廻者をおびき寄せて殺し、赦免と引き換える。'}, {label:'生存状態', val:'安定した実体を持たず、極度に危険。'} ], ability:'専用能力 · 絶対偽装：任務はその世界のいずれかの輪廻者小隊の主線を破壊するか全滅させることに強制変更される。' },
-            '穿越者': { title:'穿越者 · 自由意志', rows:[ {label:'行動準則', val:'陣営の束縛を無視し、自由に探索する。'} ], ability:'専用ルールのボーナスはないが、極めて高い因果自由度を持つ。' }
+            "守護者": { title:'守護者 · 秩序と守衛', rows:[ {label:'行動準則', val:'秩序を守り、残魂と畸変の源を排除し、世界崩壊を阻止する。'}, {label:'主神形態', val:'純白光球。'} ], ability:'専用能力 · 平和維持活動：被害ゼロ/世界の高安定度で極めて高いボーナスを得る。' },
+            "簒奪者": { title:'簒奪者 · 混沌と略奪', rows:[ {label:'行動準則', val:'秩序の礎を覆し、核心の気運を奪う。'}, {label:'主神形態', val:'暗紅の核心。'} ], ability:'専用能力 · 首狩り略奪：ハイリスク・ハイリターン。世界崩壊の代償を顧みず略奪する。' },
+            "夢織り": { title:'夢織り · 認知と魂', rows:[ {label:'行動準則', val:'鍵となる因果を捻じ曲げ、極端な感情と信仰を刈り取る。'}, {label:'主神形態', val:'温和な暖色。'} ], ability:'専用能力 · 黒幕：認知操作。二重スパイの立場を好む。' },
+            "簒奪者": { title:"簒奪者 · 失敗者の影", rows:[ {label:'行動準則', val:'原住民に奪舎し、現役の輪廻者をおびき寄せて殺し、赦免と引き換える。'}, {label:'生存状態', val:'安定した実体を持たず、極度に危険。'} ], ability:'専用能力 · 絶対偽装：任務はその世界のいずれかの輪廻者小隊の主線を破壊するか全滅させることに強制変更される。' },
+            "輪廻者": { title:"輪廻者 · 自由意志", rows:[ {label:'行動準則', val:'陣営の束縛を無視し、自由に探索する。'} ], ability:'専用ルールのボーナスはないが、極めて高い因果自由度を持つ。' }
         },
 
         // ==========================================
@@ -1110,15 +1102,15 @@
     }
 
     // ===== 変数更新方式（追加API / 主AI追従） =====
-    const VARIABLE_API_MODE_KEY = 'samsara_variable_api_mode';
+    const VARIABLE_API_MODE_KEY = 'rinne_jp_variable_api_mode';
     const VARIABLE_API_WORLD_BOOK_RULES = {
-        "output_format (AI返信と同時更新・主API)": { '随主API': true, '额外API': false },
-        "[mvu_update]output_format (追加モデルで変数更新)": { '随主API': false, '额外API': true }
+        "output_format (AI返信と同時更新・主API)": { "主AI追従出力": true, "追加API": false },
+        "[mvu_update]output_format (追加モデルで変数更新)": { "主AI追従出力": false, "追加API": true }
     };
 
     function normalizeVariableApiMode(mode) {
-        return mode === '随主API' ? '随主API' : '额外API';
-    }
+return '主AI追従出力';
+}
     function variableApiStorage() {
         const roots = [window, (() => { try { return window.parent; } catch(e) { return null; } })(), (() => { try { return window.top; } catch(e) { return null; } })()];
         for (const root of roots) {
@@ -1127,11 +1119,8 @@
         return null;
     }
     function getVariableApiMode() {
-        try {
-  const storage = variableApiStorage();
-  return normalizeVariableApiMode(storage ? storage.getItem(VARIABLE_API_MODE_KEY) : '额外API');
-        } catch(e) { return '额外API'; }
-    }
+saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
+}
     function saveVariableApiMode(mode) {
         try {
   const storage = variableApiStorage();
@@ -1161,8 +1150,8 @@
     }
     function variableApiPresetDesired(name, mode) {
         const text = String(name || '');
-        if (text.indexOf('变量额外API') >= 0) return mode === '额外API';
-        if (text.indexOf('变量主API') >= 0) return mode === '随主API';
+        if (text.indexOf('变量额外API') >= 0) return mode === "追加API";
+        if (text.indexOf('变量主API') >= 0) return mode === "主AI追従出力";
         return null;
     }
     async function applyVariableApiMode(mode) {
@@ -1252,7 +1241,7 @@
         const el = $('variable-api-mode-status');
         if (!el) return;
         el.className = 'variable-api-mode-status' + (state ? ' ' + state : '');
-        el.textContent = message || (mode === '额外API'
+        el.textContent = message || (mode === "追加API"
   ? '現在：追加API出力。本文と変数更新は別ターンで実行されます。'
   : '現在：主AI追従出力。本文モデルが同じターンで変数更新も出力します。');
     }
@@ -1264,7 +1253,7 @@
         const result = await applyVariableApiMode(mode);
         buttons.forEach(btn => btn.disabled = false);
         if (result.ok) {
-  renderVariableApiMode('切り替え完了：' + (mode === '额外API' ? '追加API出力' : '主AI追従出力') + ' · 世界書の変更 ' + result.worldbookChanged + ' 件 · プリセットの変更 ' + result.presetChanged + ' 件', 'ok');
+  renderVariableApiMode('切り替え完了：' + (mode === "追加API" ? '追加API出力' : '主AI追従出力') + ' · 世界書の変更 ' + result.worldbookChanged + ' 件 · プリセットの変更 ' + result.presetChanged + ' 件', 'ok');
   if (!(options && options.silent)) showToast('変数更新方式を切り替えました');
         } else {
   renderVariableApiMode(result.error || '切り替え失敗', 'err');
@@ -1290,6 +1279,7 @@
         renderCustomForms();
         updateBgSummary();
         renderVariableApiMode();
+        chooseVariableApiMode('主AI追従出力', {silent:true});
 
         // 🌟 追加：ページ読み込み完了後にプリセットの案内を検出して表示する
         openWelcomeLoadModal();
@@ -1313,7 +1303,7 @@
         // ラジオリストを描画
         $('welcome-preset-list').innerHTML = keys.map(k => {
             const pre = p[k].state;
-            const dateStr = new Date(p[k].ts||0).toLocaleString('zh-CN', {month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'});
+            const dateStr = new Date(p[k].ts||0).toLocaleString("ja-JP", {month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'});
             const isSelected = welcomeSelectedPreset === k;
             
             return `
@@ -1504,7 +1494,7 @@
         const isSelected = selectedItems.has(item.id);
         const sel = isSelected ? 'is-selected' : '';
         const disabled = (!isSelected && currentCoins < item.cost) ? 'is-disabled' : '';
-        const srcClass = (item.source === '主神空間' || item.source === '主神空间') ? 'source-main' : (item.source && item.source !== '手工造物' ? 'source-world' : '');
+        const srcClass = (item.source === '主神空間' || item.source === "主神空間") ? 'source-main' : (item.source && item.source !== '手工造物' ? 'source-world' : '');
         const tagHtml = (item.tags||[]).map(t => `<span class="tag-text">${esc(t)}</span>`).join('');
         const srcTag = item.source ? `<span class="tag-text ${srcClass}">[${esc(item.source)}]</span>` : '';
         const attrsStr = item.attrs ? Object.entries(item.attrs).map(([k,v]) => `${k} ${v}${typeof v==='number'&&k==='AP'?'%':''}`).join(' · ') : '';
@@ -1585,7 +1575,7 @@
                 <div class="form-group"><label>パートナー名</label><input type="text" id="cp-name" class="form-control" placeholder="パートナーの名前"></div>
                 <div class="form-group"><label>生命階層</label><select id="cp-tier" class="form-control" onchange="updatePartnerBuildBtnState()">${['Ⅰ','Ⅱ','Ⅲ'].map(r=>`<option>${r}</option>`).join('')}</select></div>
                 <div class="form-group"><label>種族</label><input type="text" id="cp-race" class="form-control" placeholder="例：エルフ"></div>
-                <div class="form-group"><label>性別</label><select id="cp-gender" class="form-control"><option value="男">男性</option><option value="女">女性</option><option value="扶她">ふたなり</option><option value="男娘">男の娘</option><option value="药娘">薬娘</option><option value="太监">宦官</option><option value="无性别">無性</option></select></div>
+                <div class="form-group"><label>性別</label><select id="cp-gender" class="form-control"><option value="男">男性</option><option value="女">女性</option><option value="ふたなり">ふたなり</option><option value="男の娘">男の娘</option><option value="薬娘">薬娘</option><option value="宦官">宦官</option><option value="無性">無性</option></select></div>
             </div>
             <div class="form-group"><label>外見特徴</label><input type="text" id="cp-app" class="form-control" placeholder="外見を簡単に描写..."></div>
             <div class="form-group"><label>好きなもの</label><input type="text" id="cp-like" class="form-control" placeholder="例：キャラとくっつくのが好き、甘いものが好き..."></div>
@@ -1769,7 +1759,7 @@
             <button class="tab-button ${c.key===activePlotCat?'active':''}" onclick="switchPlotCat('${c.key}')">${c.label}</button>`).join('');
     }
     // 単一世界の身分上書き：単一世界に入ると身分を「穿越者」に強制しドロップダウンをロック；離れると元の選択へ戻して解除する
-    const IDENTITY_SINGLE_WORLD = '穿越者';
+    const IDENTITY_SINGLE_WORLD = "輪廻者";
     function applySingleWorldIdentityOverride() {
         const idEl = $('f-identity');
         if (!idEl) return;
@@ -2154,7 +2144,7 @@
     }
     
     function applyState(st) {
-        $('f-name').value = st.name||''; $('f-gender').value = st.gender||'男'; $('f-age').value = st.age||20; $('f-race').value = st.race||'人类'; $('f-identity').value = st.identity||'守护者'; currentCoins = st.coins ?? DB.initSpaceCoins; partnerCostPaid = st.partnerCostPaid || 0; $('val-coins').innerText = currentCoins; selectedItems = new Set(st.selectedItems||[]); selectedPlot = st.selectedPlot||null; selectedPartner = st.selectedPartner||null; useCustomPartnerFlag = !!st.useCustomPartnerFlag; singleWorldEnabled = !!st.singleWorldEnabled; customItems = st.customItems||[]; if (st.activePlotCat) activePlotCat = st.activePlotCat; else activePlotCat = 'multi'; originalIdentity = (st.originalIdentity !== undefined ? st.originalIdentity : null); singleWorldIdentityOverridden = !!st.singleWorldIdentityOverridden; document.querySelectorAll('.attr-input').forEach((input, idx) => { input.value = (st.attrs && st.attrs[DB.attributes[idx]]) ?? DB.attrMin; }); updateFactionDesc(); if (st.customPartner) { $('cp-name').value=st.customPartner.name||''; $('cp-tier').value=st.customPartner.tier||'F'; $('cp-race').value=st.customPartner.race||''; $('cp-gender').value=st.customPartner.gender||'男'; $('cp-app').value=st.customPartner.app||''; $('cp-like').value=st.customPartner.like||''; $('cp-bg').value=st.customPartner.bg||''; } if (st.singleWorld) { ['name','time','identity','mainstate','goal'].forEach(k => { const el=$('sw-'+k); if(el) el.value = st.singleWorld[k]||''; }); } const lockEl = $('ws-lock'); if (lockEl) lockEl.checked = !!st.stabilityLocked; const swForm = $('single-world-form'); if (swForm) { if (activePlotCat === 'single') { swForm.style.display=''; swForm.classList.add('expanded'); } else { swForm.classList.remove('expanded'); } } const idEl = $('f-identity'); if (idEl) { if (activePlotCat === 'single' || singleWorldIdentityOverridden) { if (!singleWorldIdentityOverridden) { originalIdentity = idEl.value; singleWorldIdentityOverridden = true; } idEl.value = IDENTITY_SINGLE_WORLD; idEl.disabled = true; singleWorldIdentityLocked = true; updateFactionDesc(); } else { idEl.disabled = false; singleWorldIdentityLocked = false; } } calcTier(); renderItems(); renderSelectedPanel(); renderPlotTabs(); renderPlots(); renderPartners(); updateBgSummary(); const cpClearBtn = $('cp-clear-btn'); if (cpClearBtn) cpClearBtn.style.display = (useCustomPartnerFlag && selectedPartner === 'custom') ? '' : 'none';
+        $('f-name').value = st.name||''; $('f-gender').value = st.gender||'男'; $('f-age').value = st.age||20; $('f-race').value = st.race||"人間"; $('f-identity').value = st.identity||"守護者"; currentCoins = st.coins ?? DB.initSpaceCoins; partnerCostPaid = st.partnerCostPaid || 0; $('val-coins').innerText = currentCoins; selectedItems = new Set(st.selectedItems||[]); selectedPlot = st.selectedPlot||null; selectedPartner = st.selectedPartner||null; useCustomPartnerFlag = !!st.useCustomPartnerFlag; singleWorldEnabled = !!st.singleWorldEnabled; customItems = st.customItems||[]; if (st.activePlotCat) activePlotCat = st.activePlotCat; else activePlotCat = 'multi'; originalIdentity = (st.originalIdentity !== undefined ? st.originalIdentity : null); singleWorldIdentityOverridden = !!st.singleWorldIdentityOverridden; document.querySelectorAll('.attr-input').forEach((input, idx) => { input.value = (st.attrs && st.attrs[DB.attributes[idx]]) ?? DB.attrMin; }); updateFactionDesc(); if (st.customPartner) { $('cp-name').value=st.customPartner.name||''; $('cp-tier').value=st.customPartner.tier||'F'; $('cp-race').value=st.customPartner.race||''; $('cp-gender').value=st.customPartner.gender||'男'; $('cp-app').value=st.customPartner.app||''; $('cp-like').value=st.customPartner.like||''; $('cp-bg').value=st.customPartner.bg||''; } if (st.singleWorld) { ['name','time','identity','mainstate','goal'].forEach(k => { const el=$('sw-'+k); if(el) el.value = st.singleWorld[k]||''; }); } const lockEl = $('ws-lock'); if (lockEl) lockEl.checked = !!st.stabilityLocked; const swForm = $('single-world-form'); if (swForm) { if (activePlotCat === 'single') { swForm.style.display=''; swForm.classList.add('expanded'); } else { swForm.classList.remove('expanded'); } } const idEl = $('f-identity'); if (idEl) { if (activePlotCat === 'single' || singleWorldIdentityOverridden) { if (!singleWorldIdentityOverridden) { originalIdentity = idEl.value; singleWorldIdentityOverridden = true; } idEl.value = IDENTITY_SINGLE_WORLD; idEl.disabled = true; singleWorldIdentityLocked = true; updateFactionDesc(); } else { idEl.disabled = false; singleWorldIdentityLocked = false; } } calcTier(); renderItems(); renderSelectedPanel(); renderPlotTabs(); renderPlots(); renderPartners(); updateBgSummary(); const cpClearBtn = $('cp-clear-btn'); if (cpClearBtn) cpClearBtn.style.display = (useCustomPartnerFlag && selectedPartner === 'custom') ? '' : 'none';
     }
     
     function openPresetModal() { renderPresetList(); $('preset-modal').style.display = 'flex'; }
@@ -2179,7 +2169,7 @@
             const b64 = btoa(unescape(encodeURIComponent(k)));
             const pre = p[k].state;
             const isDel = pendingDeletePreset === k;
-            const dateStr = new Date(p[k].ts||0).toLocaleString('zh-CN', {year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'});
+            const dateStr = new Date(p[k].ts||0).toLocaleString("ja-JP", {year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'});
             
             // 操作ボタンの状態判定
             let actionsHtml = '';
@@ -2386,7 +2376,7 @@
                 /* 半移行(接頭辞 JP + 葉 CN)のパスはどちらのスキーマでも解決しないため, 旧セーブだけでなく
                    移行期に書かれたデータもここで回収する。canonical が既にあれば常にそちらを優先する。 */
 var LEGACY_KEY_PREFERRED = {"关系リスト":true};
-                var LEGACY_KEY_RENAMES = {"传闻":"噂","布告与檄文":"布告と檄文","发布者":"発布者","张贴位置":"掲示位置","街头巷议":"街頭の噂","可信度":"信頼度","来源":"出典","情报交易":"情報取引","卖家":"売り手","情报评级":"情報評価","要价":"要求価格","摘要":"要約","真实内幕":"真の内幕","关系リスト":"関係リスト","背景故事":"背景","层级":"階層","当前形态":"現在形態","标签":"タグ","标签[]":"タグ[]","类型":"タイプ","描述":"説明","品质":"品質","效果":"効果","状态":"状態","消耗":"消費","身份":"身分","身份[]":"身分[]","是否队友":"仲間","态度":"態度","外貌":"外見","喜爱":"好み","形态库":"形態庫","力量":"筋力","体质":"体力","血统":"血統","在场":"登場","着装":"服装","职业":"職業","种族":"種族","装备":"装備","持续":"持続","最终属性":"最終属性","魔法减伤率":"魔法軽減率","物理减伤率":"物理軽減率","先攻DC":"先制DC","角色":"キャラ","空间币":"スペースコイン","权限凭证":"権限証憑","任务":"任務","副本成就":"インスタンス実績","奖励":"報酬","难度":"難易度","说明":"説明","击杀":"撃破","列表":"リスト","惩罚":"罰則","交付":"納品","目标":"目標","委托方":"依頼元","隐藏真相":"隠された真実","成员商库":"メンバー商品庫","道具列表":"道具リスト","道具列表[]":"道具リスト[]","价格":"価格","技能列表":"技能リスト","技能列表[]":"技能リスト[]","升级列表":"升級リスト","升级列表[]":"升級リスト[]","所属大类":"所属カテゴリ","替换目标":"置換対象","血统列表":"血統リスト","血统列表[]":"血統リスト[]","装备列表":"装備リスト","装备列表[]":"装備リスト[]","设置":"設定","单一世界":"単一世界","世界超稳":"世界超安定","法则":"法則","法则[]":"法則[]","后台":"バックステージ","货币":"通貨","购买力基准":"購買力基準","经济波动":"経済変動","历法":"暦法","闰年规则":"閏年規則","月份天数":"月日数","月份天数[]":"月日数[]","时间":"時間","势力":"勢力","领地":"領地","实力":"実力","风险":"リスク","稳定":"安定","异端雷达":"異端レーダー","当前模式":"現在モード","名单":"名簿","经历":"経歴","阵营":"陣営","因果轨道":"因果軌道","当前阶段":"現在段階","故事线":"ストーリーライン","偏移记录":"偏移記録","引发者":"誘発者","影响程度":"影響度","下一节点":"次ノード","系统状态":"システム状態","待播报记录":"配信待ち記録","当前轮次":"現在ラウンド","上次世界日期":"前回世界日付","试炼任务名单":"試練任務名簿","试炼任务名单[]":"試練任務名簿[]","试炼已完成":"試練完了","是否可试炼":"試練可能","是否试炼任务":"試練任務中","是否在主神空间":"主神空間滞在中","是否战斗中":"戦闘中","游玩天数":"プレイ日数","待办事件":"待機イベント","待办事件[]":"待機イベント[]","建设序列":"建設シーケンス","产出":"産出","功能":"機能","阶段":"段階","下次产出日期":"次回産出日","下次产出游天":"次回産出游日","能源":"エネルギー","当前":"現在","所属对象":"所属対象","所属对象[]":"所属対象[]","完整度":"完全度","消耗单元":"消耗ユニット","余量":"残量","主体规模":"主体規模","驻扎人员":"駐留人員","关系列表":"関係リスト"};
+                var LEGACY_KEY_RENAMES = {"传闻":"噂","布告与檄文":"布告と檄文","发布者":"発布者","张贴位置":"掲示位置","街头巷议":"街頭の噂","可信度":"信頼度","来源":"出典","情报交易":"情報取引","卖家":"売り手","情报评级":"情報評価","要价":"要求価格","摘要":"要約","真实内幕":"真の内幕","关系リスト":"関係リスト","背景故事":"背景","层级":"階層","当前形态":"現在形態","标签":"タグ","标签[]":"タグ[]","类型":"タイプ","描述":"説明","品质":"品質","效果":"効果","状态":"状態","消耗":"消費","身份":"身分","身份[]":"身分[]","是否队友":"仲間","态度":"態度","外貌":"外見","喜爱":"好み","形态库":"形態庫","力量":"筋力","体质":"体力","血统":"血統","在场":"登場","着装":"服装","职业":"職業","种族":"種族","装备":"装備","持续":"持続","最终属性":"最終属性","魔法减伤率":"魔法軽減率","物理减伤率":"物理軽減率","先攻DC":"先制DC","角色":"キャラ","空间币":"スペースコイン","权限凭证":"権限証憑","任务":"任務","副本成就":"インスタンス実績","奖励":"報酬","难度":"難易度","说明":"説明","击杀":"撃破","列表":"リスト","惩罚":"罰則","交付":"納品","目标":"目標","委托方":"依頼元","隐藏真相":"隠された真実","成员商库":"メンバー商品庫","道具列表":"道具リスト","道具列表[]":"道具リスト[]","价格":"価格","技能列表":"技能リスト","技能列表[]":"技能リスト[]","升级列表":"強化リスト","升级列表[]":"強化リスト[]","所属大类":"所属カテゴリ","替换目标":"置換対象","血统列表":"血統リスト","血统列表[]":"血統リスト[]","装备列表":"装備リスト","装备列表[]":"装備リスト[]","设置":"設定","单一世界":"単一世界","世界超稳":"世界超安定","法则":"法則","法则[]":"法則[]","后台":"バックステージ","货币":"通貨","购买力基准":"購買力基準","经济波动":"経済変動","历法":"暦法","闰年规则":"閏年規則","月份天数":"月日数","月份天数[]":"月日数[]","时间":"時間","势力":"勢力","领地":"領地","实力":"実力","风险":"リスク","稳定":"安定","异端雷达":"異端レーダー","当前模式":"現在モード","名单":"名簿","经历":"経歴","阵营":"陣営","因果轨道":"因果軌道","当前阶段":"現在段階","故事线":"ストーリーライン","偏移记录":"偏移記録","引发者":"誘発者","影响程度":"影響度","下一节点":"次ノード","系统状态":"システム状態","待播报记录":"配信待ち記録","当前轮次":"現在ラウンド","上次世界日期":"前回世界日付","试炼任务名单":"試練任務名簿","试炼任务名单[]":"試練任務名簿[]","试炼已完成":"試練完了","是否可试炼":"試練可能","是否试炼任务":"試練任務中","是否在主神空间":"主神空間滞在中","是否战斗中":"戦闘中","游玩天数":"プレイ日数","待办事件":"待機イベント","待办事件[]":"待機イベント[]","建设序列":"建設シーケンス","产出":"産出","功能":"機能","阶段":"段階","下次产出日期":"次回産出日","下次产出游天":"次回産出プレイ日","能源":"エネルギー","当前":"現在","所属对象":"所属対象","所属对象[]":"所属対象[]","完整度":"完全度","消耗单元":"消耗ユニット","余量":"残量","主体规模":"主体規模","驻扎人员":"駐留人員","关系列表":"関係リスト"};
                 /* F5B_ENGINE_RECORD_SCOPE: 世界エンジン自身の自由形式レコードコンテナ。ZOD はこれらを
                    z.record(z.string(), z.any()) / z.array(z.any()) として宣言しており、内部キーは MVU キーでは
                    なくエンジン自身の記録モデル(RECORDS/DETAILS, 簡体字のまま読む)である。再帰リネームの
@@ -2439,7 +2429,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 _set(c, 'stat_data.キャラ.身分', [identity, gender, age+'歳']);
                 _set(c, 'stat_data.キャラ.スペースコイン', currentCoins);
                 
-                _set(c, 'stat_data.キャラ.道具', itemObj);
+                _set(c, "stat_data.キャラ.アイテム", itemObj);
                 _set(c, 'stat_data.キャラ.装備', equipObj);
                 _set(c, 'stat_data.キャラ.技能', skillObj);
                 
@@ -2501,7 +2491,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 時間アンカー: ${$('sw-time').value.trim() || '未設定'}
 メインストーリー状態: ${$('sw-mainstate').value.trim() || '未設定'}
 潜入身分: ${$('sw-identity').value.trim() || 'キャラクター'}
-主神任务: ${$('sw-goal').value.trim() || 'なし'}`;
+主神任務: ${$('sw-goal').value.trim() || 'なし'}`;
         } else if (selectedPlot) {
             const p = DB.plots.find(x => x.id === selectedPlot);
             if (p) {

@@ -1,7 +1,7 @@
 import type { Api } from '@earendil-works/pi-ai';
 
 /** 需要映射到服务商原生 JSON 输出配置的两种应答格式。 */
-export type PiStructuredResponseFormat = '格式化输出' | '格式化输出(v4兼容)';
+export type PiStructuredResponseFormat = "フォーマット出力" | "フォーマット出力(v4互換)";
 
 /** MVU 的结构化输出 Schema，包含协议需要的名称及可选严格校验标记。 */
 export type PiJsonSchema = {
@@ -171,11 +171,11 @@ function applyNativeStructuredOutput(
     response_format: PiStructuredResponseFormat,
     schema: PiJsonSchema | undefined
 ): Record<string, unknown> {
-    if (response_format === '格式化输出' && !schema) {
+    if (response_format === "フォーマット出力" && !schema) {
         throw new Error('More source structured output requires a JSON schema');
     }
 
-    const is_json_schema = response_format === '格式化输出';
+    const is_json_schema = response_format === "フォーマット出力";
     if (api === 'openai-completions') {
         return {
             ...payload,

@@ -53,16 +53,16 @@ import {
 installPiAbortSignalPolyfills();
 
 export const PI_RUNTIME_RESPONSE_FORMATS = [
-    '聊天消息',
-    '工具调用',
-    '格式化输出',
-    '格式化输出(v4兼容)',
+    "チャットメッセージ",
+    "ツール呼び出し",
+    "フォーマット出力",
+    "フォーマット出力(v4互換)",
 ] as const;
 
 /** 额外解析允许使用的应答格式，供预检和原生载荷转换共同约束。 */
 export type PiRuntimeResponseFormat = (typeof PI_RUNTIME_RESPONSE_FORMATS)[number];
 /** 一次额外模型请求读取的完整设置结构。 */
-export type PiExtraModelSettings = MvuSettings['额外模型解析配置'];
+export type PiExtraModelSettings = MvuSettings["追加モデル解析設定"];
 
 /** 运行时失败分类；配合 retryable 决定请求策略与界面提示。 */
 export type PiRuntimeErrorCode =
@@ -198,7 +198,7 @@ function resolveResponseFormat(
     settings: ExtraModelSettingsRecord,
     override: unknown
 ): PiRuntimeResponseFormat {
-    const value = override ?? settings['应答格式'];
+    const value = override ?? settings["応答フォーマット"];
     if (
         typeof value !== 'string' ||
         !PI_RUNTIME_RESPONSE_FORMATS.some(candidate => candidate === value)
@@ -275,10 +275,10 @@ function resolveSampling(
         ? optionalNumberField(settings, 'top_k', 0, 500, true)
         : undefined;
     const frequencyPenalty = capabilities.sampling.frequencyPenalty
-        ? optionalNumberField(settings, '频率惩罚', -2, 2)
+        ? optionalNumberField(settings, "頻度ペナルティ", -2, 2)
         : undefined;
     const presencePenalty = capabilities.sampling.presencePenalty
-        ? optionalNumberField(settings, '存在惩罚', -2, 2)
+        ? optionalNumberField(settings, "存在ペナルティ", -2, 2)
         : undefined;
     if (
         resolution.definition.key === 'anthropic' &&
@@ -341,16 +341,16 @@ function assertResponseCapability(
     capabilities: Readonly<PiApiCapabilities>,
     api: Api
 ): void {
-    if (responseFormat === '工具调用' && !capabilities.tools) {
+    if (responseFormat === "ツール呼び出し" && !capabilities.tools) {
         throw new PiRuntimeError(
             'unsupported_capability',
             `More source API '${api}' does not support tool calls`
         );
     }
     const structuredOutputUnsupported =
-        responseFormat === '格式化输出' && !capabilities.structuredOutput;
+        responseFormat === "フォーマット出力" && !capabilities.structuredOutput;
     const jsonObjectOutputUnsupported =
-        responseFormat === '格式化输出(v4兼容)' && !capabilities.jsonObjectOutput;
+        responseFormat === "フォーマット出力(v4互換)" && !capabilities.jsonObjectOutput;
     if (structuredOutputUnsupported || jsonObjectOutputUnsupported) {
         throw new PiRuntimeError(
             'unsupported_capability',
@@ -364,7 +364,7 @@ function prepareTools(
     responseFormat: PiRuntimeResponseFormat,
     definitions: readonly ToolDefinition[] | undefined
 ): readonly Tool[] | undefined {
-    if (responseFormat !== '工具调用') {
+    if (responseFormat !== "ツール呼び出し") {
         return undefined;
     }
     if (!definitions?.length) {
@@ -387,13 +387,13 @@ function prepareJsonSchema(
     responseFormat: PiRuntimeResponseFormat,
     schema: PiJsonSchema | undefined
 ): PiJsonSchema | undefined {
-    if (responseFormat === '格式化输出' && schema === undefined) {
+    if (responseFormat === "フォーマット出力" && schema === undefined) {
         throw new PiRuntimeError(
             'invalid_configuration',
             'More source structured output requires a JSON schema'
         );
     }
-    return responseFormat === '格式化输出' ? cloneJsonSchema(schema) : undefined;
+    return responseFormat === "フォーマット出力" ? cloneJsonSchema(schema) : undefined;
 }
 
 /** 用空载荷预演请求转换，提前发现受保护字段覆盖及格式配置错误。 */
@@ -461,7 +461,7 @@ export async function assertPiRuntimeConfiguration(
     const responseFormat = resolveResponseFormat(settings, input.responseFormat);
     const capabilities = capabilityFor(resolution);
     const streaming =
-        settings['兼容假流式'] === true || isPiStreamingRequired(resolution.model.api);
+        settings["疑似ストリーミング互換"] === true || isPiStreamingRequired(resolution.model.api);
     if (streaming && !capabilities.streaming) {
         throw new PiRuntimeError(
             'unsupported_capability',
@@ -508,7 +508,7 @@ export async function assertPiRuntimeConfiguration(
     try {
         tools = prepareTools(responseFormat, input.tools);
         toolChoice =
-            responseFormat === '工具调用'
+            responseFormat === "ツール呼び出し"
                 ? resolvePiToolChoice(resolution.model.api, input.toolChoice ?? 'required')
                 : undefined;
     } catch (error) {
@@ -623,8 +623,8 @@ function assertImageCapability(
 /** 仅保留需要写入原生载荷的两种格式化输出模式。 */
 function nativeStructuredFormat(
     responseFormat: PiRuntimeResponseFormat
-): '格式化输出' | '格式化输出(v4兼容)' | undefined {
-    return responseFormat === '格式化输出' || responseFormat === '格式化输出(v4兼容)'
+): "フォーマット出力" | "フォーマット出力(v4互換)" | undefined {
+    return responseFormat === "フォーマット出力" || responseFormat === "フォーマット出力(v4互換)"
         ? responseFormat
         : undefined;
 }

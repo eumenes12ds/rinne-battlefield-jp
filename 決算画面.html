@@ -552,11 +552,11 @@
           const GRADES = ['F','E','D','C','B','A','S','SS','SSS'];
 
           // 決算の寛容判定：主神任務/昇格試練の完了状態は一般的な同義表記を許容し、AIの偶発的な表現揺れで失敗と誤判定されるのを防ぐ。
-          const SETTLEMENT_SUCCESS_STATUSES = new Set(['決算可能','提出可能','清算待ち','清算','清算済み','完了','完了済み','清算完了','待结算','结算','已结算','完成','已完成','结算完成','可结算']);
+          const SETTLEMENT_SUCCESS_STATUSES = new Set(['決算可能','提出可能','清算待ち','清算','清算済み','完了','完了済み','清算完了','待结算','结算','已结算','完成',"完了",'结算完成',"決算可能"]);
     // F5C_ENUM_VALUE_COMPAT: 旧セーブ(簡体字版)の実績状態も達成として扱う。ZOD は読み取り境界で
     // 正規値へ移行するが、チャット読み込み時に再パースされないため、比較側も両表記を受け入れる。
-    function isAchievedStatus(status) { return status === '達成済み' || status === '已达成'; }
-          const SETTLEMENT_FAILURE_STATUSES = new Set(['失敗','失敗済み','任務失敗','失败','已失败','任务失败']);
+    function isAchievedStatus(status) { return status === '達成済み' || status === "達成済み"; }
+          const SETTLEMENT_FAILURE_STATUSES = new Set(['失敗','失敗済み','任務失敗',"失敗","失敗","失敗"]);
           function settlementTaskStatus(value) { return String(value || '').trim(); }
           function isSettlementTaskSuccessful(value) { return SETTLEMENT_SUCCESS_STATUSES.has(settlementTaskStatus(value)); }
           function isSettlementTaskFailed(value) { return SETTLEMENT_FAILURE_STATUSES.has(settlementTaskStatus(value)); }
@@ -609,8 +609,8 @@
                 return '';
               });
             }
-            take(/(-?\d+(?:\.\d+)?)\s*(万)?\s*(?:スペースコイン|空间币)/g);
-            take(/(?:スペースコイン|空间币)\s*(?:奖励|惩罚|罰則|扣除|损失|减少|[：:]|\s)*\s*(-?\d+(?:\.\d+)?)\s*(万)?/g);
+            take(/(-?\d+(?:\.\d+)?)\s*(万)?\s*(?:スペースコイン|(?:空间币|スペースコイン))/g);
+            take(/(?:スペースコイン|(?:空间币|スペースコイン))\s*(?:(?:奖励|報酬)|(?:惩罚|罰則)|罰則|扣除|损失|减少|[：:]|\s)*\s*(-?\d+(?:\.\d+)?)\s*(万)?/g);
             return values.reduce(function(sum, n) {
               return sum + (penaltyMode ? Math.abs(n) : Math.max(0, n));
             }, 0);
@@ -620,7 +620,7 @@
             return String(value || '')
               .split(/[；;、|｜+＋\n]+/)
               .map(function(x) { return x.trim(); })
-              .filter(function(x) { return x && x.indexOf('スペースコイン') < 0 && x.indexOf('空间币') < 0; })
+              .filter(function(x) { return x && x.indexOf('スペースコイン') < 0 && x.indexOf("スペースコイン") < 0; })
               .join('；');
           }
 
@@ -687,7 +687,7 @@
             if (!isSingleWorld) {
               Object.keys(factions).forEach(function(name) {
                 const entry = factions[name] || {};
-                const reputation = Number(entry.声望) || 0;
+                const reputation = Number(entry.名声) || 0;
                 if (reputation <= 0) return;
                 const subtotal = base * reputation / 100;
                 reputationRaw += subtotal;
@@ -883,7 +883,7 @@
           /* 半移行(接頭辞 JP + 葉 CN)のパスはどちらのスキーマでも解決しないため, 旧セーブだけでなく
              移行期に書かれたデータもここで回収する。canonical が既にあれば常にそちらを優先する。 */
 var LEGACY_KEY_PREFERRED = {"关系リスト":true};
-          var LEGACY_KEY_RENAMES = {"传闻":"噂","布告与檄文":"布告と檄文","发布者":"発布者","张贴位置":"掲示位置","街头巷议":"街頭の噂","可信度":"信頼度","来源":"出典","情报交易":"情報取引","卖家":"売り手","情报评级":"情報評価","要价":"要求価格","摘要":"要約","真实内幕":"真の内幕","关系リスト":"関係リスト","背景故事":"背景","层级":"階層","当前形态":"現在形態","标签":"タグ","标签[]":"タグ[]","类型":"タイプ","描述":"説明","品质":"品質","效果":"効果","状态":"状態","消耗":"消費","身份":"身分","身份[]":"身分[]","是否队友":"仲間","态度":"態度","外貌":"外見","喜爱":"好み","形态库":"形態庫","力量":"筋力","体质":"体力","血统":"血統","在场":"登場","着装":"服装","职业":"職業","种族":"種族","装备":"装備","持续":"持続","最终属性":"最終属性","魔法减伤率":"魔法軽減率","物理减伤率":"物理軽減率","先攻DC":"先制DC","角色":"キャラ","空间币":"スペースコイン","权限凭证":"権限証憑","任务":"任務","副本成就":"インスタンス実績","奖励":"報酬","难度":"難易度","说明":"説明","击杀":"撃破","列表":"リスト","惩罚":"罰則","交付":"納品","目标":"目標","委托方":"依頼元","隐藏真相":"隠された真実","成员商库":"メンバー商品庫","道具列表":"道具リスト","道具列表[]":"道具リスト[]","价格":"価格","技能列表":"技能リスト","技能列表[]":"技能リスト[]","升级列表":"升級リスト","升级列表[]":"升級リスト[]","所属大类":"所属カテゴリ","替换目标":"置換対象","血统列表":"血統リスト","血统列表[]":"血統リスト[]","装备列表":"装備リスト","装备列表[]":"装備リスト[]","设置":"設定","单一世界":"単一世界","世界超稳":"世界超安定","法则":"法則","法则[]":"法則[]","后台":"バックステージ","货币":"通貨","购买力基准":"購買力基準","经济波动":"経済変動","历法":"暦法","闰年规则":"閏年規則","月份天数":"月日数","月份天数[]":"月日数[]","时间":"時間","势力":"勢力","领地":"領地","实力":"実力","风险":"リスク","稳定":"安定","异端雷达":"異端レーダー","当前模式":"現在モード","名单":"名簿","经历":"経歴","阵营":"陣営","因果轨道":"因果軌道","当前阶段":"現在段階","故事线":"ストーリーライン","偏移记录":"偏移記録","引发者":"誘発者","影响程度":"影響度","下一节点":"次ノード","系统状态":"システム状態","待播报记录":"配信待ち記録","当前轮次":"現在ラウンド","上次世界日期":"前回世界日付","试炼任务名单":"試練任務名簿","试炼任务名单[]":"試練任務名簿[]","试炼已完成":"試練完了","是否可试炼":"試練可能","是否试炼任务":"試練任務中","是否在主神空间":"主神空間滞在中","是否战斗中":"戦闘中","游玩天数":"プレイ日数","待办事件":"待機イベント","待办事件[]":"待機イベント[]","建设序列":"建設シーケンス","产出":"産出","功能":"機能","阶段":"段階","下次产出日期":"次回産出日","下次产出游天":"次回産出游日","能源":"エネルギー","当前":"現在","所属对象":"所属対象","所属对象[]":"所属対象[]","完整度":"完全度","消耗单元":"消耗ユニット","余量":"残量","主体规模":"主体規模","驻扎人员":"駐留人員","关系列表":"関係リスト"};
+          var LEGACY_KEY_RENAMES = {"传闻":"噂","布告与檄文":"布告と檄文","发布者":"発布者","张贴位置":"掲示位置","街头巷议":"街頭の噂","可信度":"信頼度","来源":"出典","情报交易":"情報取引","卖家":"売り手","情报评级":"情報評価","要价":"要求価格","摘要":"要約","真实内幕":"真の内幕","关系リスト":"関係リスト","背景故事":"背景","层级":"階層","当前形态":"現在形態","标签":"タグ","标签[]":"タグ[]","类型":"タイプ","描述":"説明","品质":"品質","效果":"効果","状态":"状態","消耗":"消費","身份":"身分","身份[]":"身分[]","是否队友":"仲間","态度":"態度","外貌":"外見","喜爱":"好み","形态库":"形態庫","力量":"筋力","体质":"体力","血统":"血統","在场":"登場","着装":"服装","职业":"職業","种族":"種族","装备":"装備","持续":"持続","最终属性":"最終属性","魔法减伤率":"魔法軽減率","物理减伤率":"物理軽減率","先攻DC":"先制DC","角色":"キャラ","空间币":"スペースコイン","权限凭证":"権限証憑","任务":"任務","副本成就":"インスタンス実績","奖励":"報酬","难度":"難易度","说明":"説明","击杀":"撃破","列表":"リスト","惩罚":"罰則","交付":"納品","目标":"目標","委托方":"依頼元","隐藏真相":"隠された真実","成员商库":"メンバー商品庫","道具列表":"道具リスト","道具列表[]":"道具リスト[]","价格":"価格","技能列表":"技能リスト","技能列表[]":"技能リスト[]","升级列表":"強化リスト","升级列表[]":"強化リスト[]","所属大类":"所属カテゴリ","替换目标":"置換対象","血统列表":"血統リスト","血统列表[]":"血統リスト[]","装备列表":"装備リスト","装备列表[]":"装備リスト[]","设置":"設定","单一世界":"単一世界","世界超稳":"世界超安定","法则":"法則","法则[]":"法則[]","后台":"バックステージ","货币":"通貨","购买力基准":"購買力基準","经济波动":"経済変動","历法":"暦法","闰年规则":"閏年規則","月份天数":"月日数","月份天数[]":"月日数[]","时间":"時間","势力":"勢力","领地":"領地","实力":"実力","风险":"リスク","稳定":"安定","异端雷达":"異端レーダー","当前模式":"現在モード","名单":"名簿","经历":"経歴","阵营":"陣営","因果轨道":"因果軌道","当前阶段":"現在段階","故事线":"ストーリーライン","偏移记录":"偏移記録","引发者":"誘発者","影响程度":"影響度","下一节点":"次ノード","系统状态":"システム状態","待播报记录":"配信待ち記録","当前轮次":"現在ラウンド","上次世界日期":"前回世界日付","试炼任务名单":"試練任務名簿","试炼任务名单[]":"試練任務名簿[]","试炼已完成":"試練完了","是否可试炼":"試練可能","是否试炼任务":"試練任務中","是否在主神空间":"主神空間滞在中","是否战斗中":"戦闘中","游玩天数":"プレイ日数","待办事件":"待機イベント","待办事件[]":"待機イベント[]","建设序列":"建設シーケンス","产出":"産出","功能":"機能","阶段":"段階","下次产出日期":"次回産出日","下次产出游天":"次回産出プレイ日","能源":"エネルギー","当前":"現在","所属对象":"所属対象","所属对象[]":"所属対象[]","完整度":"完全度","消耗单元":"消耗ユニット","余量":"残量","主体规模":"主体規模","驻扎人员":"駐留人員","关系列表":"関係リスト"};
           /* F5B_ENGINE_RECORD_SCOPE: 世界エンジン自身の自由形式レコードコンテナ。ZOD はこれらを
              z.record(z.string(), z.any()) / z.array(z.any()) として宣言しており、内部キーは MVU キーでは
              なくエンジン自身の記録モデル(RECORDS/DETAILS, 簡体字のまま読む)である。再帰リネームの
@@ -1038,7 +1038,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 const fallback = Object.keys(list).filter(function(key) {
                   if (keys.indexOf(key) >= 0) return false;
                   const task = list[key];
-                  return task && /(主神|系统|空间|普升|晋升|试炼)/.test(String(task.依頼元 || '').trim());
+                  return task && /(主神|系统|(?:空间|空間)|普升|晋升|试炼)/.test(String(task.依頼元 || '').trim());
                 });
                 keys = keys.concat(fallback.slice(0, missing));
               }
@@ -1046,14 +1046,14 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
               // 試練マークはあるが任務名簿が未作成の移行セーブとの互換。
               keys = Object.keys(list).filter(function(key) {
                 const task = list[key];
-                return task && /(主神|系统|空间|普升|晋升|试炼)/.test(String(task.依頼元 || '').trim());
+                return task && /(主神|系统|(?:空间|空間)|普升|晋升|试炼)/.test(String(task.依頼元 || '').trim());
               });
             } else {
               // 旧セーブは標準値を優先して踏襲する；委託元がAIに壊されている場合は、プログラム側の試練署名にも同時に合致するときのみ救済する。
               // TRIAL_COMMISSIONER_ALIAS_V2：旧セーブは「普升试炼」のみ正確に互換し、通常の「主神空間」任務には拡大しない。
               const canonical = Object.keys(list).filter(function(key) {
                 const task = list[key];
-                return task && ['昇格試練','晋升试炼','普升试炼'].includes(String(task.依頼元 || '').trim());
+                return task && ['昇格試練',"昇格試練","昇格試練"].includes(String(task.依頼元 || '').trim());
               });
               if (canonical.length) {
                 keys = canonical;
@@ -1062,10 +1062,10 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                   const task = list[key];
                   if (!task || typeof task !== 'object') return false;
                   const commissioner = String(task.依頼元 || '').trim();
-                  if (!/(主神|系统|空间|普升|晋升|试炼)/.test(commissioner)) return false;
+                  if (!/(主神|系统|(?:空间|空間)|普升|晋升|试炼)/.test(commissioner)) return false;
                   const delivery = String(task.納品 || '').trim();
                   const legacyKey = String(key || '').trim();
-                  return delivery === '全試練任務の完了後に一括清算' || delivery === '全部试炼主任务完成后统一结算' || /(?:昇格試練|晋升试炼)[·.]\s*\d+/.test(legacyKey);
+                  return delivery === '全試練任務の完了後に一括清算' || delivery === '全部试炼主任务完成后统一结算' || /(?:昇格試練|(?:晋升试炼|昇格試練))[·.]\s*\d+/.test(legacyKey);
                 });
               }
             }
@@ -1074,7 +1074,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
               const task = list[key] || {};
               return {
                 key: key,
-                name: String(task.名称 || task.任务名 || task.标题 || key || ('昇格試練·' + (index + 1))),
+                name: String(task.名称 || task.任务名 || task.タイトル || key || ('昇格試練·' + (index + 1))),
                 status: String(task.状態 || '').trim()
               };
             });
@@ -1089,7 +1089,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             const list = stat && stat.任務 && stat.任務.リスト && typeof stat.任務.リスト === 'object' ? stat.任務.リスト : {};
             const keys = Object.keys(list).filter(function(key) {
               const commissioner = String(list[key] && list[key].依頼元 || '').trim();
-              return commissioner === '主神任務' || commissioner === '主神任务' || commissioner === '昇格試練' || commissioner === '晋升试炼' || commissioner === '普升试炼';
+              return commissioner === '主神任務' || commissioner === "主神任務" || commissioner === '昇格試練' || commissioner === "昇格試練" || commissioner === "昇格試練";
             });
             extractTrialTasks(data).forEach(function(task) {
               if (task && task.key && keys.indexOf(task.key) < 0) keys.push(task.key);
@@ -1319,7 +1319,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
               const status=String(task.状態 || '').trim();
               const terminal=(typeof isSettlementTaskTerminal === 'function')
                 ? isSettlementTaskTerminal(status)
-                : ['決算可能','提出可能','清算待ち','清算','清算済み','完了','完了済み','清算完了','待结算','结算','已结算','完成','已完成','结算完成','可结算','失敗','失敗済み','任務失敗','失败','已失败','任务失败'].indexOf(status)>=0;
+                : ['決算可能','提出可能','清算待ち','清算','清算済み','完了','完了済み','清算完了','待结算','结算','已结算','完成',"完了",'结算完成',"決算可能",'失敗','失敗済み','任務失敗',"失敗","失敗","失敗"].indexOf(status)>=0;
               if (terminal) score+=100;
               else if (status) score+=10;
             });
@@ -1405,7 +1405,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             }).length;
             const trackedFactions = Object.keys(factions).filter(function(name) {
               const entry = factions[name] || {};
-              return Number.isFinite(Number(entry.声望));
+              return Number.isFinite(Number(entry.名声));
             }).length;
 
             const taskCount = Object.keys(taskList).length;
@@ -1517,7 +1517,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             let bestIndex = -1;
             Object.keys(list).forEach(function(key) {
               const task = list[key] || {};
-              if (String(task.依頼元 || '').trim() !== '主神任務' && String(task.依頼元 || '').trim() !== '主神任务') return;
+              if (String(task.依頼元 || '').trim() !== '主神任務' && String(task.依頼元 || '').trim() !== "主神任務") return;
               if (!isSettlementTaskSuccessful(task.状態)) return;
               successfulTaskCount += 1;
               if (!isSingleWorld) return;
@@ -1662,7 +1662,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
           function inferTrialTasksFromSettlement(text) {
             const source = String(text || '');
             const rewards = {};
-            const re = /【?(?:昇格試練|晋升试炼)[·.]\s*(\d+)】?\s*[：:]\s*([^\n]+)/g;
+            const re = /【?(?:昇格試練|(?:晋升试炼|昇格試練))[·.]\s*(\d+)】?\s*[：:]\s*([^\n]+)/g;
             let m;
             let maxNo = 0;
             while ((m = re.exec(source)) !== null) {
@@ -1703,7 +1703,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
               html += '<div class="st-trial-row"><div class="st-trial-name">' + escapeHtml(task.name) + '</div><div class="st-trial-state ' + cls + '">' + escapeHtml(label) + '</div></div>';
             });
             html += '<div class="st-trial-bar"><div class="st-trial-fill" style="width:' + pct + '%"></div></div>';
-            html += '<div class="st-trial-result"><div class="st-trial-stamp ' + (passed ? 'pass' : 'fail') + '">' + (passed ? '試練完了 · ステータスバーで昇格開始をクリック' : !live ? '本文結果は変数検証待ち' : displayTasks.some(function(task){return ['失敗','失败'].includes(task.status);}) ? '試練未達成' : '試練任務の決算待ち') + '</div></div>';
+            html += '<div class="st-trial-result"><div class="st-trial-stamp ' + (passed ? 'pass' : 'fail') + '">' + (passed ? '試練完了 · ステータスバーで昇格開始をクリック' : !live ? '本文結果は変数検証待ち' : displayTasks.some(function(task){return ['失敗',"失敗"].includes(task.status);}) ? '試練未達成' : '試練任務の決算待ち') + '</div></div>';
             html += '</div>';
             return html;
           }
@@ -1749,9 +1749,9 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
           function parseAchievementReward(reward, fallbackWorld) {
             const v = String(reward || '').trim();
-            let m = v.match(/^(SSS|SS|S|A|B|C|D|E|F)\s*(?:級ブラインドボックス|级盲盒)\s*[·・]\s*(.+)$/i);
-            if (!m) m = v.match(/^(SSS|SS|S|A|B|C|D|E|F)\s*(?:級ブラインドボックス|级盲盒)\s*[（(]\s*([^）)]*)\s*[）)]$/i);
-            if (!m) m = v.match(/^(SSS|SS|S|A|B|C|D|E|F)\s*(?:級ブラインドボックス|级盲盒)\s*$/i);
+            let m = v.match(/^(SSS|SS|S|A|B|C|D|E|F)\s*(?:級ブラインドボックス|(?:级盲盒|級ブラインドボックス))\s*[·・]\s*(.+)$/i);
+            if (!m) m = v.match(/^(SSS|SS|S|A|B|C|D|E|F)\s*(?:級ブラインドボックス|(?:级盲盒|級ブラインドボックス))\s*[（(]\s*([^）)]*)\s*[）)]$/i);
+            if (!m) m = v.match(/^(SSS|SS|S|A|B|C|D|E|F)\s*(?:級ブラインドボックス|(?:级盲盒|級ブラインドボックス))\s*$/i);
             if (!m) return null;
             const grade = gradeTier(m[1]);
             const world = String(m[2] || fallbackWorld || '').replace(/[【】《》]/g, '').trim();
@@ -1761,10 +1761,10 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
           /* B1_SETTLEMENT_HEADING_COMPAT: 旧チャット/旧AI出力の決算見出しを正規見出しへ読み替える。入力境界専用・冪等。 */
           var SETTLEMENT_HEADING_ALIASES = [
-            ['轮回清算协议', '輪廻清算プロトコル'],
-            ['世界因果与综合评估', '世界因果と総合評価'],
-            ['因果烙印与干涉回放', '因果の烙印と干渉の再生'],
-            ['因果演进与世界暗流', '因果の進展と世界の暗流']
+            ["輪廻清算プロトコル", '輪廻清算プロトコル'],
+            ["世界因果と総合評価", '世界因果と総合評価'],
+            ["因果の烙印と干渉の再生", '因果の烙印と干渉の再生'],
+            ["因果の進展と世界の暗流", '因果の進展と世界の暗流']
           ];
           var SETTLEMENT_KEY_ALIASES = {
             '判定依据': '判定根拠',
@@ -1809,10 +1809,10 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
             function classifyStage(name) {
               const n = String(name || '');
-              if (/評価|评估|難易度|难度|安定|稳定/.test(n)) return 'assess';
-              if (/烙印|回放|再生|传闻|噂|风格/.test(n)) return 'story';
-              if (/法則|法则|戦利品|战利品|遗物|遺物/.test(n)) return 'loot';
-              if (/收益|核算|スペースコイン|空间币/.test(n)) return 'income';
+              if (/評価|评估|難易度|(?:难度|難易度)|安定|(?:稳定|安定)/.test(n)) return 'assess';
+              if (/烙印|回放|再生|(?:传闻|噂)|噂|风格/.test(n)) return 'story';
+              if (/法則|(?:法则|法則)|戦利品|战利品|遗物|遺物/.test(n)) return 'loot';
+              if (/收益|核算|スペースコイン|(?:空间币|スペースコイン)/.test(n)) return 'income';
               if (/演进|暗流|最终|因果/.test(n)) return 'epilogue';
               return 'generic';
             }
@@ -1843,7 +1843,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
               if ((m = line.match(/^####(?!#)\s*(.+)$/))) { newStage(normalizeLegacySettlementHeading(stripDecor(m[1]).replace(/^【|】$/g, ''))); continue; }
               if ((m = line.match(/^#{1,3}(?!#)\s*(.+)$/))) { out.title = normalizeLegacySettlementHeading(stripDecor(m[1]).replace(/^【|】$/g, '')); continue; }
               if ((m = line.match(/^\*{0,2}\[?\s*(?:プロトコル序列|协议序列)\s*\]?\*{0,2}\s*[：:]\s*(.+)$/))) { out.serial = stripDecor(m[1]); continue; }
-              if ((m = line.match(/^\*{0,2}\[?\s*(?:輪廻者|轮回者)\s*\]?\*{0,2}\s*[：:]\s*(.+)$/))) { out.player = stripDecor(m[1]); continue; }
+              if ((m = line.match(/^\*{0,2}\[?\s*(?:輪廻者|(?:轮回者|輪廻者))\s*\]?\*{0,2}\s*[：:]\s*(.+)$/))) { out.player = stripDecor(m[1]); continue; }
 
               let body = isList ? line.replace(/^\s*[*+-]\s+/, '').trim() : line;
               body = body.replace(/^\$\((.+?)\)\s*[：:]\s*/, '\u0024' + '1：');
@@ -1851,12 +1851,12 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
               if (/^[\*【]*(?:ヒント|提示)[：:]/.test(body)) { push('notice', { text: stripDecor(body.replace(/^[\*【]*(?:ヒント|提示)[：:]?\s*/, '').replace(/[\*】]*$/, '')) }); curSub = ''; continue; }
               if ((m = body.match(/^\*{0,2}(?:インスタンスの烙印|副本烙印)\s*[｜|]?\s*(.+)$/))) { push('brand', { name: stripDecor(m[1]) }); continue; }
               if (/主神権限証憑|主神权限凭证/.test(body) && body.replace(/\*/g, '').length < 30) { curSub = '主神权限凭证'; cardSec = ''; push('cert', {}); continue; }
-              if (/(?:世界結晶|世界结晶)/.test(body) && body.replace(/[*【】（）()：:]/g, '').length < 30) { curSub = '世界結晶'; cardSec = ''; push('relic', { label: '世界結晶 · クリア記念品', name: '', type: '', effect: '', desc: '' }); continue; }
+              if (/(?:世界結晶|(?:世界结晶|世界結晶))/.test(body) && body.replace(/[*【】（）()：:]/g, '').length < 30) { curSub = '世界結晶'; cardSec = ''; push('relic', { label: '世界結晶 · クリア記念品', name: '', type: '', effect: '', desc: '' }); continue; }
               if (/(?:世界遺物・特別褒賞|世界遗物特别嘉奖)/.test(body) && body.replace(/\*/g, '').length < 30) { curSub = '世界遺物'; cardSec = ''; push('relicGold', { label: '世界遺物 · 特別褒賞', name: '', type: '', effect: '', desc: '', origin: '' }); continue; }
 
               if ((m = body.match(/^\*{0,2}[【\[]?([^*【】\[\]：:]{2,16})[】\]]?\*{0,2}\s*[：:]\s*$/))) {
                 const subName = normalizeLegacySettlementKey(m[1].trim());
-                if (!/判定根拠|判定結果|^獲得$|獲得物品|检定源|^结果$/.test(subName)) { curSub = subName; push('sub', { name: subName }); continue; }
+                if (!/判定根拠|判定結果|^獲得$|獲得物品|检定源|^(?:结果|結果)$/.test(subName)) { curSub = subName; push('sub', { name: subName }); continue; }
               }
 
               if (curStage && curStage.type === 'income' && /×/.test(body) && /=/.test(body)) {
@@ -1877,7 +1877,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
               if ((m = body.match(/^[\(*]*(?:倉庫物品の検出|检测仓库物品)[：:]?\s*(.+?)\)*$/))) { push('warehouse', { text: m[1].replace(/[\)*]+$/, '').trim() }); continue; }
 
               if (curStage && (curSub === '世界結晶' || curSub === '世界遺物')) {
-                const secM = stripDecor(body).match(/^(判定依据|判定结果|获得|获得物品|判定根拠|判定結果|獲得|獲得物品)[：:]?$/);
+                const secM = stripDecor(body).match(/^((?:判定依据|判定根拠)|(?:判定结果|判定結果)|(?:获得|獲得)|(?:获得物品|獲得物品)|判定根拠|判定結果|獲得|獲得物品)[：:]?$/);
                 if (secM) {
                   const secKey = normalizeLegacySettlementKey(secM[1]);
                   if (secKey === '判定根拠' || secKey === '判定結果') { cardSec = 'reasons'; push('reasonHead', { text: secKey }); }
@@ -1909,9 +1909,9 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
                 if (curStage && curStage.type === 'income' && /合計|合计|上限|実際計上|实际计入/.test(k)) { push('sum', { name: k, v: v }); continue; }
                 if (/総収益|总收益/.test(k)) { const nm = v.match(/-?[\d,，\.]+\s*万?/); push('total', { num: nm ? parseCnNum(nm[0]) : null, text: v, debt: /負債|负债/.test(v) }); continue; }
-                if (/稳定|安定/.test(k) && /→|->/.test(v)) { const pm = v.match(/(\d+(?:\.\d+)?)\s*%\s*(?:→|->)\s*(\d+(?:\.\d+)?)\s*%/); if (pm) { push('stab', { from: parseFloat(pm[1]), to: parseFloat(pm[2]) }); continue; } }
+                if (/(?:稳定|安定)|安定/.test(k) && /→|->/.test(v)) { const pm = v.match(/(\d+(?:\.\d+)?)\s*%\s*(?:→|->)\s*(\d+(?:\.\d+)?)\s*%/); if (pm) { push('stab', { from: parseFloat(pm[1]), to: parseFloat(pm[2]) }); continue; } }
                 if (/^注/.test(k)) { push('note', { text: k + '：' + v }); continue; }
-                if (curStage && curStage.type === 'income' && isList && !/^注/.test(k) && /->|→|强制执行(?:惩罚|罰則)/.test(v)) { push('punish', { name: k.replace(/[[\]]/g, ''), desc: v.replace(/^强制执行(?:惩罚|罰則)\s*(?:->|→)?\s*/, '') }); continue; }
+                if (curStage && curStage.type === 'income' && isList && !/^注/.test(k) && /->|→|强制执行(?:(?:惩罚|罰則)|罰則)/.test(v)) { push('punish', { name: k.replace(/[[\]]/g, ''), desc: v.replace(/^强制执行(?:(?:惩罚|罰則)|罰則)\s*(?:->|→)?\s*/, '') }); continue; }
                 if (curStage && curStage.type === 'story' && isList && curSub && /ハイライト|再生|高光|回放/.test(curSub)) { push('hl', { t: k, d: v }); continue; }
 
                 if (curStage && (curSub === '世界結晶' || curSub === '世界遺物')) {
@@ -1929,7 +1929,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
               }
 
               const plainBody = stripDecor(body);
-              if (!/[：:]/.test(plainBody) && plainBody.length < 60 && /未|无/.test(plainBody) && /惩罚|罰則|失败|获得|獲得|遗物|检测|压缩|抵扣/.test(plainBody)) { push('empty', { text: plainBody }); continue; }
+              if (!/[：:]/.test(plainBody) && plainBody.length < 60 && /未|(?:无|なし)/.test(plainBody) && /(?:惩罚|罰則)|罰則|(?:失败|失敗)|(?:获得|獲得)|獲得|遗物|检测|压缩|抵扣/.test(plainBody)) { push('empty', { text: plainBody }); continue; }
               if (/^【.*(?:完了|完毕).*】$/.test(stripDecor(body))) { push('closing', { text: stripDecor(body) }); continue; }
 
               if (curStage && (curSub === '世界結晶' || curSub === '世界遺物') && /^\d+[.、]\s*\S/.test(stripDecor(body))) {
@@ -2023,13 +2023,13 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             // SETTLEMENT_LEGACY_INCOME_CLEANUP
             // 旧チャットの簡体字見出し(3件)と本パネル自身の日本語見出しの両方を除外対象にする。
             // 本関数は再入時に自分の直前の出力も再フィルタするため、日本語形が無いと見出しが二重化する。
-            const legacyIncomeSubs = new Set(['击杀目标附加收益明细','世界探索附加收益明细','势力羁绊附加收益明细','キル目標追加収益明細','世界探索追加収益明細','勢力絆追加収益明細']);
+            const legacyIncomeSubs = new Set(["キル目標追加収益明細","世界探索追加収益明細","勢力絆追加収益明細",'キル目標追加収益明細','世界探索追加収益明細','勢力絆追加収益明細']);
             const aiNonCoinItems = (stage.items || []).filter(function(item) {
               if (item.kind === 'calc' || item.kind === 'sum' || item.kind === 'total') return false;
               const legacySub = String(item && item.sub || '').trim();
               const legacyName = String(item && item.name || '').trim();
               if (legacyIncomeSubs.has(legacySub) || legacyIncomeSubs.has(legacyName)) return false;
-              try { if (/スペースコイン|空间币/.test(JSON.stringify(item))) return false; } catch (e) {}
+              try { if (/スペースコイン|(?:空间币|スペースコイン)/.test(JSON.stringify(item))) return false; } catch (e) {}
               return true;
             });
             stage.items = buildProgrammaticIncomeItems(result).concat(aiNonCoinItems);
@@ -2056,14 +2056,14 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
               case 'sub': return '<div class="st-sub">' + escapeHtml(it.name) + '</div>';
               case 'kv': {
                 const k = it.k, v = it.v;
-                if (/评级|等级|難易度|难度|基準|基准/.test(k) && /^[A-Za-z]{1,3}$/.test(v.trim()) && GRADES.indexOf(v.trim().toUpperCase()) >= 0) return rateRow(k, v);
-                if (/難易度|难度|评级/.test(k) && /^[A-Za-z]{1,3}\s*[-~—–]\s*[A-Za-z]{1,3}$/.test(v.trim())) return rateRow(k, v);
+                if (/评级|(?:等级|レベル)|難易度|(?:难度|難易度)|基準|基准/.test(k) && /^[A-Za-z]{1,3}$/.test(v.trim()) && GRADES.indexOf(v.trim().toUpperCase()) >= 0) return rateRow(k, v);
+                if (/難易度|(?:难度|難易度)|评级/.test(k) && /^[A-Za-z]{1,3}\s*[-~—–]\s*[A-Za-z]{1,3}$/.test(v.trim())) return rateRow(k, v);
                 if ((k === '獲得物品' || k === '獲得') && /^【.+】$/.test(v)) return '<div class="st-relic-name">' + escapeHtml(v) + '</div>';
                 if (k === '判定結果') { const okV = /充足|授与|满足|授予/.test(v) && !/未獲得|未获得/.test(v); return '<div class="st-verdict ' + (okV ? 'ok' : 'no') + '">' + (okV ? '✔ ' : '✕ ') + escapeHtml(v) + '</div>'; }
                 if (k === '説明' && /[“”"]/.test(v)) return '<div class="st-relic-quote">' + escapeHtml(v) + '</div>';
                 if (k === '効果' && /事跡留存|事迹留存/.test(v)) return '<div class="st-kv effect"><span class="k">' + escapeHtml(k) + '</span><span class="v">' + escapeHtml(v) + '</span></div>';
                 if (/(?:評述|评述)/.test(k)) return '<div class="st-comment">' + escapeHtml(v) + '</div>';
-                if (st && st.type === 'income' && /奖励|報酬|收益/.test(k)) return '<div class="st-kv income-v"><span class="k">' + escapeHtml(k) + '</span><span class="v">' + escapeHtml(v) + '</span></div>';
+                if (st && st.type === 'income' && /(?:奖励|報酬)|報酬|收益/.test(k)) return '<div class="st-kv income-v"><span class="k">' + escapeHtml(k) + '</span><span class="v">' + escapeHtml(v) + '</span></div>';
                 return '<div class="st-kv"><span class="k">' + escapeHtml(k) + '</span><span class="v">' + escapeHtml(v) + '</span></div>';
               }
               case 'reasonHead': return '<div class="st-reason-head">' + escapeHtml(it.text) + '</div>';
@@ -2130,7 +2130,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 const it = items[i];
 
                 if (it.kind === 'sub' && /(?:任務専用報酬|任务专属奖励)/.test(it.name || '')) rewardSeen = true;
-                if (rewardSeen && !trialInserted && it.kind === 'sub' && !/(?:任務専用報酬|任务专属奖励)/.test(it.name || '') && (trialTasks.length || /(?:昇格試練|晋升试炼)[·\.]/.test(rawText))) {
+                if (rewardSeen && !trialInserted && it.kind === 'sub' && !/(?:任務専用報酬|任务专属奖励)/.test(it.name || '') && (trialTasks.length || /(?:昇格試練|(?:晋升试炼|昇格試練))[·\.]/.test(rawText))) {
                   inner += '<div class="st-trial-host">' + renderTrialPanel() + '</div>';
                   trialInserted = true;
                 }
@@ -2139,7 +2139,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                   let rows = '';
                   while (i < items.length && items[i].kind === 'kv' && /(?:任務専用報酬|任务专属奖励)/.test(items[i].sub || '')) {
                     const reward = items[i];
-                    const valueClass = /已发放|获得|到账/.test(reward.v || '') ? ' reward-ok' : '';
+                    const valueClass = /已发放|(?:获得|獲得)|到账/.test(reward.v || '') ? ' reward-ok' : '';
                     rows += '<div class="st-sum-row"><span class="k">' + escapeHtml(reward.k) + '</span><span class="v' + valueClass + '">' + escapeHtml(reward.v) + '</span></div>';
                     i++;
                   }
@@ -2173,7 +2173,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 i++;
               }
 
-              if (rewardSeen && !trialInserted && (trialTasks.length || /(?:昇格試練|晋升试炼)[·\.]/.test(rawText))) {
+              if (rewardSeen && !trialInserted && (trialTasks.length || /(?:昇格試練|(?:晋升试炼|昇格試練))[·\.]/.test(rawText))) {
                 inner += '<div class="st-trial-host">' + renderTrialPanel() + '</div>';
               }
 
@@ -2288,7 +2288,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             // 階層が既に変化していれば今回の資格は昇格に使用済み；旧決算パネルは再度補記してはならない。
             if (hasHeader && trialPassed && !reincarnatorTierChanged) {
               const currentSys = stat.システム状態 && typeof stat.システム状態 === 'object' ? stat.システム状態 : {};
-              if (currentSys.试炼已完成 !== true) {
+              if (currentSys.試練完了 !== true) {
                 const sys = ensureObject(stat, 'システム状態');
                 setValue(sys, '試練完了', true);
               }
@@ -2300,7 +2300,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
             // 成功/失敗のいずれも今回の試練ライフサイクルの終了を意味する；身分マークは一度だけ消費され、過去のパネルがそれを復活させることはできない。
             const activeTrialSys = stat.システム状態 && typeof stat.システム状態 === 'object' ? stat.システム状態 : null;
-            if (activeTrialSys && activeTrialSys.是否试炼任务 === true) {
+            if (activeTrialSys && activeTrialSys.試練任務中 === true) {
               const sys = ensureObject(stat, 'システム状態');
               setValue(sys, '試練任務中', false);
               setValue(sys, '試練任務名簿', []);
@@ -2337,7 +2337,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
               // 通常インスタンス終了時はプレイヤーが所有/共有管理する資産のみを残す；純NPC、勢力、無主の資産はインスタンスと共に消去する。
               // <user> はプロンプトマクロ；プログラム側では Tavern の現在の Persona 名を正式なプレイヤー身分とし、旧マークは互換のみを担う。
-              const assets = ensureObject(stat, '资产');
+              const assets = ensureObject(stat, "資産");
               const playerOwnerName = (() => {
                 try {
                   const host = (window.parent && window.parent !== window) ? window.parent : window;
@@ -2351,7 +2351,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 return (!!playerOwnerName && value === playerOwnerName)
                   || value === '<user>'
                   || value === '{{user}}'
-                  || value === '玩家';
+                  || value === "プレイヤー";
               };
               Object.keys(assets).forEach(function(assetName) {
                 const asset = assets[assetName];
@@ -2458,12 +2458,12 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
               const assess = d.stages.find(function(s) { return s.type === 'assess'; });
               (assess ? assess.items : []).forEach(function(it) {
                 if (it.kind !== 'kv') return;
-                if (/難易度/.test(it.k) && /评级|等级/.test(it.k) && !baseGrade) baseGrade = gradeFloor(it.v);
+                if (/難易度/.test(it.k) && /评级|(?:等级|レベル)/.test(it.k) && !baseGrade) baseGrade = gradeFloor(it.v);
               });
               if (!baseGrade) {
                 d.stages.forEach(function(s) {
                   s.items.forEach(function(it) {
-                    if (it.kind === 'kv' && /難易度/.test(it.k) && /评级|等级/.test(it.k) && !baseGrade) baseGrade = gradeFloor(it.v);
+                    if (it.kind === 'kv' && /難易度/.test(it.k) && /评级|(?:等级|レベル)/.test(it.k) && !baseGrade) baseGrade = gradeFloor(it.v);
                   });
                 });
               }
@@ -2489,7 +2489,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 achievementGrants[r.name].count++;
               });
               Object.keys(achievementGrants).forEach(function(name) {
-                const g = achievementGrants[name], key = 'stat_data.キャラ.道具.' + name;
+                const g = achievementGrants[name], key = "stat_data.キャラ.アイテム." + name;
                 const old = win._.get(c, key) || {};
                 const currentQty = Number(old.数量) || 0;
                 const baselineQty = achievementBaselineData
@@ -2564,8 +2564,8 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
               });
 
               relics.forEach(function(r) {
-                if (!r.name || exists('stat_data.キャラ.道具.' + r.name)) return;
-                const key = 'stat_data.キャラ.道具.' + r.name;
+                if (!r.name || exists("stat_data.キャラ.アイテム." + r.name)) return;
+                const key = "stat_data.キャラ.アイテム." + r.name;
                 win._.set(c, key + '.品質', baseGrade);
                 win._.set(c, key + '.タイプ', r.type || '記念品');
                 win._.set(c, key + '.数量', 1);

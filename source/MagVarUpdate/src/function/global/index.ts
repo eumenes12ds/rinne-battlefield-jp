@@ -1,3 +1,4 @@
+import { migrateMvuData } from '@/card_protocol';
 import { loadInitVarData } from '@/function/initvar/variable_init';
 import { updateVariable, updateVariables } from '@/function/update_variables';
 import { isValueWithDescription, MvuData, variable_events } from '@/variable_def';
@@ -26,7 +27,7 @@ function createMvu() {
          * const message_data = Mvu.getMvuData({ type: 'message', message_id: getCurrentMessageId() });
          */
         getMvuData: function (options: VariableOption): MvuData {
-            return getVariables(options) as MvuData;
+            return migrateMvuData(getVariables(options)) as MvuData;
         },
 
         /**
@@ -74,7 +75,7 @@ function createMvu() {
 
         /** @deprecated */
         getCurrentMvuData: function (): MvuData {
-            const variables = getVariables({ type: 'message', message_id: getCurrentMessageId() });
+            const variables = migrateMvuData(getVariables({ type: 'message', message_id: getCurrentMessageId() }));
             return variables as MvuData;
         },
 

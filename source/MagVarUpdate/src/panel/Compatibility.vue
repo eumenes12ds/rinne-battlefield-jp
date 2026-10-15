@@ -1,29 +1,29 @@
 <template>
     <Section :label="t('panel.compatibility.section')">
         <template #content>
-            <Checkbox v-model="store.settings.兼容性.更新到聊天变量">
+            <Checkbox v-model="store.settings.互換性.チャット変数に更新">
                 <span>{{ t('panel.compatibility.updateChatVariables') }}</span>
                 <HelpIcon :help="t('panel.compatibility.updateChatVariablesHelp')" />
                 <OverrideBadge
-                    v-if="store.has_character_settings_override('兼容性.更新到聊天变量')"
+                    v-if="store.has_character_settings_override('互換性.チャット変数に更新')"
                     :value="update_chat_variables_override_label"
                 />
             </Checkbox>
 
-            <Checkbox v-model="store.settings.兼容性.显示老旧功能">
+            <Checkbox v-model="store.settings.互換性.旧機能を表示">
                 <span>{{ t('panel.compatibility.showLegacy') }}</span>
             </Checkbox>
 
-            <Checkbox v-model="store.settings.兼容性.sendas不视为user消息">
+            <Checkbox v-model="store.settings.互換性.sendasをuserメッセージとみなさない">
                 <span>{{ t('panel.compatibility.sendasNotUser') }}</span>
                 <HelpIcon :help="sandas_message_help" />
                 <OverrideBadge
-                    v-if="store.has_character_settings_override('兼容性.sendas不视为user消息')"
+                    v-if="store.has_character_settings_override('互換性.sendasをuserメッセージとみなさない')"
                     :value="sendas_not_user_override_label"
                 />
             </Checkbox>
 
-            <Checkbox v-model="store.settings.兼容性.额外模型解析非阻塞">
+            <Checkbox v-model="store.settings.互換性.追加モデル解析を非同期化">
                 <span>{{ t('panel.compatibility.nonblockingExtraAnalysis') }}</span>
                 <HelpIcon :help="t('panel.compatibility.nonblockingExtraAnalysisHelp')" />
             </Checkbox>
@@ -77,14 +77,14 @@ import OverrideBadge from '@/panel/component/OverrideBadge.vue';
 import { OPEN_SOURCE_LICENSES } from '@/panel/open_source_licenses';
 import Section from '@/panel/component/Section.vue';
 import sandas_message_help_en from '@/panel/compatibility_sandas_message.ja.md';
-import sandas_message_help_zh_cn from '@/panel/compatibility_sandas_message.zh-CN.md';
+import sandas_message_help_zh_cn from '@/panel/compatibility_sandas_message.ja.md';
 import { useDataStore } from '@/store';
 import { computed } from 'vue';
 
 const store = useDataStore();
 const { locale, t } = useMvuI18n();
 const sandas_message_help = computed(() =>
-    locale.value === 'zh-CN' ? sandas_message_help_zh_cn : sandas_message_help_en
+    locale.value === "ja-JP" ? sandas_message_help_zh_cn : sandas_message_help_en
 );
 // 许可证表来自统一清单；说明随界面语言更新，包名和许可证标识保持可核查的原值。
 const license_help = computed(
@@ -96,10 +96,10 @@ function format_boolean(value: boolean): string {
 }
 
 const update_chat_variables_override_label = computed(() =>
-    format_boolean(store.effective_settings.兼容性.更新到聊天变量)
+    format_boolean(store.effective_settings.互換性.チャット変数に更新)
 );
 const sendas_not_user_override_label = computed(() =>
-    format_boolean(store.effective_settings.兼容性.sendas不视为user消息)
+    format_boolean(store.effective_settings.互換性.sendasをuserメッセージとみなさない)
 );
 </script>
 

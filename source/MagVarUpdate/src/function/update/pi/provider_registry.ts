@@ -136,7 +136,7 @@ export interface PiProviderDefinition {
     key: PiProviderKey;
     providerId: PiProviderKey;
     displayName: Readonly<{
-        'zh-CN': string;
+        "ja-JP": string;
         en: string;
     }>;
     defaultApi: PiWireApi;
@@ -408,7 +408,7 @@ function fixedApiKeyProvider(
     ) as Readonly<Partial<Record<PiWireApi, Readonly<PiApiCapabilities>>>>;
     return Object.freeze({
         ...target,
-        displayName: Object.freeze({ 'zh-CN': chineseName, en: name }),
+        displayName: Object.freeze({ "ja-JP": chineseName, en: name }),
         apiCapabilities,
         fields: target.allowedApis.length > 1 ? MULTI_API_KEY_FIELDS : API_KEY_FIELDS,
     });
@@ -419,7 +419,7 @@ export const PI_PROVIDER_REGISTRY: Readonly<Record<PiProviderKey, PiProviderDefi
         'ant-ling': fixedApiKeyProvider('ant-ling', 'Ant Ling'),
         anthropic: Object.freeze({
             ...PI_PROVIDER_TARGET_REGISTRY.anthropic,
-            displayName: Object.freeze({ 'zh-CN': 'Anthropic', en: 'Anthropic' }),
+            displayName: Object.freeze({ "ja-JP": 'Anthropic', en: 'Anthropic' }),
             apiCapabilities: Object.freeze({
                 'anthropic-messages': ANTHROPIC_CAPABILITIES,
             }),
@@ -433,7 +433,7 @@ export const PI_PROVIDER_REGISTRY: Readonly<Record<PiProviderKey, PiProviderDefi
         'github-copilot': fixedApiKeyProvider('github-copilot', 'GitHub Copilot'),
         google: Object.freeze({
             ...PI_PROVIDER_TARGET_REGISTRY.google,
-            displayName: Object.freeze({ 'zh-CN': 'Google Gemini', en: 'Google Gemini' }),
+            displayName: Object.freeze({ "ja-JP": 'Google Gemini', en: 'Google Gemini' }),
             apiCapabilities: Object.freeze({
                 'google-generative-ai': GOOGLE_CAPABILITIES,
             }),
@@ -454,7 +454,7 @@ export const PI_PROVIDER_REGISTRY: Readonly<Record<PiProviderKey, PiProviderDefi
         nvidia: fixedApiKeyProvider('nvidia', 'NVIDIA'),
         openai: Object.freeze({
             ...PI_PROVIDER_TARGET_REGISTRY.openai,
-            displayName: Object.freeze({ 'zh-CN': 'OpenAI', en: 'OpenAI' }),
+            displayName: Object.freeze({ "ja-JP": 'OpenAI', en: 'OpenAI' }),
             apiCapabilities: Object.freeze({
                 'openai-responses': OPENAI_RESPONSES_CAPABILITIES,
                 'openai-completions': OPENAI_COMPLETIONS_CAPABILITIES,
@@ -463,7 +463,7 @@ export const PI_PROVIDER_REGISTRY: Readonly<Record<PiProviderKey, PiProviderDefi
         }),
         'openai-codex': Object.freeze({
             ...PI_PROVIDER_TARGET_REGISTRY['openai-codex'],
-            displayName: Object.freeze({ 'zh-CN': 'OpenAI Codex', en: 'OpenAI Codex' }),
+            displayName: Object.freeze({ "ja-JP": 'OpenAI Codex', en: 'OpenAI Codex' }),
             apiCapabilities: Object.freeze({
                 'openai-codex-responses': CODEX_CAPABILITIES,
             }),

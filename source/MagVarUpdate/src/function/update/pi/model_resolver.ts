@@ -408,7 +408,7 @@ export function resolvePiModelFromExtraModelSettings(settings: unknown): Resolve
     }
     return resolvePiModel({
         piConfig: settings.pi,
-        maxTokens: settings['最大回复token数'],
-        apiKey: settings['密钥'],
+        maxTokens: settings["最大応答トークン数"],
+        apiKey: settings["APIキー"],
     });
 }
