@@ -1,0 +1,6 @@
+{
+  "repository": "earendil-works/pi",
+  "commit": "d981de1229ef899957bbe968bc8dcda02a21f477",
+  "path": "LICENSE",
+  "reason": "The npm tarball omits the repository MIT license."
+}

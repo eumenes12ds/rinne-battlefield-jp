@@ -1,0 +1,28 @@
+{
+  "name": "typebox",
+  "version": "1.3.7",
+  "license": "MIT",
+  "repository": {
+    "url": "git+https://github.com/sinclairzx81/typebox.git",
+    "type": "git"
+  },
+  "dist": {
+    "shasum": "21f00a60f0712ed438ad61c0665abca04d72bb24",
+    "tarball": "https://registry.npmjs.org/typebox/-/typebox-1.3.7.tgz",
+    "fileCount": 1367,
+    "integrity": "sha512-meKuifc33Pccx0O6PdIzYMq3Og8zvP4TIi/a+Bw3AEMZMxOD0+RHGQvpglEe6Zdy3wZ8nqn/j95h8LUZLk/6Hg==",
+    "signatures": [
+      {
+        "sig": "MEUCIQDAa0hmfZhg2YJlbzvbE79Mpcc0EG4oqZeqjHvlyvBMjgIgPDnZQwOuZctnCMSCQk/tAxuB5dBzwumOCtZFc8bRxfc=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/typebox@1.3.7",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 1463263
+  }
+}

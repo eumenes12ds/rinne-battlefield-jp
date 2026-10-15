@@ -1,0 +1,28 @@
+{
+  "name": "openai",
+  "version": "6.40.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "url": "git+https://github.com/openai/openai-node.git",
+    "type": "git"
+  },
+  "dist": {
+    "shasum": "6dbe044cf0537a91e0a7949878f856e903386afc",
+    "tarball": "https://registry.npmjs.org/openai/-/openai-6.40.0.tgz",
+    "fileCount": 2512,
+    "integrity": "sha512-MWtTjd/gQt4jpbji61NTgFWJLoY/PdRJ6wG9/ZDRMYNMlBKrCrSlkLI+KgHP1vR1qT6LKSAyAqIxno6lcK9JiA==",
+    "signatures": [
+      {
+        "sig": "MEYCIQCG5eNTznkEGAkk50/JYMh37y4XEydu5HeovNGfwDETPAIhAJ2D/EXR6E/TWB9TKdYRSdxYM3G6F4asxYGOFEbSSuhb",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/openai@6.40.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 9746741
+  }
+}

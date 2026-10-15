@@ -1,0 +1,33 @@
+{
+  "name": "@earendil-works/pi-ai",
+  "version": "0.85.1",
+  "license": "MIT",
+  "repository": {
+    "url": "git+https://github.com/earendil-works/pi.git",
+    "type": "git",
+    "directory": "packages/ai"
+  },
+  "dist": {
+    "shasum": "3f5726032c30149f6060a3aeacb79436c7387a37",
+    "tarball": "https://registry.npmjs.org/@earendil-works/pi-ai/-/pi-ai-0.85.1.tgz",
+    "fileCount": 750,
+    "integrity": "sha512-+VgVIJDkDO2efYJKEEqvPTH4zmnIaXdAppGbO+vKFA9qy5PdhFiAenuFAkU+oiCSfOC4dMHDyrjdQeL4ZoC5CQ==",
+    "signatures": [
+      {
+        "sig": "MEUCIQDcUNgX34W1J3Ffjyxp60oYZ1XAREdLCgragaApFQ3dQgIgRuPlOA+xS9p6btiaGC60AIzAuNVLk5/3o12k1yzIqlY=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "sig": "MEQCIE3Ux3LGmL/daUgy/Zmrz5jH9N0Dn/4NZ7sgA87LFCoCAiBfpsyPinrY34wckafPgUZzY5NNdPzez1MflP5duTU8Bg==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@earendil-works%2fpi-ai@0.85.1",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 4281282
+  }
+}

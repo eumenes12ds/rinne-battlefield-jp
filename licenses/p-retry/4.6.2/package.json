@@ -1,0 +1,23 @@
+{
+  "name": "p-retry",
+  "version": "4.6.2",
+  "license": "MIT",
+  "repository": {
+    "url": "git+https://github.com/sindresorhus/p-retry.git",
+    "type": "git"
+  },
+  "dist": {
+    "shasum": "9baae7184057edd4e17231cee04264106e092a16",
+    "tarball": "https://registry.npmjs.org/p-retry/-/p-retry-4.6.2.tgz",
+    "fileCount": 5,
+    "integrity": "sha512-312Id396EbJdvRONlngUx0NydfrIQ5lsYu0znKVUzVvArzEIt08V1qhtyESbGVd1FGX7UKtiFp5uwKZdM8wIuQ==",
+    "signatures": [
+      {
+        "sig": "MEYCIQC3RWNHGsA4QmpxagOAuZ3oH/nxO9yUWAbAaX6fQn9yewIhAK4QeRhQaI3IItWEKz/R93IZRkvg4p5qYeSxmjkoGuJd",
+        "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+      }
+    ],
+    "unpackedSize": 11032,
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v4.10.10\r\nComment: https://openpgpjs.org\r\n\r\nwsFzBAEBCAAGBQJiaNN/ACEJED1NWxICdlZqFiEECWMYAoorWMhJKdjhPU1b\r\nEgJ2VmrpRg/9HaWuGXqkmNVmQ8uGRS+FEituo5ckXYS2UqdD52c0WrBQCu6I\r\nbd2O90+cAPMRPFZ4IBuLLXO7pEp7ZUMrUy1jwMpA+aTi5E0frWjoK85PB+A2\r\nUrJVPy0gMYOoPykXaP08SLjOcwf7kDOgedta4rZILV9m4dBDPAxJoT9VH/ze\r\neszzXlbRMt1aChDxRrnSkG1vSg6fKkJRRWoDlJuuA6lxoiI/TDTdLAJCwlfy\r\nHJfzECLWSHTrZ1hbSght4L47fC1VidxkBntg8+1I5OqI8O0zeFlcp5ps2lJ/\r\nwcd+lABF56M3vJ/F0xoiL5nDbHdElGsu+HO26SBhOKgh9DgiyECMCObmOCvj\r\nRndK2ZxDI50hbw2FrK16742O1/UzmINAeMZkzewmD8x66DtSaD46y8bvdzC+\r\nvhRzWou4Whgwmy+GJ250GEakxYlhvKDR5H4emtJR6qiYq0ZBtQ0/RwMpikau\r\nmdyjYRktuHdmibV5vEFWJZlJwT+lDKO5aW/LDiiCEWsHznDBL71dKorUitx4\r\nAvzvWrRFeToUFmRuCOLCrDCAkd3VsAzLyO0Hwz3Fd7pKITP31TLyT6X4zl1c\r\nKm0OBnSL1rfN8pk660CcbIj4k8E1tYTUyFscH2l9LefGLrtE0B5eHpQi9eZp\r\ntvdu79GcBaKscB+S6eNfOmF5xZxKIMbVEFw=\r\n=g67e\r\n-----END PGP SIGNATURE-----\r\n"
+  }
+}

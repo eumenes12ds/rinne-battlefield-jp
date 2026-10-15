@@ -1,0 +1,32 @@
+{
+  "name": "standardwebhooks",
+  "version": "1.1.1",
+  "license": "MIT",
+  "repository": {
+    "url": "git+https://github.com/standard-webhooks/standard-webhooks.git",
+    "type": "git"
+  },
+  "dist": {
+    "shasum": "25b98fa2bbe4edad7b42778135c923563e3d5e2f",
+    "tarball": "https://registry.npmjs.org/standardwebhooks/-/standardwebhooks-1.1.1.tgz",
+    "fileCount": 8,
+    "integrity": "sha512-bCbX9ZEyFkWPsRz7Bl3NuQUJohmwGSev/yhr7vhaGPlc4AfIrspIRa6cPTBuI1ItmrTDJ4d/S2hCsfe4+vQGnQ==",
+    "signatures": [
+      {
+        "sig": "MEYCIQCVzV4h+tDbIwBpI3U5ac2ruiGBspXtDpZ0v30fEIuxrwIhAOBaxkjPXFaLgUGB6XRAGBxaXoLHiD0uVwdgyrP6Rotz",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "sig": "MEYCIQD7E8KvUUyfpEra9Yui+KoWG/WMkAgQXMmQmuoDqtmMLwIhAPU2OhXY8eHreTiEwyb9PB/9mgdcQHlykqjDddRVZY2P",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/standardwebhooks@1.1.1",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 13402
+  }
+}

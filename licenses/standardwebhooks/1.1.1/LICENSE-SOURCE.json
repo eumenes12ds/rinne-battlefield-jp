@@ -1,0 +1,6 @@
+{
+  "repository": "standard-webhooks/standard-webhooks",
+  "commit": "b4d2c14fc5b4ccff3ff271e3b087dff812254c59",
+  "path": "LICENSE",
+  "reason": "The npm tarball omits its MIT license."
+}

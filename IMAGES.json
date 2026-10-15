@@ -1,0 +1,14 @@
+[
+  {
+    "source": "https://vue-i18n.intlify.dev/vue-i18n-devtools-logo.png",
+    "path": "images/vue-i18n-devtools-logo.png",
+    "sha256": "76e1d0f0b9fb7b91c32e827fbae9f5d91d604fc63f8957a49aeb7959473e6d40",
+    "purpose": "Optional Vue/Pinia developer-tools logo; no character artwork"
+  },
+  {
+    "source": "https://pinia.vuejs.org/logo.svg",
+    "path": "images/pinia-logo.svg",
+    "sha256": "7ed2c83025e4db9acb65efe1f41b6dd3a0bd7e9d9ebdcb6b69f4ce4a3c5e1450",
+    "purpose": "Optional Vue/Pinia developer-tools logo; no character artwork"
+  }
+]

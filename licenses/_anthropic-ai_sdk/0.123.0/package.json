@@ -1,0 +1,32 @@
+{
+  "name": "@anthropic-ai/sdk",
+  "version": "0.123.0",
+  "license": "MIT",
+  "repository": {
+    "url": "git+https://github.com/anthropics/anthropic-sdk-typescript.git",
+    "type": "git"
+  },
+  "dist": {
+    "shasum": "c11bb1f1976a83b6cbece3dcca0c50f4fe6c6985",
+    "tarball": "https://registry.npmjs.org/@anthropic-ai/sdk/-/sdk-0.123.0.tgz",
+    "fileCount": 1735,
+    "integrity": "sha512-Y9oX9mPNGZClHQOFqrWRk43Srcu/UHuPq3rfxxOq7JgW0gi+lJA2MAOK4Ul3k/+AUrwRWFJvd0tK3oC0Pw25dw==",
+    "signatures": [
+      {
+        "sig": "MEQCIGm8GdOx5MsfwIWql8sCQxr3+oEujDJDpnxRCa/LJ/bIAiAI4pLNomuSCXh9snRZMBBi1icaitwbTeIXLddLgrSheQ==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "sig": "MEUCICI9gcK880yW62Lsi20FJ07Rn+f0ukSzCmrl3dLJULH2AiEAnvRP0CIBVxKZnraKeoCN3WPGKlwk1Gg5/vEU8C53i/k=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@anthropic-ai%2fsdk@0.123.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 8716358
+  }
+}
