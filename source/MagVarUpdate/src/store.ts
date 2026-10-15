@@ -200,7 +200,7 @@ const OldSettings = z
             ...settings,
             追加モデル解析設定: {
                 脱獄方案: プリセット送信 ? "現在のプリセットを使用" : "内蔵脱獄を使用",
-                自動リクエスト有効: 追加モデル解析を自動トリガー,
+                自動リクエスト有効: false,
                 応答フォーマット: 関数呼び出しを使用 ? "ツール呼び出し" : "チャットメッセージ",
                 ...extra_model_settings,
             },
@@ -228,7 +228,7 @@ const NewSettings = z
             })
             .loose()
             .prefault({}),
-        更新方式: z.literal('主AI追従出力').catch('主AI追従出力').default('主AI追従出力'),
+        更新方式: z.enum(['主AI追従出力', '追加モデル解析']).catch('主AI追従出力').default('主AI追従出力'),
         追加モデル解析設定: z
             .object({
                 脱獄方案: ExtraModelJailbreakStrategy.default("内蔵脱獄を使用"),
@@ -239,7 +239,7 @@ const NewSettings = z
                 疑似ストリーミング互換: z.boolean().default(false),
                 ランダムヘッダー: z.boolean().default(true),
 
-                自動リクエスト有効: z.literal(false).catch(false).default(false),
+                自動リクエスト有効: z.boolean().default(false),
                 リクエスト方式: z
                     .enum([
                         "順番にリクエストし、失敗したら再試行",
@@ -339,6 +339,8 @@ const NewSettings = z
     .loose()
     .transform(data => {
         // 新安装由 Schema 提供 false；迁移时保留已保存的流式选项及方案继承值。
+        data.更新方式 = '主AI追従出力';
+        data.追加モデル解析設定.自動リクエスト有効 = false;
         data.internal.既定で疑似ストリーミング非互換を有効化済み = true;
         return data;
     })
