@@ -2138,7 +2138,43 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
     // ==========================================
     let isJourneyContext = false; 
     
-    function showSaveConfirm() { $('save-confirm-modal').style.display = 'flex'; }
+    function fitSaveConfirm() {
+        const modal = $('save-confirm-modal');
+        if (!modal || modal.style.display === 'none') return;
+        try {
+            const frame = window.frameElement;
+            if (!frame || window.parent === window) return;
+            const parent = window.parent;
+            const rect = frame.getBoundingClientRect();
+            const viewport = parent.visualViewport;
+            let top = viewport ? viewport.offsetTop : 0;
+            let bottom = top + (viewport ? viewport.height : parent.innerHeight);
+            const chat = parent.document.getElementById('chat');
+            if (chat && chat.getClientRects().length) {
+                const area = chat.getBoundingClientRect();
+                top = Math.max(top, area.top);
+                bottom = Math.min(bottom, area.bottom);
+            }
+            top = Math.max(top, rect.top);
+            bottom = Math.min(bottom, rect.bottom);
+            if (bottom <= top) return;
+            modal.style.top = (top - rect.top) + 'px';
+            modal.style.bottom = 'auto';
+            modal.style.height = (bottom - top) + 'px';
+            const box = modal.querySelector('.modal-container');
+            if (box) box.style.maxHeight = '100%';
+        } catch (_) { /* 単独表示では既存のビューポート配置を使う。 */ }
+    }
+    const saveConfirmHost = window.parent || window;
+    saveConfirmHost.addEventListener('scroll', fitSaveConfirm, true);
+    saveConfirmHost.addEventListener('resize', fitSaveConfirm);
+    if (saveConfirmHost.visualViewport) saveConfirmHost.visualViewport.addEventListener('resize', fitSaveConfirm);
+    window.addEventListener('pagehide', () => {
+        saveConfirmHost.removeEventListener('scroll', fitSaveConfirm, true);
+        saveConfirmHost.removeEventListener('resize', fitSaveConfirm);
+        if (saveConfirmHost.visualViewport) saveConfirmHost.visualViewport.removeEventListener('resize', fitSaveConfirm);
+    }, { once: true });
+    function showSaveConfirm() { $('save-confirm-modal').style.display = 'flex'; fitSaveConfirm(); }
     function hideSaveConfirm() { $('save-confirm-modal').style.display = 'none'; }
     
     function skipAndStart() { hideSaveConfirm(); executeJourney(); }
