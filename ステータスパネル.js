@@ -11,7 +11,7 @@
  */
 (function () {
     'use strict';
-    var STATUS_BAR_VERSION = '1.0.0-JP';
+    var STATUS_BAR_VERSION = '1.1.0-JP-inline';
     try { console.log('%c[主神端末] ⚡ 輪廻端末 v2 接続中...', 'color:#8f9fff;font-weight:bold'); } catch (e) {}
 
     /* ===== 1. 親ウィンドウへのリダイレクト ===== */
@@ -240,19 +240,37 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     }
     /* ===== 5. 旧インスタンスの事前クリーンアップ ===== */
     function samPreClean() {
-        try {
-            var previousRuntime = GS_PARENT.SamsaraStatusBarRuntime;
-            if (previousRuntime && typeof previousRuntime.stopSubscriptions === "function") previousRuntime.stopSubscriptions();
-            if ($) {
-                $('#samsara-ball, #samsara-panel, #samsara-modal, #samsara-theme-style').remove();
-                $(document).off('.sam .samPanel .samBall .samModal');
+        var runtime = STATUS_BAR_RUNTIME;
+        if (!runtime) {
+            var previous = GS_PARENT.SamsaraStatusBarRuntime;
+            if (previous && typeof previous.dispose === 'function') previous.dispose();
+            else {
+                if (previous && typeof previous.stopSubscriptions === 'function') previous.stopSubscriptions();
+                if ($) $('#samsara-ball, #samsara-panel, #samsara-modal, #samsara-portrait-viewer, #samsara-theme-style, #rinne-status-parking').remove();
             }
-            if (window.samsaraGuardTimer) clearInterval(window.samsaraGuardTimer);
-        } catch (e) { console.warn('[主神端末] 事前クリーンアップ失敗:', e.message); }
+            return;
+        }
+        if (runtime.disposed) return;
+        runtime.disposed = true;
+        runtime.stopSubscriptions();
+        if (inlineObserver) inlineObserver.disconnect();
+        if (inlineMountFrame) GS_PARENT.cancelAnimationFrame(inlineMountFrame);
+        clearTimeout(runtime.refreshTimer); clearTimeout(runtime.bootstrapTimer);
+        clearInterval(window.samsaraGuardTimer); clearInterval(window.samsaraRefreshTimer);
+        (runtime.nodes || []).forEach(function(node) { $(node).remove(); });
+        if (runtime.style) runtime.style.remove();
+        if (GS_PARENT.SamsaraStatusBarRuntime === runtime) {
+            $(document).off('.rinneInlineStatus');
+            $(GS_PARENT).off('.rinneInlineStatus');
+            delete GS_PARENT.SamsaraStatusBarRuntime;
+            GS_PARENT.__状態パネル_loaded__ = false;
+            if (GS_PARENT.Samsara && GS_PARENT.Samsara.terminal === runtime.terminal) delete GS_PARENT.Samsara.terminal;
+        }
     }
     samPreClean();
     var STATUS_BAR_RUNTIME = new StatusBarRuntimeLifecycle(GS_PARENT, STATUS_BAR_LOADER);
     GS_PARENT.SamsaraStatusBarRuntime = STATUS_BAR_RUNTIME;
+    STATUS_BAR_RUNTIME.dispose = samPreClean;
     GS_PARENT.Samsara = GS_PARENT.Samsara || {};
     GS_PARENT.Samsara.StatusBarInfo = {
         version: STATUS_BAR_VERSION,
@@ -690,7 +708,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var root = document.getElementById('samsara-theme-style');
         if (!root) return;
         // styleブロックを再構築(変数+固定CSS)
-        root.innerHTML = buildCSS(th, t);
+        root.innerHTML = buildCSS(th, t) + INLINE_STATUS_CSS;
     }
     function isMobile() { return (GS_PARENT.innerWidth || document.documentElement.clientWidth) <= 768; }
     function getCurrentTab() {
@@ -1833,165 +1851,89 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var s = (v == null ? '' : String(v));
         return Object.prototype.hasOwnProperty.call(DISPLAY_LABELS, s) ? DISPLAY_LABELS[s] : s;
     }
+    var INLINE_STATUS_CSS = "        /* 本文末尾のステータス。ページと一緒にスクロールし、固定ウィンドウは作らない。 */\n        #rinne-status-parking[hidden], #samsara-panel[hidden] { display:none !important; }\n        #samsara-panel[data-inline-status] {\n            position:relative !important; inset:auto !important; z-index:auto;\n            display:flex; width:100% !important; max-width:100% !important;\n            height:auto !important; min-height:0 !important; max-height:none !important;\n            margin:20px 0 0 !important; box-sizing:border-box;\n            animation:none !important; transform:none !important;\n            box-shadow:0 4px 18px rgba(0,0,0,.2); overflow:visible;\n        }\n        #samsara-panel[data-inline-status] *, #samsara-panel[data-inline-status] *::before,\n        #samsara-panel[data-inline-status] *::after { box-sizing:border-box; }\n        #samsara-panel[data-inline-status] .sam-topbar { cursor:default; border-radius:10px 10px 0 0; gap:10px; flex-wrap:wrap; }\n        #samsara-panel[data-inline-status] .tl-info { min-width:0; overflow-wrap:anywhere; }\n        #samsara-panel[data-inline-status] .tl-actions { flex-wrap:wrap; }\n        #samsara-panel[data-inline-status] .sam-main { display:flex; flex-direction:column; flex:none; min-height:0; overflow:visible; }\n        #samsara-panel[data-inline-status] .sam-tab-rail {\n            flex:none; flex-direction:row; flex-wrap:wrap; width:100%; overflow:visible;\n            border-right:0; border-bottom:1px solid var(--sam-border); padding:5px; gap:3px;\n        }\n        #samsara-panel[data-inline-status] .sam-tab-btn { flex:1 0 64px; min-width:0; border-radius:6px; }\n        #samsara-panel[data-inline-status] .sam-tab-content {\n            flex:none; min-width:0; min-height:120px; height:auto; max-height:none;\n            overflow:visible; overscroll-behavior:auto; touch-action:auto; padding:12px;\n        }\n        #samsara-panel[data-inline-status] .sam-save-btn { position:static; align-self:flex-end; margin:8px 12px; padding:8px 16px; }\n        #samsara-panel[data-inline-status] .sam-edit-badge { position:static; margin:8px 12px 0; }\n        @media (max-width:768px) {\n            #samsara-panel[data-inline-status] { margin-top:14px !important; }\n            #samsara-panel[data-inline-status] .sam-tab-btn { flex-basis:60px; }\n            #samsara-panel[data-inline-status] .sam-tab-content { padding:10px 8px; }\n        }\n\n";
     function initSamsaraCSS() {
         var old = document.getElementById('samsara-theme-style');
         if (old) old.remove();
         var styleEl = document.createElement('style');
         styleEl.id = 'samsara-theme-style';
         styleEl.type = 'text/css';
-        styleEl.innerHTML = buildCSS(THEES_DEFAULT(), getTheme());
+        styleEl.innerHTML = buildCSS(THEES_DEFAULT(), getTheme()) + INLINE_STATUS_CSS;
         document.head.appendChild(styleEl);
+        STATUS_BAR_RUNTIME.style = styleEl;
     }
     function THEES_DEFAULT() { return THEMES[getTheme()] || THEMES.night; }
 
-    /* ===== 10. パネル開閉 ===== */
-    function toggleSamsaraPanel() {
-        var $panel = $('#samsara-panel');
-        var $ball = $('#samsara-ball');
-        var isOpen = $panel.hasClass('open');
-        if (isOpen) {
-            // 開く際にインラインで display:flex を書いているため、removeClass('open') だけでは即座に隠れない
-            // 以前は 300ms 空待ちしてから display:none にしており、退場アニメも無いため約1秒固まったように感じた
-            if ($panel.data('samCloseTimer')) {
-                clearTimeout($panel.data('samCloseTimer'));
-                $panel.removeData('samCloseTimer');
-            }
-            $panel.removeClass('open').addClass('closing');
-            var closeTimer = setTimeout(function() {
-                $panel.removeClass('closing').css('display', 'none');
-                $panel.removeData('samCloseTimer');
-            }, 180);
-            $panel.data('samCloseTimer', closeTimer);
-            $ball.stop(true, true).fadeIn(160);
-            try { localStorage.setItem(SAM_CONFIG.open, '0'); } catch(e){}
-        } else {
-            if ($panel.data('samCloseTimer')) {
-                clearTimeout($panel.data('samCloseTimer'));
-                $panel.removeData('samCloseTimer');
-            }
-            $panel.removeClass('closing');
-            if (isMobile()) { $panel.css({left:'',top:'',right:'',bottom:'',margin:'',height:''}); }
-            else {
-                var r = $ball[0].getBoundingClientRect();
-                var vw = GS_PARENT.innerWidth, vh = GS_PARENT.innerHeight;
-                var pw = $panel.outerWidth() || 720;
-                var nl = Math.max(20, Math.min(vw - pw - 20, r.left > vw/2 ? r.left - pw - 20 : r.left + 60));
-                var nt = Math.max(20, Math.min(vh - 700, r.top));
-                $panel.css({left:nl+'px', top:nt+'px', right:'auto', bottom:'auto'});
-            }
-            $panel.css('display', 'flex');
-            $panel[0].offsetHeight;
-            $panel.addClass('open');
-            $ball.stop(true, true).fadeOut(160);
-            try { localStorage.setItem(SAM_CONFIG.open, '1'); } catch(e){}
-            renderAll();
-        }
-    }
+    /* 本文末尾へ常時表示するため、開閉とドラッグは使用しない。 */
+    /* 本文末尾のパネルは常時表示する。 */
 
     /* ===== 11. ドラッグシステム(ボール+パネル) ===== */
-    function setupDragEngines() {
-        var $ball = $('#samsara-ball');
-        var $panel = $('#samsara-panel');
-        if (!$ball.length || !$panel.length) return;
+    /* インライン表示ではドラッグを使用しない。 */
 
-        if (!$ball.data('samDragBound')) {
-            $ball.data('samDragBound', '1');
-            var sx1=0, sy1=0, ox1=0, oy1=0, dragging1=false, moved1=false;
-            try {
-                var savedPos = localStorage.getItem(SAM_CONFIG.pos);
-                if (savedPos && !isMobile()) {
-                    var arr = savedPos.split(',');
-                    if (arr.length === 2) {
-                        $ball[0].style.setProperty('left', arr[0]+'px', 'important');
-                        $ball[0].style.setProperty('top', arr[1]+'px', 'important');
-                        $ball[0].style.setProperty('right', 'auto', 'important');
-                    }
-                }
-            } catch(e){}
-            $ball[0].addEventListener('touchstart', handleBallDown, { passive: false });
-            $ball.on('mousedown', function(e) { if (e.button !== 0) return; handleBallDown(e); });
-            function handleBallDown(e) {
-                var p = e.originalEvent && e.originalEvent.touches ? e.originalEvent.touches[0] : (e.touches ? e.touches[0] : e);
-                sx1 = p.clientX; sy1 = p.clientY;
-                var r = $ball[0].getBoundingClientRect(); ox1 = r.left; oy1 = r.top;
-                dragging1 = true;
-                document.addEventListener('mousemove', handleBallMove);
-                document.addEventListener('touchmove', handleBallMove, { passive: false });
-                document.addEventListener('mouseup', handleBallUp);
-                document.addEventListener('touchend', handleBallUp);
-            }
-            function handleBallMove(me) {
-                if (!dragging1) return;
-                var mp = me.originalEvent && me.originalEvent.touches ? me.originalEvent.touches[0] : (me.touches ? me.touches[0] : me);
-                var dx = mp.clientX - sx1, dy = mp.clientY - sy1;
-                if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
-                    moved1 = true;
-                    var vw = GS_PARENT.innerWidth||1024, vh = GS_PARENT.innerHeight||768;
-                    var sz = $ball[0].offsetWidth || 34;
-                    var nl = Math.max(10, Math.min(vw-sz-10, ox1+dx));
-                    var nt = Math.max(10, Math.min(vh-sz-10, oy1+dy));
-                    $ball[0].style.setProperty('right','auto','important');
-                    $ball[0].style.setProperty('bottom','auto','important');
-                    $ball[0].style.setProperty('left', nl+'px','important');
-                    $ball[0].style.setProperty('top', nt+'px','important');
-                    if (me.type === 'touchmove' && me.cancelable) me.preventDefault();
-                }
-            }
-            function handleBallUp() {
-                if (dragging1 && moved1) {
-                    try { localStorage.setItem(SAM_CONFIG.pos, parseInt($ball[0].style.left)+','+parseInt($ball[0].style.top)); } catch(e){}
-                }
-                dragging1 = false;
-                document.removeEventListener('mousemove', handleBallMove);
-                document.removeEventListener('touchmove', handleBallMove);
-                document.removeEventListener('mouseup', handleBallUp);
-                document.removeEventListener('touchend', handleBallUp);
-                setTimeout(function() { moved1 = false; }, 50);
-            }
-            $ball.on('click', function() { if (!moved1) toggleSamsaraPanel(); });
-        }
-
-        if (!$panel.data('samDragBound')) {
-            $panel.data('samDragBound', '1');
-            var sx2=0, sy2=0, ox2=0, oy2=0, dragging2=false;
-            $panel.on('mousedown touchstart', '.sam-topbar', function(e) {
-                if (e.type === 'mousedown' && e.button !== 0) return;
-                if ($(e.target).closest('.sam-icon-btn').length) return;
-                if (isMobile()) return;
-                var p = e.originalEvent.touches ? e.originalEvent.touches[0] : e;
-                sx2 = p.clientX; sy2 = p.clientY;
-                var r = $panel[0].getBoundingClientRect(); ox2 = r.left; oy2 = r.top;
-                dragging2 = true;
-                $(document).on('mousemove.samPanel touchmove.samPanel', function(me) {
-                    if (!dragging2) return;
-                    var mp = me.originalEvent.touches ? me.originalEvent.touches[0] : me;
-                    var dx = mp.clientX - sx2, dy = mp.clientY - sy2;
-                    var vw = GS_PARENT.innerWidth||1024, vh = GS_PARENT.innerHeight||768;
-                    var pw = $panel.outerWidth(), ph = $panel.outerHeight();
-                    var nl = Math.max(0, Math.min(vw-pw, ox2+dx));
-                    var nt = Math.max(0, Math.min(vh-ph, oy2+dy));
-                    $panel.css({left:nl+'px', top:nt+'px', right:'auto', bottom:'auto'});
-                    if (me.type === 'touchmove' && me.cancelable) me.preventDefault();
-                });
-                $(document).on('mouseup.samPanel touchend.samPanel', function() {
-                    dragging2 = false;
-                    $(document).off('mousemove.samPanel touchmove.samPanel mouseup.samPanel touchend.samPanel');
-                });
-            });
-        }
+    // 本文の外側に一つだけ配置し、ST が本文を再描画しても保存内容へ混入させない。
+    var inlinePanel = null;
+    var inlineObserver = null;
+    var inlineMountFrame = 0;
+    function findInlineStatusTarget() {
+        try {
+            if (GS_PARENT.kiosk && GS_PARENT.kiosk.getState().mode !== 'playing') return null;
+            var context = GS_PARENT.SillyTavern && GS_PARENT.SillyTavern.getContext();
+            var messages = document.querySelectorAll('#chat > .mes[is_user="false"]:not([is_system="true"])');
+            var message = messages[messages.length - 1];
+            if (!message) return null;
+            var id = Number(message.getAttribute('mesid'));
+            var raw = context && context.chat && context.chat[id] && context.chat[id].mes;
+            if (typeof raw === 'string' && /^(?:【表紙】|【封面】)\s*$/.test(raw.trim())) return null;
+            return message.querySelector('.mes_text');
+        } catch (error) { return null; }
     }
+    function mountInlineStatus() {
+        inlineMountFrame = 0;
+        if (STATUS_BAR_RUNTIME.disposed || !inlinePanel) return;
+        var target = findInlineStatusTarget();
+        var panel = inlinePanel[0];
+        var parking = document.getElementById('rinne-status-parking');
+        if (!target) {
+            if (parking && panel.parentNode !== parking) parking.appendChild(panel);
+            return;
+        }
+        if (target.nextElementSibling !== panel) {
+            target.insertAdjacentElement('afterend', panel);
+            // jQuery による本文の削除は委譲イベントも破棄するため、移動後に一度だけ再接続する。
+            bindUIEvents();
+            if (!isEditMode()) renderAll();
+        }
+        panel.dataset.messageId = target.closest('.mes').getAttribute('mesid');
+    }
+    function queueInlineStatus() {
+        if (!STATUS_BAR_RUNTIME.disposed && !inlineMountFrame) inlineMountFrame = GS_PARENT.requestAnimationFrame(mountInlineStatus);
+    }
+    function observeInlineStatus() {
+        var chat = document.getElementById('chat');
+        if (!chat || inlineObserver) return;
+        inlineObserver = new GS_PARENT.MutationObserver(function(records) {
+            if (records.some(function(record) {
+                return !record.target.closest || !record.target.closest('#samsara-panel');
+            })) queueInlineStatus();
+        });
+        inlineObserver.observe(chat, {childList:true, subtree:true, attributes:true, attributeFilter:['mesid','is_user','is_system']});
+        queueInlineStatus();
+    }
+
 
     /* ===== 12. DOM 注入 ===== */
     function initSamsaraDOM() {
-        if (!document.getElementById('samsara-ball')) {
-            var t = getTheme();
-            var panelAttr = (t === 'night') ? '' : ('data-theme="'+t+'"');
-            var tpl = '<div id="samsara-ball"><div class="core"></div></div><div id="samsara-panel" '+panelAttr+'></div><div id="samsara-modal"></div><div id="samsara-portrait-viewer"><img id="sam-pv-img" alt=""><div id="sam-pv-label"></div></div>';
-            $('body').append(tpl);
-            setupDragEngines();
-            bindUIEvents();
-            bindPortraitEvents();
-        }
+        if (inlinePanel) return;
+        var parking = document.createElement('div'); parking.id = 'rinne-status-parking'; parking.hidden = true;
+        var panel = document.createElement('section'); panel.id = 'samsara-panel'; panel.className = 'open';
+        panel.setAttribute('data-inline-status', ''); panel.setAttribute('role', 'region'); panel.setAttribute('aria-label', 'ステータス');
+        var theme = getTheme(); if (theme !== 'night') panel.setAttribute('data-theme', theme);
+        parking.appendChild(panel); document.body.appendChild(parking); inlinePanel = $(panel);
+        var modal = document.createElement('div'); modal.id = 'samsara-modal'; document.body.appendChild(modal);
+        var portrait = document.createElement('div'); portrait.id = 'samsara-portrait-viewer';
+        portrait.innerHTML = '<img id="sam-pv-img" alt=""><div id="sam-pv-label"></div>'; document.body.appendChild(portrait);
+        STATUS_BAR_RUNTIME.nodes = [panel, parking, modal, portrait];
+        bindUIEvents(); bindPortraitEvents(); observeInlineStatus(); mountInlineStatus();
     }
 
     /* ===== 13. ダイアログ ===== */
@@ -2002,12 +1944,12 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         $m.html('<div class="sam-modal-box"><div class="sam-modal-head"><span>'+esc(title)+'</span><span class="sam-modal-close">✕</span></div><div class="sam-modal-body">'+bodyHtml+'</div></div>');
         $m[0].scrollTop = 0;
         $m.addClass('open');
-        $m.off('click.samModal').on('click.samModal', '.sam-modal-close', closeModal);
+        $m.off('click.samModal').on("click.samModal.rinneInlineStatus", '.sam-modal-close', closeModal);
         $m.off('click.samModalBg');
-        if (!noBgClose) $m.on('click.samModalBg', function(e) { if (e.target === this) closeModal(); });
+        if (!noBgClose) $m.on("click.samModalBg.rinneInlineStatus", function(e) { if (e.target === this) closeModal(); });
         // 停止ボタン(.sam-shop-stop-btn、data-sam-act で振り分け): modal は body 直下にあり #samsara-panel とは独立,
         // そのため modal 自身に委譲を追加する(bloodFusionStop / shopStopRefresh と同一)、panel 内の同名委譲とは分離して共存
-        $m.off('click.samModalStop').on('click.samModalStop', '.sam-shop-stop-btn', function(e) {
+        $m.off('click.samModalStop').on("click.samModalStop.rinneInlineStatus", '.sam-shop-stop-btn', function(e) {
             e.stopPropagation();
             var act = String($(this).attr('data-sam-act') || '');
             if (act === 'blood-fusion-stop') bloodFusionStop();
@@ -3253,57 +3195,52 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     }
     function bindUIEvents() {
         var $panel = $('#samsara-panel');
-        $panel.off('click.samBloodFusion').on('click.samBloodFusion', '.sam-blood-fusion-open', function(e) {
+        $panel.off('click.samBloodFusion').on("click.samBloodFusion.rinneInlineStatus", '.sam-blood-fusion-open', function(e) {
             e.stopPropagation();
             if (!$(this).is('[disabled]')) openBloodFusionModal(null);
         });
-        $(document).off('click.samFusionStart').on('click.samFusionStart', '.sam-fusion-start', function(e) {
+        $(document).off('click.samFusionStart').on("click.samFusionStart.rinneInlineStatus", '.sam-fusion-start', function(e) {
             e.stopPropagation();
             if ($(this).is('[disabled]')) return; // 血統が2つ未満: 融合開始ボタンはグレーアウトし無反応
             bloodFusionStart($('.sam-fusion-select[data-fusion-role="a"]').val(), $('.sam-fusion-select[data-fusion-role="b"]').val());
         });
-        $(document).off('click.samFusionDirect').on('click.samFusionDirect', '.sam-fusion-direct', function(e) {
+        $(document).off('click.samFusionDirect').on("click.samFusionDirect.rinneInlineStatus", '.sam-fusion-direct', function(e) {
             e.stopPropagation();
             if ($(this).is('[disabled]')) return; // 血統が満杯: グレーアウトしたボタンは無反応
             if (bloodFusionShopItem) bloodFusionDirectPurchase(); else closeModal();
         });
         // ★ ショップ血統置換フロー(血統枠が満杯時): 選択ダイアログを開く / キャンセルで融合ポッドへ戻る / 確定で置換を実行
-        $(document).off('click.samFusionReplaceOpen').on('click.samFusionReplaceOpen', '.sam-fusion-replace-open', function(e) {
+        $(document).off('click.samFusionReplaceOpen').on("click.samFusionReplaceOpen.rinneInlineStatus", '.sam-fusion-replace-open', function(e) {
             e.stopPropagation();
             if ($(this).is('[disabled]')) return;
             openBloodReplaceModal();
         });
-        $(document).off('click.samFusionReplaceCancel').on('click.samFusionReplaceCancel', '.sam-fusion-replace-cancel', function(e) {
+        $(document).off('click.samFusionReplaceCancel').on("click.samFusionReplaceCancel.rinneInlineStatus", '.sam-fusion-replace-cancel', function(e) {
             e.stopPropagation();
             openBloodFusionModal(bloodFusionShopItem); // 融合ポッドへ戻る
         });
-        $(document).off('click.samFusionReplaceConfirm').on('click.samFusionReplaceConfirm', '.sam-fusion-replace-confirm', function(e) {
+        $(document).off('click.samFusionReplaceConfirm').on("click.samFusionReplaceConfirm.rinneInlineStatus", '.sam-fusion-replace-confirm', function(e) {
             e.stopPropagation();
             var tgt = $('#sam-replace-target').val();
             if (!tgt) { samToast('warning', '置換する血統を先に選択してください'); return; }
             bloodFusionReplacePurchase(tgt);
         });
         // ★ A/B セレクト連動: 片方を変更したとき, 相手側から新しい選択値を除外(A=Bを回避); 相手の現在値が除外される場合は最初の有効項目へ戻す
-        $(document).off('change.samFusionSync').on('change.samFusionSync', '.sam-fusion-select', function(e) {
+        $(document).off('change.samFusionSync').on("change.samFusionSync.rinneInlineStatus", '.sam-fusion-select', function(e) {
             e.stopPropagation();
             var role = $(this).attr('data-fusion-role') || 'a';
             bloodFusionSyncSelect(role);
         });
-        // 閉じる(編集モードが有効な場合, 先に編集モードを終了してからパネルを閉じる)
-        $panel.off('click.samClose').on('click.samClose', '.sam-icon-btn.close', function() {
-            if (isEditMode()) setEditMode(false);
-            if ($('#samsara-panel').hasClass('open')) toggleSamsaraPanel();
-        });
         // 更新(編集モードが有効な場合, 先に編集モードを終了してからデータを更新)
-        $panel.off('click.samRefresh').on('click.samRefresh', '.sam-icon-btn.refresh', function() {
+        $panel.off('click.samRefresh').on("click.samRefresh.rinneInlineStatus", '.sam-icon-btn.refresh', function() {
             if (isEditMode()) setEditMode(false);
             renderAll();
             try { console.log('%c[主神端末] 🔄 手動更新', 'color:#8f9fff'); } catch(e){}
         });
         // 設定
-        $panel.off('click.samSettings').on('click.samSettings', '.sam-icon-btn.settings', function() { openSettings(); });
+        $panel.off('click.samSettings').on("click.samSettings.rinneInlineStatus", '.sam-icon-btn.settings', function() { openSettings(); });
         // Tab切替
-        $panel.off('click.samTab').on('click.samTab', '.sam-tab-btn', function() {
+        $panel.off('click.samTab').on("click.samTab.rinneInlineStatus", '.sam-tab-btn', function() {
             var tab = $(this).data('tab');
             if (tab === 'world') {
                 var engine = GS_PARENT.Samsara && GS_PARENT.Samsara.worldEngine;
@@ -3324,7 +3261,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             $(this).addClass('active');
         });
         // サブTab切替
-        $panel.off('click.samSubtab').on('click.samSubtab', '.sam-subtab', function() {
+        $panel.off('click.samSubtab').on("click.samSubtab.rinneInlineStatus", '.sam-subtab', function() {
             var sub = $(this).data('sub');
             $(this).siblings().removeClass('active');
             $(this).addClass('active');
@@ -3334,7 +3271,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             try { relationActiveSub = sub; } catch(e) {}
         });
         // カードクリック→詳細ダイアログ
-        $panel.off('click.samCard').on('click.samCard', '.sam-card', function(e) {
+        $panel.off('click.samCard').on("click.samCard.rinneInlineStatus", '.sam-card', function(e) {
             if ($(e.target).closest('.sam-tier-infuse-btn').length) return;
             var path = $(this).data('path');
             // ★ 編集モード: NPC カードは許可(キャラクター档案を開いてデータを編集); 他のカードはブロックを維持し,読み取り専用詳細への誤操作を防ぐ
@@ -3344,64 +3281,64 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             if (path) openDetailModal(path, title);
         });
         // NPC削除ボタン(編集モード)→MVUから当該NPCを削除
-        $panel.off('click.samNpcDel').on('click.samNpcDel', '.sam-npc-del', function(e) {
+        $panel.off('click.samNpcDel').on("click.samNpcDel.rinneInlineStatus", '.sam-npc-del', function(e) {
             e.stopPropagation();
             var name = $(this).data('del-npc');
             if (!name) return;
             deleteNpc(name);
         });
         // ★ NPC転送ボタン(在场NPC)→物資転送ダイアログを開く
-        $panel.off('click.samTransfer').on('click.samTransfer', '.sam-npc-transfer', function(e) {
+        $panel.off('click.samTransfer').on("click.samTransfer.rinneInlineStatus", '.sam-npc-transfer', function(e) {
             e.stopPropagation();
             var name = $(this).data('transfer-npc');
             if (name) openTransferModal(name);
         });
         // ★ NPC遺物取得ボタン(死亡NPC)→取得ダイアログを開く
-        $panel.off('click.samLoot').on('click.samLoot', '.sam-npc-loot', function(e) {
+        $panel.off('click.samLoot').on("click.samLoot.rinneInlineStatus", '.sam-npc-loot', function(e) {
             e.stopPropagation();
             var name = $(this).data('loot-npc');
             if (name) openLootModal(name);
         });
         // ★ 取得ダイアログ内の操作(documentへ委譲)
-        $(document).off('click.samLootItem').on('click.samLootItem', '.sam-loot-item', function(e) {
+        $(document).off('click.samLootItem').on("click.samLootItem.rinneInlineStatus", '.sam-loot-item', function(e) {
             if ($(e.target).closest('.sam-trf-qty').length) return;
             lootToggle($(this).data('loot-cat'), $(this).data('loot-key'));
         });
-        $(document).off('click.samLootQty').on('click.samLootQty', '.sam-loot-qty-btn', function(e) {
+        $(document).off('click.samLootQty').on("click.samLootQty.rinneInlineStatus", '.sam-loot-qty-btn', function(e) {
             e.stopPropagation();
             lootAdjustQty($(this).data('cat'), $(this).data('key'), $(this).data('trf-qty'));
         });
-        $(document).off('change.samLootInp').on('change.samLootInp', '.sam-loot-qty-inp', function(e) {
+        $(document).off('change.samLootInp').on("change.samLootInp.rinneInlineStatus", '.sam-loot-qty-inp', function(e) {
             e.stopPropagation();
             lootInputQty($(this).data('cat'), $(this).data('key'), this.value);
         });
-        $(document).off('click.samLootConfirm').on('click.samLootConfirm', '.sam-loot-btn.confirm', function(e) {
+        $(document).off('click.samLootConfirm').on("click.samLootConfirm.rinneInlineStatus", '.sam-loot-btn.confirm', function(e) {
             executeLoot();
         });
-        $(document).off('click.samLootCancel').on('click.samLootCancel', '.sam-loot-btn.cancel', function(e) {
+        $(document).off('click.samLootCancel').on("click.samLootCancel.rinneInlineStatus", '.sam-loot-btn.cancel', function(e) {
             closeModal();
         });
         // ★ 転送ダイアログ内の操作(documentへ委譲, modalコンテナは初回showModal時に生成されるため)
-        $(document).off('click.samTrfItem').on('click.samTrfItem', '.sam-trf-item', function(e) {
+        $(document).off('click.samTrfItem').on("click.samTrfItem.rinneInlineStatus", '.sam-trf-item', function(e) {
             if ($(e.target).closest('.sam-trf-qty').length) return; // 数量コントロール領域ではtoggleを発火させない
             transferToggle($(this).data('trf-cat'), $(this).data('trf-key'));
         });
-        $(document).off('click.samTrfQty').on('click.samTrfQty', '.sam-trf-qty-btn', function(e) {
+        $(document).off('click.samTrfQty').on("click.samTrfQty.rinneInlineStatus", '.sam-trf-qty-btn', function(e) {
             e.stopPropagation();
             transferAdjustQty($(this).data('cat'), $(this).data('key'), $(this).data('trf-qty'));
         });
-        $(document).off('change.samTrfInp').on('change.samTrfInp', '.sam-trf-qty-inp', function(e) {
+        $(document).off('change.samTrfInp').on("change.samTrfInp.rinneInlineStatus", '.sam-trf-qty-inp', function(e) {
             e.stopPropagation();
             transferInputQty($(this).data('cat'), $(this).data('key'), this.value);
         });
-        $(document).off('click.samTrfConfirm').on('click.samTrfConfirm', '.sam-trf-btn.confirm', function(e) {
+        $(document).off('click.samTrfConfirm').on("click.samTrfConfirm.rinneInlineStatus", '.sam-trf-btn.confirm', function(e) {
             executeTransfer();
         });
-        $(document).off('click.samTrfCancel').on('click.samTrfCancel', '.sam-trf-btn.cancel', function(e) {
+        $(document).off('click.samTrfCancel').on("click.samTrfCancel.rinneInlineStatus", '.sam-trf-btn.cancel', function(e) {
             closeModal();
         });
         // ★ 世界項目削除ボタン(編集モード, 探索ポイント/勢力)→MVUから当該項目を削除
-        $panel.off('click.samWorldDel').on('click.samWorldDel', '.sam-rumor-del-btn[data-world-del]', function(e) {
+        $panel.off('click.samWorldDel').on("click.samWorldDel.rinneInlineStatus", '.sam-rumor-del-btn[data-world-del]', function(e) {
             e.stopPropagation();
             var path = $(this).attr('data-del-path') || '';
             if (!path) return;
@@ -3415,7 +3352,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             });
         });
         // ★ 資産削除ボタン(編集モード)→MVUから当該資産を削除(汎用のドットパス削除を流用)
-        $panel.off('click.samAssetDel').on('click.samAssetDel', '.sam-fc-del-btn[data-asset-del]', function(e) {
+        $panel.off('click.samAssetDel').on("click.samAssetDel.rinneInlineStatus", '.sam-fc-del-btn[data-asset-del]', function(e) {
             e.stopPropagation();
             var path = $(this).attr('data-asset-del') || '';
             if (!path) return;
@@ -3427,7 +3364,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             });
         });
         // ★ 建設シーケンス削除ボタン(編集モード)→MVUから当該建設シーケンスを削除
-        $panel.off('click.samAssetSeqDel').on('click.samAssetSeqDel', '.sam-fc-del-btn[data-asset-seq-del]', function(e) {
+        $panel.off('click.samAssetSeqDel').on("click.samAssetSeqDel.rinneInlineStatus", '.sam-fc-del-btn[data-asset-seq-del]', function(e) {
             e.stopPropagation();
             var path = $(this).attr('data-asset-seq-del') || '';
             if (!path) return;
@@ -3439,7 +3376,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             });
         });
         // ★ R21-噂取引: 取引可能ボタン → 入力欄へテキストを送信(找{卖家}购买情报「{名}」)
-        $panel.off('click.samRumorTrade').on('click.samRumorTrade', '.sam-rumor-trade-btn', function(e) {
+        $panel.off('click.samRumorTrade').on("click.samRumorTrade.rinneInlineStatus", '.sam-rumor-trade-btn', function(e) {
             e.stopPropagation();
             var name = $(this).attr('data-rumor-name') || '';
             var seller = $(this).attr('data-rumor-seller') || '不明';
@@ -3450,7 +3387,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             else samToast('warning', '入力欄が見つかりません, クリップボードへコピーしました');
         });
         // ★ 経営パネル: 未完イベントの行全体がクリック可能 → そのテキストを入力欄へ入力
-        $panel.off('click.samAssetTodo').on('click.samAssetTodo', '.sam-asset-todo-item.clickable', function(e) {
+        $panel.off('click.samAssetTodo').on("click.samAssetTodo.rinneInlineStatus", '.sam-asset-todo-item.clickable', function(e) {
             e.stopPropagation();
             var text = $(this).attr('data-asset-todo') || '';
             if (!text) return;
@@ -3459,7 +3396,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             else samToast('warning', '入力欄が見つかりません');
         });
         // ★ R21-噂取引: 単体削除ボタン → MVUへ書き戻して当該の噂を削除(確認あり)
-        $panel.off('click.samRumorDel').on('click.samRumorDel', '.sam-rumor-del-btn[data-rumor-del]', function(e) {
+        $panel.off('click.samRumorDel').on("click.samRumorDel.rinneInlineStatus", '.sam-rumor-del-btn[data-rumor-del]', function(e) {
             e.stopPropagation();
             var section = $(this).attr('data-rumor-section') || '';
             var name = $(this).attr('data-rumor-name') || '';
@@ -3469,7 +3406,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             });
         });
         // ★ R21-噂取引: カテゴリ一括クリア → 当該カテゴリを空にする(街头巷议/情报交易/布告与檄文), 確認あり
-        $panel.off('click.samRumorClearSec').on('click.samRumorClearSec', '.sam-rumor-clear-btn', function(e) {
+        $panel.off('click.samRumorClearSec').on("click.samRumorClearSec.rinneInlineStatus", '.sam-rumor-clear-btn', function(e) {
             e.stopPropagation();
             e.preventDefault(); // summary の展開/折りたたみを防止
             var section = $(this).attr('data-rumor-clear-section') || '';
@@ -3479,14 +3416,14 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             });
         });
         // ★ R21-噂取引: 上部の全噂一括削除 → 传闻.街頭の噂/情报交易/布告与檄文を空にする, 確認あり
-        $panel.off('click.samRumorClearAll').on('click.samRumorClearAll', '.sam-rumor-clearall-btn', function(e) {
+        $panel.off('click.samRumorClearAll').on("click.samRumorClearAll.rinneInlineStatus", '.sam-rumor-clearall-btn', function(e) {
             e.stopPropagation();
             samConfirm('全噂を削除', 'すべての噂(街頭の噂/情報取引/布告と檄文)を削除しますか？この操作は取り消せません。', function() {
                 handleRumorClearAll();
             });
         });
         // 装備/アイテム操作ボタン(装備/解除/収納/取り出し/削除)→MVUへ書き戻し+更新
-        $panel.off('click.samAct').on('click.samAct', '.sam-act-btn', function(e) {
+        $panel.off('click.samAct').on("click.samAct.rinneInlineStatus", '.sam-act-btn', function(e) {
             e.stopPropagation();
             var $b = $(this);
             var action = $b.attr('data-act');
@@ -3516,7 +3453,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         });
         // 状態ボタンのクリック→二次詳細ダイアログ(メインパネルのカード描画スタイルを流用)
         // ★ 編集モード: 状態詳細も再帰編集レンダリング(renderDetailNode の編集状態)を通し, 下部に保存ボタンを追加
-        $panel.off('click.samBuff').on('click.samBuff', '.sam-buff-chip', function() {
+        $panel.off('click.samBuff').on("click.samBuff.rinneInlineStatus", '.sam-buff-chip', function() {
             var name = $(this).data('name');
             var path = $(this).data('path');
             var sd = getStatData();
@@ -3537,7 +3474,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         });
         // ★ 職業構造化エディタのイベントはbindEditorEvents($root)へ移行済み(panel/modal 共用)
         // ★ 源力灌注 キャラクター/味方は同一の実行器を共用；現在の階層→次の階層のみ許可。
-        $panel.off('click.samSourceInfusion').on('click.samSourceInfusion', '.sam-tier-infuse-btn', function(e) {
+        $panel.off('click.samSourceInfusion').on("click.samSourceInfusion.rinneInlineStatus", '.sam-tier-infuse-btn', function(e) {
             e.preventDefault();
             e.stopPropagation();
             openSourceInfusion($(this).attr('data-tier-target') || 'キャラ');
@@ -3545,7 +3482,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         // ★ 進階ボタン(階層プログレスバー中央): 属性の合計ポイントが次階層の下限に達した時のみ表示; 戦闘中はブロック
         //   - 進階申請(進階試練が未完了): "【当前进阶条件已满足，申请进阶试炼】"を入力欄へ送信
         //   - 進階開始(試練完了): writeBackMvu(キャラ.階層=nextTier) + renderAll() でプログレスバー/上部階層を更新
-        $panel.off('click.samTierAdv').on('click.samTierAdv', '.sam-tier-adv-btn', function(e) {
+        $panel.off('click.samTierAdv').on("click.samTierAdv.rinneInlineStatus", '.sam-tier-adv-btn', function(e) {
             e.stopPropagation();
             var $b = $(this);
             var act = $b.attr('data-tier-act') || '';
@@ -3592,7 +3529,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             }
         });
         // ★ 決算任務ボタン: トップバーの入口。インスタンス内かつ非戦闘時に常時表示され、クリックで【決算任務】を入力欄へ送信
-        $panel.off('click.samMissionSettle').on('click.samMissionSettle', '[data-mission-settle]', function(e) {
+        $panel.off('click.samMissionSettle').on("click.samMissionSettle.rinneInlineStatus", '[data-mission-settle]', function(e) {
             e.stopPropagation();
             var text = '【決算任務】';
             var ok = sendToInputBox(text, false);
@@ -3600,7 +3537,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             else samToast('warning', '入力欄が見つかりません, クリップボードへコピーしました');
         });
         // ★ 血統/形態/スキルカードの削除ボタン(編集モードで表示): 二次確認 → MVUへ書き戻して削除
-        $panel.off('click.samFcDel').on('click.samFcDel', '.sam-fc-del-btn[data-del-path]', function(e) {
+        $panel.off('click.samFcDel').on("click.samFcDel.rinneInlineStatus", '.sam-fc-del-btn[data-del-path]', function(e) {
             e.stopPropagation();
             var path = $(this).attr('data-del-path') || '';
             if (!path) return;
@@ -3636,7 +3573,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             });
         });
         // ★ 世界選択ボタン(トップバー, 主神空間かつ非戦闘時のみ描画): クリックで【世界選択】を入力欄へ送信
-        $panel.off('click.samChooseWorld').on('click.samChooseWorld', '[data-choose-world]', function(e) {
+        $panel.off('click.samChooseWorld').on("click.samChooseWorld.rinneInlineStatus", '[data-choose-world]', function(e) {
             e.stopPropagation();
             var text = '【世界選択】';
             var ok = sendToInputBox(text, false);
@@ -3644,7 +3581,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             else samToast('warning', '入力欄が見つかりません, クリップボードへコピーしました');
         });
         // ★ ショップ商品更新ボタン: 本文AI generateRaw を呼び新ZOD構造で商品在庫を生成し, stat_data.商城 へ書き戻す
-        $panel.off('click.samShopRefresh').on('click.samShopRefresh', '.sam-shop-refresh-btn', async function(e) {
+        $panel.off('click.samShopRefresh').on("click.samShopRefresh.rinneInlineStatus", '.sam-shop-refresh-btn', async function(e) {
             e.stopPropagation();
             var $btn = $(this);
             if ($btn.is('[disabled]')) return;
@@ -3689,23 +3626,23 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             }
         });
         // ★ 要望入力欄: 入力時にリアルタイムでモジュールレベルのshopReqText, Tab切替/その他の renderAll によるDOM再構築後も復元できる(内容は失われない)
-        $panel.off('input.samShopReq').on('input.samShopReq', '.sam-shop-req', function() {
+        $panel.off('input.samShopReq').on("input.samShopReq.rinneInlineStatus", '.sam-shop-req', function() {
             shopReqText = String($(this).val() || '');
         });
         // ★ "停止"ボタン(ショップ更新停止 / 血統融合停止): data-sam-act で振り分け, dub がハングしたAIリクエストを中断し対応する epoch を進めて旧 Promise コールバックの結果を破棄させる
-        $panel.off('click.samShopStop').on('click.samShopStop', '.sam-shop-stop-btn', function(e) {
+        $panel.off('click.samShopStop').on("click.samShopStop.rinneInlineStatus", '.sam-shop-stop-btn', function(e) {
             e.stopPropagation();
             var act = String($(this).attr('data-sam-act') || '');
             if (act === 'blood-fusion-stop') bloodFusionStop();
             else shopStopRefresh();
         });
         // 配信待ち記録: ユーザーが手動でクリア(モデルが正常に叙述した後はJSONPatchでも自動クリアされる)
-        $panel.off('click.samReceiptClear').on('click.samReceiptClear', '[data-receipt-clear]', function(e) {
+        $panel.off('click.samReceiptClear').on("click.samReceiptClear.rinneInlineStatus", '[data-receipt-clear]', function(e) {
             e.stopPropagation();
             shopClearReceipt();
         });
         // ★ ショップ市場エリア: 区域Tab切替(装備|アイテム|スキル|血統)
-        $panel.off('click.samShopTab').on('click.samShopTab', '.sam-shop-tab', function(e) {
+        $panel.off('click.samShopTab').on("click.samShopTab.rinneInlineStatus", '.sam-shop-tab', function(e) {
             e.stopPropagation();
             var tab = $(this).attr('data-shop-tab');
             if (!tab || tab === shopActiveTab) return;
@@ -3714,7 +3651,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             shopRefreshMarket();
         });
         // ★ 所持パネル: サブTab切替(戦術スロット|装備バックパック|アイテムバックパック|倉庫)
-        $panel.off('click.samHoldTab').on('click.samHoldTab', '.sam-hold-tab', function(e) {
+        $panel.off('click.samHoldTab').on("click.samHoldTab.rinneInlineStatus", '.sam-hold-tab', function(e) {
             e.stopPropagation();
             var tab = $(this).attr('data-hold-tab');
             if (!tab || tab === holdActiveTab) return;
@@ -3732,7 +3669,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         });
         // ★ 所持パネル: 専用分類行の絞り込み(全部/各タイプ) —— クリック後は active 状態 + 内容領域のみ更新し, Tabバーと分類行の構造は再構築しない
         //   分類が多い場合は行内を横スクロール; ビューポート端の外にあるカプセルをクリックすると可視領域へスムーズにスクロールする(inline:center)
-        $panel.off('click.samHoldType').on('click.samHoldType', '.sam-hold-type', function(e) {
+        $panel.off('click.samHoldType').on("click.samHoldType.rinneInlineStatus", '.sam-hold-type', function(e) {
             e.stopPropagation();
             var t = String($(this).attr('data-hold-type') || '');
             if (t !== holdTypeFilter) {
@@ -3745,7 +3682,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             try { this.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' }); } catch(err) { try { this.scrollIntoView(false); } catch(e2){} }
         });
         // ★ ショップ市場エリア: 装備区 左navスロット切替
-        $panel.off('click.samShopSlot').on('click.samShopSlot', '.sam-shop-nav-btn', function(e) {
+        $panel.off('click.samShopSlot').on("click.samShopSlot.rinneInlineStatus", '.sam-shop-nav-btn', function(e) {
             e.stopPropagation();
             var slot = $(this).attr('data-shop-slot');
             if (!slot || slot === shopActiveSlot) return;
@@ -3753,7 +3690,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             shopRefreshMarket();
         });
         // ★ ショップ市場エリア: 商品カードのクリック(選択/解除); アイテム区はカード全体のクリックに反応しない(数量コントロールで決定)
-        $panel.off('click.samShopItem').on('click.samShopItem', '.sam-shop-item', function(e) {
+        $panel.off('click.samShopItem').on("click.samShopItem.rinneInlineStatus", '.sam-shop-item', function(e) {
             // クリック元が数量コントロール(ボタン/入力欄), qty の委譲処理へ流す
             var $tgt = $(e.target);
             if ($tgt.closest('.sam-shop-qty').length) return;
@@ -3793,7 +3730,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             if (items.length) shopToggleSelect(items[0], cat, slot);
         });
         // ★ ショップ市場エリア: アイテム数量コントロール(+/− ボタン + 入力欄); 数量加算時に残高を事前チェック
-        $panel.off('click.samShopQty').on('click.samShopQty', '.sam-shop-qty-btn', function(e) {
+        $panel.off('click.samShopQty').on("click.samShopQty.rinneInlineStatus", '.sam-shop-qty-btn', function(e) {
             e.stopPropagation();
             var $btn = $(this);
             var name = $btn.attr('data-name');
@@ -3815,7 +3752,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             if ($inp.length) $inp.val(nxt);
             shopSetQty(name, "道具欄", nxt);
         });
-        $panel.off('input.samShopQty change.samShopQty', '.sam-shop-qty-inp').on('input.samShopQty change.samShopQty', '.sam-shop-qty-inp', function(e) {
+        $panel.off('input.samShopQty change.samShopQty', '.sam-shop-qty-inp').on("input.samShopQty.rinneInlineStatus change.samShopQty.rinneInlineStatus", '.sam-shop-qty-inp', function(e) {
             e.stopPropagation();
             var $inp = $(this);
             var name = $inp.attr('data-name');
@@ -3841,7 +3778,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             shopSetQty(name, "道具欄", qty);
         });
         // ★ ショップ市場エリア: 取引実行ボタン
-        $panel.off('click.samShopExec').on('click.samShopExec', '.sam-shop-exec-btn', function(e) {
+        $panel.off('click.samShopExec').on("click.samShopExec.rinneInlineStatus", '.sam-shop-exec-btn', function(e) {
             e.stopPropagation();
             var $btn = $(this);
             if ($btn.is('[disabled]')) return;
@@ -3851,7 +3788,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         //   切替時: 引数の正当性を検証; 更新中なら無視する(セレクトは既にグレーアウト済み, 二重の保険);
         //   現在のキャラクターの買い物状態の永続保存に追加操作は不要(在庫は MVU のメンバー商庫へ永続化済み);
         //   切替後にカートをクリア(前のキャラクター向けに購入した商品が新しいキャラクターへ誤配分されるのを防ぐ) + アクティブ区域をリセット + 再描画
-        $panel.off('change.samShopActor').on('change.samShopActor', '.sam-shop-actor-select', function(e) {
+        $panel.off('change.samShopActor').on("change.samShopActor.rinneInlineStatus", '.sam-shop-actor-select', function(e) {
             e.stopPropagation();
             var $sel = $(this);
             if ($sel.is('[disabled]')) return;
@@ -3874,11 +3811,11 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         // ★ エディタイベント(クリックで編集/一時保存/フィールドのトグル): 独立関数として切り出し, panel と modal(独立DOM)で共用
         bindEditorEvents($panel);
         // 保存ボタン
-        $(document).off('click.samSave').on('click.samSave', '.sam-save-btn', saveEdits);
+        $(document).off('click.samSave').on("click.samSave.rinneInlineStatus", '.sam-save-btn', saveEdits);
         // <details> の折りたたみ記憶: summary のクリック(ユーザーの能動的な切替)を監視し, open状態を記録して次回描画時に復元
         // 注: click を使う。ネイティブの toggle イベントではなく, jQuery の toggle 委譲は一部バージョンで互換性問題があるため;
         // key は summary のテキストから末尾の "(N)" 数量括弧を除去し, データの増減をまたいで安定して一致させる
-        $panel.off('click.samDetails').on('click.samDetails', 'details > summary', function(e) {
+        $panel.off('click.samDetails').on("click.samDetails.rinneInlineStatus", 'details > summary', function(e) {
             // 本パネル内のセクションタイトルのクリック(バブリングした summary)のみを処理
             var $d = $(this).closest('details');
             if (!$d.length) return;
@@ -3895,11 +3832,11 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     function bindEditorEvents($root) {
         if (!$root || !$root.length) return;
         // エディタのinput変更(リアルタイムで一時保存, 即時書き戻しはしない)
-        $root.off('input.samEdit change.samEdit', '.sam-edit-input').on('input.samEdit change.samEdit', '.sam-edit-input', function() {
+        $root.off('input.samEdit change.samEdit', '.sam-edit-input').on("input.samEdit.rinneInlineStatus change.samEdit.rinneInlineStatus", '.sam-edit-input', function() {
             $(this).addClass('sam-dirty');
         });
         // クリックで即編集: 表示状態(.sam-ed-wrap)をクリック→実入力欄を挿入→フォーカス
-        $root.off('click.samEd', '.sam-ed-wrap').on('click.samEd', '.sam-ed-wrap', function(e) {
+        $root.off('click.samEd', '.sam-ed-wrap').on("click.samEd.rinneInlineStatus", '.sam-ed-wrap', function(e) {
             e.stopPropagation();
             var $w = $(this);
             if ($w.hasClass('editing')) return;
@@ -3919,15 +3856,15 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             if ($inp.is('input,textarea')) { $inp.trigger('focus'); if ($inp[0].select) $inp[0].select(); }
         });
         // ブラー/確定: pendingEdits に一時保存し表示状態へ戻す
-        $root.off('blur.samEd keydown.samEd', '.sam-edit-active').on('blur.samEd', '.sam-edit-active', function() {
+        $root.off('blur.samEd keydown.samEd', '.sam-edit-active').on("blur.samEd.rinneInlineStatus", '.sam-edit-active', function() {
             flushStagedDisplay($(this));
         });
-        $root.on('keydown.samEd', '.sam-edit-active', function(e) {
+        $root.on("keydown.samEd.rinneInlineStatus", '.sam-edit-active', function(e) {
             if (e.which === 13 && $(this).is('input')) { e.preventDefault(); this.blur(); }
             else if (e.which === 27) { e.preventDefault(); this.blur(); }
         });
         // フィールド単位のトグル(編集モード内)
-        $root.off('click.samFieldToggle').on('click.samFieldToggle', '.sam-toggle-switch[data-toggle="field"]', function(e) {
+        $root.off('click.samFieldToggle').on("click.samFieldToggle.rinneInlineStatus", '.sam-toggle-switch[data-toggle="field"]', function(e) {
             e.stopPropagation();
             $(this).toggleClass('on');
             var path = $(this).data('path');
@@ -3935,14 +3872,14 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         });
         // ★ 職業構造化エディタ: 入力のブラー/変更→再構成して一時保存; 削除→カードを除去して再構成; 追加→空カードを追加して再構成
         //   (modal 内で職業を編集する場合も同様に有効, occEditAdd は data-occ-path でグローバルに filter してコンテナを探す)
-        $root.off('blur.occEd change.occEd', '.sam-occ-field').on('blur.occEd change.occEd', '.sam-occ-field', function() {
+        $root.off('blur.occEd change.occEd', '.sam-occ-field').on("blur.occEd.rinneInlineStatus change.occEd.rinneInlineStatus", '.sam-occ-field', function() {
             occReassemble($(this).closest('.sam-occ-edit'));
         });
-        $root.off('click.occDel').on('click.occDel', '.sam-occ-del-btn', function(e) {
+        $root.off('click.occDel').on("click.occDel.rinneInlineStatus", '.sam-occ-del-btn', function(e) {
             e.stopPropagation();
             occEditDelete($(this).closest('.sam-occ-edit-card'));
         });
-        $root.off('click.occAdd').on('click.occAdd', '.sam-occ-add-btn', function(e) {
+        $root.off('click.occAdd').on("click.occAdd.rinneInlineStatus", '.sam-occ-add-btn', function(e) {
             e.stopPropagation();
             occEditAdd($(this));
         });
@@ -3950,22 +3887,22 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     /* ===== 14b. 立ち絵関連のイベントバインド(アバタークリックで拡大/アップロード + ビューアを閉じる) ===== */
     function bindPortraitEvents() {
         // キャラのアバタークリック: 立ち絵の有無にかかわらず, カスタム立ち絵ダイアログを直接表示(拡大は行わず/✎バッジも出さない)
-        $(document).off('click.samPortrait', '.sam-avatar').on('click.samPortrait', '.sam-avatar', function(e) {
+        $(document).off('click.samPortrait', '.sam-avatar').on("click.samPortrait.rinneInlineStatus", '.sam-avatar', function(e) {
             e.stopPropagation();
             openReincarnatorPortraitUp();
         });
         // NPCアバタークリック: 立ち絵の有無にかかわらず, カスタム立ち絵ダイアログを直接表示(カード詳細へのバブリングを防ぐ)
-        $(document).off('click.samNpcAvatar', '.sam-npc-avatar').on('click.samNpcAvatar', '.sam-npc-avatar', function(e) {
+        $(document).off('click.samNpcAvatar', '.sam-npc-avatar').on("click.samNpcAvatar.rinneInlineStatus", '.sam-npc-avatar', function(e) {
             e.stopPropagation();
             openPortraitUpload($(this).data('name') || '');
         });
         // NPCに立ち絵がない場合の"立ち絵"小ボタン→アップロード(バブリングを防ぐ)
-        $(document).off('click.samNpcPortraitBtn', '.sam-npc-portrait-btn').on('click.samNpcPortraitBtn', '.sam-npc-portrait-btn', function(e) {
+        $(document).off('click.samNpcPortraitBtn', '.sam-npc-portrait-btn').on("click.samNpcPortraitBtn.rinneInlineStatus", '.sam-npc-portrait-btn', function(e) {
             e.stopPropagation();
             openPortraitUpload($(this).data('name') || '');
         });
         // 立ち絵ビューアをクリックで閉じる
-        $(document).off('click.samPvClose', '#samsara-portrait-viewer').on('click.samPvClose', '#samsara-portrait-viewer', function() {
+        $(document).off('click.samPvClose', '#samsara-portrait-viewer').on("click.samPvClose.rinneInlineStatus", '#samsara-portrait-viewer', function() {
             $(this).removeClass('show');
         });
     }
@@ -4382,7 +4319,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
         // テーマ選択
         // 初期化時は jQuery で安全に値を設定: プリセットのドロップダウン名/モデルのドロップダウンなど( HTML エスケープ/インジェクション問題を回避)
         try { apiRefreshFields(); } catch(_e){ console.warn('[主神终端] apiRefreshFields の初期更新で例外:', _e && _e.message); }
-        $('#samsara-modal').off('click.samTheme').on('click.samTheme', '.sam-theme-card', function() {
+        $('#samsara-modal').off('click.samTheme').on("click.samTheme.rinneInlineStatus", '.sam-theme-card', function() {
             var tk = $(this).data('theme');
             setTheme(tk);
             $(this).siblings().removeClass('active');
@@ -4391,14 +4328,14 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             renderAll();
         });
         // 編集スイッチ
-        $('#samsara-modal').off('click.samToggle').on('click.samToggle', '.sam-toggle-switch[data-toggle="edit"]', function() {
+        $('#samsara-modal').off('click.samToggle').on("click.samToggle.rinneInlineStatus", '.sam-toggle-switch[data-toggle="edit"]', function() {
             var on = !$(this).hasClass('on');
             $(this).toggleClass('on', on);
             setEditMode(on);
             closeModal();
             renderAll();
         });
-        $('#samsara-modal').off('change.samDifficulty').off('click.samDifficulty').on('click.samDifficulty', 'button[data-difficulty]', function() {
+        $('#samsara-modal').off('change.samDifficulty').off('click.samDifficulty').on("click.samDifficulty.rinneInlineStatus", 'button[data-difficulty]', function() {
             var mode = $(this).attr('data-difficulty');
             if (['体験', '正常', '困難', '挑戦'].indexOf(mode) < 0) return;
             var ok = writeBackMvu(function(statData) {
@@ -4413,7 +4350,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             renderAll();
         });
         // 世界超稳 / 単一世界 スイッチ( MVU の設定ノードに書き戻す)
-        $('#samsara-modal').off('click.samCfgToggle').on('click.samCfgToggle', '.sam-toggle-switch[data-toggle="世界超安定"], .sam-toggle-switch[data-toggle="単一世界"]', function() {
+        $('#samsara-modal').off('click.samCfgToggle').on("click.samCfgToggle.rinneInlineStatus", '.sam-toggle-switch[data-toggle="世界超安定"], .sam-toggle-switch[data-toggle="単一世界"]', function() {
             var key = $(this).data('toggle');
             var on = !$(this).hasClass('on');
             $(this).toggleClass('on', on);
@@ -4424,7 +4361,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             renderAll();
         });
         // 世界進行のマスタースイッチ：専用 API を優先；専用 API が無効なときだけ主神ターミナルの追加モデルを再利用/有効化する。
-        $('#samsara-modal').off('click.samWorldEngine').on('click.samWorldEngine', '.sam-toggle-switch[data-toggle="world-engine"]', function() {
+        $('#samsara-modal').off('click.samWorldEngine').on("click.samWorldEngine.rinneInlineStatus", '.sam-toggle-switch[data-toggle="world-engine"]', function() {
             var engine = GS_PARENT.Samsara && GS_PARENT.Samsara.worldEngine;
             if (!engine || typeof engine.setEnabled !== 'function') { samToast('error', '先に独立スクリプトを読み込んでください：世界進行システム.js'); return; }
             var on = !$(this).hasClass('on');
@@ -4453,7 +4390,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
   $st.text(message || (mode === "追加モデル解析" ? '現在：追加API出力' : '現在：主AI追従出力'));
         }
         refreshVariableModeFields();
-        $apiModal.off('click.samVariableMode').on('click.samVariableMode', '[data-variable-api-mode]', async function() {
+        $apiModal.off('click.samVariableMode').on("click.samVariableMode.rinneInlineStatus", '[data-variable-api-mode]', async function() {
   var mode = normalizeVariableApiMode($(this).attr('data-variable-api-mode'));
   var $buttons = $('[data-variable-api-mode]', $apiModal).prop('disabled', true);
   refreshVariableModeFields('世界書とプリセットの項目を切り替えています…', '');
@@ -4522,13 +4459,13 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             }
         }
         // 有効化スイッチ: enabledの切り替え, 下部フィールドの表示を同期
-        $apiModal.off('click.samApiEnable').on('click.samApiEnable', '.sam-toggle-switch[data-toggle="api-enabled"]', function() {
+        $apiModal.off('click.samApiEnable').on("click.samApiEnable.rinneInlineStatus", '.sam-toggle-switch[data-toggle="api-enabled"]', function() {
             var on = !$(this).hasClass('on');
             saveApiConfig(function(cfg) { cfg.enabled = on; });
             apiRefreshFields();
         });
         // プリセットを選ぶと即読み込み: プリセット内のアドレス/Key/ソース/プロキシをそのまま入力欄に貼り付け, モデルのドロップダウンはプリセット内のモデルだけに絞り, プリセット名を下の入力欄に同期する
-        $apiModal.off('change.samApiPreset').on('change.samApiPreset', '#sam-api-preset-sel', function() {
+        $apiModal.off('change.samApiPreset').on("change.samApiPreset.rinneInlineStatus", '#sam-api-preset-sel', function() {
             clearTimeout(apiFieldTimer);
             var $sel = $(this);
             var name = ($sel.val() || '').trim();
@@ -4556,7 +4493,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             $('#sam-api-models-status').html('<span class="sam-api-status warn">未読み込み(既定の一覧を使用)</span>');
         });
         // プリセットを削除
-        $apiModal.off('click.samApiDel').on('click.samApiDel', '.sam-api-btn[data-act="delete-preset"]', function() {
+        $apiModal.off('click.samApiDel').on("click.samApiDel.rinneInlineStatus", '.sam-api-btn[data-act="delete-preset"]', function() {
             var name = ($('#sam-api-preset-sel option:selected').text() || '').trim();
             if (!name) { samToast('warn', '先に削除するプリセットを選択してください'); return; }
             samConfirm('プリセットを削除', 'プリセット「' + name + '」を削除しますか?この操作は取り消せません。', function() {
@@ -4570,7 +4507,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             });
         });
         // プリセットを保存(ダイアログ内の現在のフィールド値をスナップショットとし, プリセット一覧に書き込み, 同名は上書き)
-        $apiModal.off('click.samApiSave').on('click.samApiSave', '.sam-api-btn[data-act="save-preset"]', function() {
+        $apiModal.off('click.samApiSave').on("click.samApiSave.rinneInlineStatus", '.sam-api-btn[data-act="save-preset"]', function() {
             clearTimeout(apiFieldTimer);   // 書き戻し待ちタイマーを解除し, スナップショットが現在の画面の値を読みその後も古い値の書き戻しに上書きされないようにする
             var name = ($('#sam-api-preset-name').val() || '').trim();
             if (!name) { samToast('warn', 'プリセット名を入力してください'); return; }
@@ -4589,7 +4526,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             samToast('ok', 'プリセットを保存しました: ' + name);
         });
         // フィールドのリアルタイム保存(デバウンス + apiUrl 変更時にモデルのドロップダウンを更新; apiFieldTimer は前方で宣言済み)
-        $apiModal.off('input.samApiField change.samApiField').on('input.samApiField change.samApiField', '[data-field]', function() {
+        $apiModal.off('input.samApiField change.samApiField').on("input.samApiField.rinneInlineStatus change.samApiField.rinneInlineStatus", '[data-field]', function() {
             var field = $(this).data('field');
             var val = $(this).val() || '';
             clearTimeout(apiFieldTimer);
@@ -4599,7 +4536,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             }, 400);
         });
         // モデル一覧を読み込む(非同期で fetch /v1/models, 成功したら fetchedModelsに書き込む)
-        $apiModal.off('click.samApiLoad').on('click.samApiLoad', '.sam-api-btn[data-act="load-models"]', function() {
+        $apiModal.off('click.samApiLoad').on("click.samApiLoad.rinneInlineStatus", '.sam-api-btn[data-act="load-models"]', function() {
             var $btn = $(this); var $st = $('#sam-api-models-status');
             $btn.prop('disabled', true).text('読み込み中…');
             $st.html('<span class="sam-api-status">モデル一覧を要求しています…</span>');
@@ -4622,7 +4559,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             });
         });
         // 読み込み済みモデル一覧をクリア(既定のモデル推奨に戻し, 選択もリセット)
-        $apiModal.off('click.samApiClear').on('click.samApiClear', '.sam-api-btn[data-act="clear-models"]', function() {
+        $apiModal.off('click.samApiClear').on("click.samApiClear.rinneInlineStatus", '.sam-api-btn[data-act="clear-models"]', function() {
             saveApiConfig(function(cfg) { cfg.fetchedModels = []; cfg.model = ''; });
             apiRenderModelSelect(getApiConfig());
             $('[data-field="model"]', $apiModal).val('');
@@ -4652,10 +4589,10 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             }
         } catch(_e) {}
         var statData = getStatData();
-        var $panel = $('#samsara-panel');
+        var $panel = inlinePanel || $('#samsara-panel');
         if (!statData || !statData.キャラ) {
             // ターミナル未応答: 上部バーには 更新/閉じる ボタンを引き続き表示(更新は.sam-icon-btn.refreshを再利用, イベントは bindUIEventsで委譲済み)
-            $panel.html('<div class="sam-topbar"><div class="tl-info"><div class="tl-time" style="color:var(--sam-sub);">ターミナル未応答</div></div><div class="tl-actions"><div class="sam-icon-btn refresh" title="データを更新">🔄</div><div class="sam-icon-btn close" title="閉じる">✕</div></div></div><div class="sam-empty"><div style="font-size:36px;opacity:0.6;animation:samPulse 2s infinite;">📡</div><div style="margin-top:10px;">因果チェーンはまだ接続されていません...</div><div style="font-size:11px;opacity:0.6;">(新しいシナリオの初期化か時間の進行を待つか, 右上の🔄で更新してください)</div></div>');
+            $panel.html('<div class="sam-topbar"><div class="tl-info"><div class="tl-time" style="color:var(--sam-sub);">ターミナル未応答</div></div><div class="tl-actions"><div class="sam-icon-btn refresh" title="データを更新">🔄</div></div></div><div class="sam-empty"><div style="font-size:36px;opacity:0.6;animation:samPulse 2s infinite;">📡</div><div style="margin-top:10px;">因果チェーンはまだ接続されていません...</div><div style="font-size:11px;opacity:0.6;">(新しいシナリオの初期化か時間の進行を待つか, 右上の🔄で更新してください)</div></div>');
             $('#samsara-ball').removeClass('combat-mode');
             // "ターミナル未応答"の場合にのみ5秒の自動更新タイマーを起動; データを受信して正常にレンダリングしたら下部で解除する
             if (!window.samsaraRefreshTimer) {
@@ -4751,7 +4688,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             + settlementBtn
             + '<div class="sam-icon-btn refresh" title="更新">🔄</div>'
             + '<div class="sam-icon-btn settings '+(editMode?'edit-on':'')+'" title="設定">⚙️</div>'
-            + '<div class="sam-icon-btn close" title="閉じる">✕</div>'
+            + ''
             + '</div></div>';
     }
 
@@ -4826,20 +4763,20 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             + '<div style="margin-top:8px;font-size:11px;color:var(--sam-sub);">ローカル画像にサイズ制限はありません(ブラウザのストレージ上限のみに従います)。</div>';
         showModal(title, body);
         var doSave = function(u) { isReincarnator ? saveReincarnatorPortrait(u) : saveNpcPortrait(name, u); };
-        $('#sam-portrait-url-btn').off('click.samPt').on('click.samPt', function() {
+        $('#sam-portrait-url-btn').off('click.samPt').on("click.samPt.rinneInlineStatus", function() {
             var u = ($('#sam-portrait-url').val() || '').trim();
             if (!u) return;
             doSave(u);
         });
-        $('#sam-portrait-file-btn').off('click.samPt').on('click.samPt', function() { $('#sam-portrait-file').click(); });
-        $('#sam-portrait-file').off('change.samPt').on('change.samPt', function() {
+        $('#sam-portrait-file-btn').off('click.samPt').on("click.samPt.rinneInlineStatus", function() { $('#sam-portrait-file').click(); });
+        $('#sam-portrait-file').off('change.samPt').on("change.samPt.rinneInlineStatus", function() {
             var f = this.files && this.files[0];
             if (!f) return;
             var rd = new FileReader();
             rd.onload = function(ev) { doSave(ev.target.result); };
             rd.readAsDataURL(f);
         });
-        $('#sam-portrait-clear-btn').off('click.samPt').on('click.samPt', function() { doSave(''); });
+        $('#sam-portrait-clear-btn').off('click.samPt').on("click.samPt.rinneInlineStatus", function() { doSave(''); });
     }
     function openReincarnatorPortraitUp() { openPortraitUpload('キャラ'); }
     function renderReincarnatorBar(p, sys, editMode) {
@@ -9776,7 +9713,7 @@ if (hasReq) {
             + '</div></div>';
         $m.html(box).addClass('open');
         // ボタンクリック: キャンセル/確認 → ダイアログを閉じる; 確認なら onOk をコールバック
-        $m.off('click.samConfirm').on('click.samConfirm', '.sam-confirm-btn', function(e) {
+        $m.off('click.samConfirm').on("click.samConfirm.rinneInlineStatus", '.sam-confirm-btn', function(e) {
             e.stopPropagation();
             var isOk = $(this).hasClass('ok');
             // samConfirm 自身の全イベント(オーバーレイの外側クリックで閉じる処理を含む)を掃除し, 次回 #samsara-modal を再利用する showModal に残留しないようにする
@@ -9787,7 +9724,7 @@ if (hasReq) {
             }
         });
         // オーバーレイ(ダイアログ外)のクリックでキャンセル
-        $m.off('click.samConfirmBg').on('click.samConfirmBg', function(e) {
+        $m.off('click.samConfirmBg').on("click.samConfirmBg.rinneInlineStatus", function(e) {
             if (e.target === this) {
                 $m.off('click.samConfirm').off('click.samConfirmBg');
                 $m.removeClass('open').empty();
@@ -9954,60 +9891,39 @@ if (hasReq) {
             suspend: function() {
                 var panel = $('#samsara-panel');
                 var state = { open: panel.hasClass('open'), scroll: $('#sam-tab-content').scrollTop() || 0 };
-                panel.hide(); $('#samsara-ball').hide();
+                panel.prop('hidden', true);
                 return state;
             },
             restore: function(state) {
-                if (state && state.open) {
-                    if (!isEditMode()) renderAll();
-                    $('#samsara-panel').css('display', 'flex').addClass('open');
-                    $('#samsara-ball').hide();
-                    $('#sam-tab-content').scrollTop(state.scroll || 0);
-                } else { $('#samsara-ball').show(); }
+                $('#samsara-panel').prop('hidden', false);
+                queueInlineStatus(); if (!isEditMode()) renderAll();
             }
         };
+        STATUS_BAR_RUNTIME.terminal = GS_PARENT.Samsara.terminal;
         if (GS_PARENT.Samsara.worldEngine && typeof GS_PARENT.Samsara.worldEngine.isConfigured === 'function' && GS_PARENT.Samsara.worldEngine.isConfigured()) {
             var _worldUsesDedicated = typeof GS_PARENT.Samsara.worldEngine.usesDedicatedApi === 'function' && GS_PARENT.Samsara.worldEngine.usesDedicatedApi();
             if (!_worldUsesDedicated) GS_PARENT.Samsara.terminal.enableApi();
         }
         renderAll();
-        try {
-            if (localStorage.getItem(SAM_CONFIG.open) === '1') {
-                var $panel = $('#samsara-panel');
-                var $ball = $('#samsara-ball');
-                if (!isMobile()) {
-                    var r = $ball[0].getBoundingClientRect();
-                    var vw = GS_PARENT.innerWidth, vh = GS_PARENT.innerHeight;
-                    var pw = $panel.outerWidth() || 720;
-                    var nl = Math.max(20, Math.min(vw - pw - 20, r.left > vw/2 ? r.left - pw - 20 : r.left + 60));
-                    var nt = Math.max(20, Math.min(vh - 700, r.top));
-                    $panel.css({left:nl+'px', top:nt+'px', right:'auto', bottom:'auto'});
-                } else {
-                    $panel.css({left:'', top:'', right:'', bottom:'', margin:''});
-                }
-                $panel.css('display','flex').addClass('open');
-                $ball.hide();
-            }
-        } catch (e) {}
-
         var win = getMvuGlobal();
         // ★ デバウンス更新: 500ms 以内に複数イベントが起きても renderAll は一度だけ発火
         //   - "補助計算スクリプト"が属性を再計算する時間を確保(古い値を読まないように)
         //   - 連続イベント(複数階層の削除/連続swipe/複数回の変数更新)をまとめて毎回の再描画によるカクつきを防ぐ
         //   - renderAll は読み取り専用, MVU, への書き戻しを行わないため無限ループの危険はない
-        var _refreshTimer = null;
+        // 更新タイマーはランタイムと一緒に破棄する。
         var debouncedRefresh = function() {
-            if (_refreshTimer) clearTimeout(_refreshTimer);
-            _refreshTimer = setTimeout(function() {
-                _refreshTimer = null;
-                if ($('#samsara-panel').hasClass('open') && !isEditMode()) renderAll();
+            queueInlineStatus();
+            if (STATUS_BAR_RUNTIME.refreshTimer) clearTimeout(STATUS_BAR_RUNTIME.refreshTimer);
+            STATUS_BAR_RUNTIME.refreshTimer = setTimeout(function() {
+                STATUS_BAR_RUNTIME.refreshTimer = null;
+                if (!STATUS_BAR_RUNTIME.disposed && !isEditMode()) renderAll();
             }, 500);
         };
         try {
             // 1) MVU 変数更新終了 → 更新(元の updateFunc, デバウンス版に変更)
             if (win && win.Mvu && win.Mvu.events) {
                 $(document).off('VARIABLE_UPDATE_ENDED.sam');
-                $(document).on('VARIABLE_UPDATE_ENDED.sam', debouncedRefresh);
+                $(document).on("VARIABLE_UPDATE_ENDED.sam.rinneInlineStatus", debouncedRefresh);
                 if (typeof eventOn === 'function') trackStatusBarSubscription(eventOn(win.Mvu.events.VARIABLE_UPDATE_ENDED, debouncedRefresh));
             }
             // 2) 酒場ネイティブイベント: 階層削除/swipe切替/チャット切替 → MVU スナップショットのロールバックや切替が起きる, 更新が必要
@@ -10016,16 +9932,12 @@ if (hasReq) {
                 if (tavern_events.MESSAGE_DELETED && typeof eventOn === 'function') trackStatusBarSubscription(eventOn(tavern_events.MESSAGE_DELETED, debouncedRefresh));
                 if (tavern_events.MESSAGE_SWIPED  && typeof eventOn === 'function') trackStatusBarSubscription(eventOn(tavern_events.MESSAGE_SWIPED, debouncedRefresh));
                 if (tavern_events.CHAT_CHANGED    && typeof eventOn === 'function') trackStatusBarSubscription(eventOn(tavern_events.CHAT_CHANGED, debouncedRefresh));
+                ['MESSAGE_RECEIVED', 'CHARACTER_MESSAGE_RENDERED', 'MESSAGE_UPDATED'].forEach(function(key) {
+                    if (tavern_events[key] && typeof eventOn === 'function') trackStatusBarSubscription(eventOn(tavern_events[key], debouncedRefresh));
+                });
             }
         } catch (e) {}
-        // DOM監視タイマー: 玉/パネルが削除されたら再構築
-        window.samsaraGuardTimer = setInterval(function() {
-            if (!document.getElementById('samsara-ball') || !document.getElementById('samsara-panel')) {
-                initSamsaraDOM();
-                renderAll();
-                if (GS_PARENT.Samsara.worldEngine && GS_PARENT.Samsara.worldEngine.isOpen()) GS_PARENT.Samsara.terminal.suspend();
-            }
-        }, 15000);
+        observeInlineStatus();
         if (GS_PARENT.Samsara.worldEngine && GS_PARENT.Samsara.worldEngine.isOpen()) GS_PARENT.Samsara.terminal.suspend();
         try { (window.parent || window).__状態パネル_loaded__ = true; } catch(e) { window.__状態パネル_loaded__ = true; }
         // 注: データ更新タイマーは renderAll() の"端末未応答"分岐内へ移し必要時に起動, データ受信後に自動クリア, 無駄な更新でスクロールとパフォーマンスへ影響するのを避ける
@@ -10033,9 +9945,10 @@ if (hasReq) {
     }
 
     (function bootstrap() {
-        if (!$ || !_ || !document.body) { try { _ = (GS_PARENT._ || window._); } catch (e) {} return setTimeout(bootstrap, 200); }
+        if (STATUS_BAR_RUNTIME.disposed) return;
+        if (!$ || !_ || !document.body) { try { _ = (GS_PARENT._ || window._); } catch (e) {} return (STATUS_BAR_RUNTIME.bootstrapTimer = setTimeout(bootstrap, 200)); }
         init();
     })();
 
-    try { $(window).on('unload.sam', samPreClean); } catch (e) {}
+    try { $(window).on("unload.sam.rinneInlineStatus", samPreClean); } catch (e) {}
 })();
