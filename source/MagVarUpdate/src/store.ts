@@ -1,4 +1,4 @@
-import { decodeMvuSettings, encodeMvuSettings } from '@/settings_compat';
+import { decodeMvuSettings, encodeMvuSettings, readMvuSettings } from '@/settings_compat';
 import {
     migrateExtraModelApiProfiles,
     normalizeExtraModelPiProfileContextWindow,
@@ -346,7 +346,7 @@ const NewSettings = z
     })
     .prefault({});
 
-const Settings = z.union([OldSettings, NewSettings]).catch(() => NewSettings.parse({}));
+const Settings = z.preprocess(decodeMvuSettings, z.union([OldSettings, NewSettings]).catch(() => NewSettings.parse({})));
 
 export type MvuSettings = z.infer<typeof NewSettings>;
 
@@ -402,8 +402,8 @@ const Runtimes = z
     })
     .prefault({});
 
-export const useDataStore = defineStore("MVU変数フレームワーク", () => {
-    const settings = ref(Settings.parse(decodeMvuSettings(_.get(SillyTavern.extensionSettings, 'rinne_jp_mvu_settings', _.get(SillyTavern.extensionSettings, 'mvu_settings', {})))));
+export const useDataStore = defineStore('MVU変数フレームワーク', () => {
+    const settings = ref(Settings.parse(readMvuSettings()));
     watch(
         settings,
         new_settings => {
@@ -412,13 +412,13 @@ export const useDataStore = defineStore("MVU変数フレームワーク", () => 
                 new_settings.追加モデル解析設定.自動リクエスト有効 = false;
                 return;
             }
-            _.set(SillyTavern.extensionSettings, 'rinne_jp_mvu_settings', encodeMvuSettings(toRaw(new_settings), _.get(SillyTavern.extensionSettings, 'rinne_jp_mvu_settings', _.get(SillyTavern.extensionSettings, 'mvu_settings', {}))));
+            _.set(SillyTavern.extensionSettings, 'rinne_jp_mvu_settings', encodeMvuSettings(toRaw(new_settings)));
             if (!is_jest_environment) SillyTavern.saveSettingsDebounced();
         },
         { deep: true }
     );
     const _reload_settings = () => {
-        settings.value = Settings.parse(decodeMvuSettings(_.get(SillyTavern.extensionSettings, 'rinne_jp_mvu_settings', _.get(SillyTavern.extensionSettings, 'mvu_settings', {}))));
+        settings.value = Settings.parse(readMvuSettings());
     };
 
     const character_settings = ref<CharacterSettingsState>(createCharacterSettingsState());
@@ -500,6 +500,7 @@ export const useDataStore = defineStore("MVU変数フレームワーク", () => 
 
     return {
         settings,
+        replaceSettings: (value: unknown) => { settings.value = Settings.parse(decodeMvuSettings(value)); },
         _reload_settings,
         character_settings,
         effective_settings,

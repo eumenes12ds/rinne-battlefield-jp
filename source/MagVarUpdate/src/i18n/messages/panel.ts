@@ -113,27 +113,27 @@ export const panelMessages = defineMessages({
         en: 'Repair actions',
     },
     'panel.button.reprocessVariables': {
-        "ja-JP": '重新处理变量',
+        "ja-JP": "変数を再処理",
         en: 'Reprocess variables',
     },
     'panel.button.reloadInitialVariables': {
-        "ja-JP": '重新读取初始变量',
+        "ja-JP": "初期変数を再読み込み",
         en: 'Reload initial variables',
     },
     'panel.button.snapshotFloor': {
-        "ja-JP": '快照楼层',
+        "ja-JP": "スナップショット階層",
         en: 'Snapshot floor',
     },
     'panel.button.replayFloor': {
-        "ja-JP": '重演楼层',
+        "ja-JP": "階層を再演",
         en: 'Replay floor',
     },
     'panel.button.retryExtraModelParsing': {
-        "ja-JP": '重试额外模型解析',
+        "ja-JP": "追加モデル解析を再試行",
         en: 'Retry extra-model parsing',
     },
     'panel.button.clearOldFloorVariables': {
-        "ja-JP": '清除旧楼层变量',
+        "ja-JP": "古い階層の変数をクリア",
         en: 'Clear variables from old floors',
     },
     'panel.help.ariaLabel': {
@@ -424,7 +424,7 @@ export const panelMessages = defineMessages({
     },
     'panel.request.autoHelp': {
         "ja-JP":
-            '关闭后，AI 回复完成时不会自动触发额外模型解析；你需要主动点击“重试额外模型解析”按钮，才会执行解析并添加状态栏占位符 &lt;StatusPlaceHolderImpl/&gt;。',
+            "关闭后，AI 回复完成时不会自动触发额外模型解析；你需要主动点击“追加モデル解析を再試行”按钮，才会执行解析并添加状态栏占位符 &lt;StatusPlaceHolderImpl/&gt;。",
         en: 'When disabled, extra-model parsing is not triggered automatically after the AI finishes replying. Click “Retry extra-model parsing” to run it and add the status-bar placeholder &lt;StatusPlaceHolderImpl/&gt;.',
     },
     'panel.request.batchWarning': {

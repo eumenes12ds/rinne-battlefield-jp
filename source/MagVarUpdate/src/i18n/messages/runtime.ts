@@ -143,7 +143,7 @@ export const runtimeMessages = defineMessages({
         en: 'The current character card does not support extra-model parsing',
     },
     'runtime.button.extraModelRetryTitle': {
-        "ja-JP": '[MVU]重试额外模型解析',
+        "ja-JP": "[MVU]追加モデル解析を再試行",
         en: '[MVU] Retry extra-model parsing',
     },
     'runtime.button.extraModelParsingCompleted': {

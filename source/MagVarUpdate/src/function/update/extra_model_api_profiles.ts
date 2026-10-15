@@ -80,7 +80,7 @@ export type ExtraModelApiProfileFields = Partial<ExtraModelApiRequestFields> & {
     現在のapiプロファイル: string;
 };
 
-export const DEFAULT_EXTRA_MODEL_API_PROFILE_NAME = '默认';
+export const DEFAULT_EXTRA_MODEL_API_PROFILE_NAME = "既定";
 
 /** 统一方案名两端空白，避免查找、去重和保存使用不同的名称。 */
 function normalizeExtraModelApiProfileName(name: string): string {

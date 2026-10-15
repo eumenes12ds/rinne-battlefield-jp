@@ -3974,8 +3974,8 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     /* ===== 15a. MVU変数更新方式（追加API / 主AI追従） ===== */
     var VARIABLE_API_MODE_KEY = 'rinne_jp_variable_api_mode';
     var VARIABLE_API_WORLD_BOOK_RULES = {
-        "output_format (AI返信と同時更新・主API)": { "主AI追従出力": true, "追加API": false },
-        "[mvu_update]output_format (追加モデルで変数更新)": { "主AI追従出力": false, "追加API": true }
+        "output_format (AI返信と同時更新・主API)": { "主AI追従出力": true, "追加モデル解析": false },
+        "[mvu_update]output_format (追加モデルで変数更新)": { "主AI追従出力": false, "追加モデル解析": true }
     };
     function normalizeVariableApiMode(mode) {
 return '主AI追従出力';
@@ -4013,10 +4013,10 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
         if (wb && Array.isArray(wb.entries)) return wb.entries;
         return [];
     }
-    function variableApiPresetDesired(name, mode) {
-        var text = String(name || '');
-        if (text.indexOf('变量额外API') >= 0) return mode === "追加API";
-        if (text.indexOf('变量主API') >= 0) return mode === "主AI追従出力";
+    function variableApiPresetDesired(prompt, mode) {
+        const id = String(prompt && (prompt.identifier || prompt.id) || '');
+        if (id === '9103b46e-5810-4ed9-b06e-4365070fca35') return mode === '追加モデル解析';
+        if (id === '85c7f45b-e3b4-430c-bbab-822498d93de2') return mode === '主AI追従出力';
         return null;
     }
     async function applyVariableApiMode(mode) {
@@ -4026,7 +4026,16 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
         var updateWorldbookFn = resolveVariableApiHostFunction('updateWorldbookWith');
         if (!getNames || !getWorldbookFn || !updateWorldbookFn) return { ok:false, error:'世界書の切り替えインターフェースが検出できません。酒場助手スクリプトが有効になっているか確認してください。' };
 
-        var namesInfo;
+        // Preset IDs are stable across translated display names; validate before any writes.
+        try {
+            const readPreset = resolveVariableApiHostFunction('getPreset');
+            const writePreset = resolveVariableApiHostFunction('updatePresetWith');
+            if (!readPreset || !writePreset) throw new Error('プリセット更新インターフェースが見つかりません。');
+            const initialPreset = await Promise.resolve(readPreset('in_use'));
+            const matches = (initialPreset && Array.isArray(initialPreset.prompts) ? initialPreset.prompts : []).filter(p => variableApiPresetDesired(p, mode) !== null);
+            if (matches.length !== 2 || new Set(matches.map(p => p.identifier || p.id)).size !== 2) throw new Error('変数更新プリセットの識別子が見つからないか重複しています。');
+        } catch (error) { return { ok:false, error:String(error && error.message || error) }; }
+        let namesInfo;
         try { namesInfo = await Promise.resolve(getNames('current')); }
         catch(e) { return { ok:false, error:'現在のキャラクターの世界書の読み込みに失敗: ' + (e && e.message ? e.message : e) }; }
         namesInfo = namesInfo || {};
@@ -4069,7 +4078,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
       try { preset = await Promise.resolve(getPresetFn('in_use')); } catch(e3) {}
       var prompts = preset && Array.isArray(preset.prompts) ? preset.prompts : [];
       prompts.forEach(function(prompt) {
-          var desired = variableApiPresetDesired(prompt && (prompt.name || prompt.id), mode);
+          var desired = variableApiPresetDesired(prompt, mode);
           if (desired === null) return;
           presetMatched++;
           if (prompt.enabled !== desired) presetChanged++;
@@ -4078,7 +4087,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
           await Promise.resolve(updatePresetFn('in_use', function(nextPreset) {
               var list = nextPreset && Array.isArray(nextPreset.prompts) ? nextPreset.prompts : [];
               list.forEach(function(prompt) {
-                  var desired = variableApiPresetDesired(prompt && (prompt.name || prompt.id), mode);
+                  var desired = variableApiPresetDesired(prompt, mode);
                   if (desired !== null) prompt.enabled = desired;
               });
               return nextPreset;
@@ -4088,6 +4097,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
         } catch(e4) {
   return { ok:false, error:'変数更新方式の切り替えに失敗: ' + (e4 && e4.message ? e4.message : e4), worldbookMatched:worldbookMatched, worldbookChanged:worldbookChanged, presetMatched:presetMatched, presetChanged:presetChanged };
         }
+        if (presetMatched !== 2) return { ok:false, error:'変数更新プリセットの同期対象が一致しません。', worldbookMatched, worldbookChanged, presetMatched, presetChanged };
         if (!worldbookMatched) return { ok:false, error:'現在のキャラクターの世界書に変数更新モードの項目が見つかりません。項目名を確認してください。', worldbookMatched:0, worldbookChanged:0, presetMatched:presetMatched, presetChanged:presetChanged };
         saveVariableApiMode(mode);
         return { ok:true, mode:mode, worldbookMatched:worldbookMatched, worldbookChanged:worldbookChanged, presetMatched:presetMatched, presetChanged:presetChanged };
@@ -4440,7 +4450,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
   var $st = $('#sam-varmode-status', $apiModal);
   if (!$st.length) return;
   $st.removeClass('ok err').addClass(state || '');
-  $st.text(message || (mode === "追加API" ? '現在：追加API出力' : '現在：主AI追従出力'));
+  $st.text(message || (mode === "追加モデル解析" ? '現在：追加API出力' : '現在：主AI追従出力'));
         }
         refreshVariableModeFields();
         $apiModal.off('click.samVariableMode').on('click.samVariableMode', '[data-variable-api-mode]', async function() {
@@ -4451,7 +4461,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
   $buttons.prop('disabled', false);
   if (result.ok) {
       refreshVariableModeFields('切り替え完了 · 世界書の変更 '+result.worldbookChanged+' 件 · プリセットの変更 '+result.presetChanged+' 件', 'ok');
-      samToast('success', '変数更新方式を切り替えました：' + (mode === "追加API" ? '追加API出力' : '主AI追従出力'));
+      samToast('success', '変数更新方式を切り替えました：' + (mode === "追加モデル解析" ? '追加API出力' : '主AI追従出力'));
   } else {
       refreshVariableModeFields(result.error || '切り替えに失敗', 'err');
       samToast('error', result.error || '変数更新方式の切り替えに失敗');
