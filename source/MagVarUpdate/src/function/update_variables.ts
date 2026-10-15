@@ -360,7 +360,7 @@ function jsonPatchPathToCommandPath(path: string | undefined): string {
     const pathSegments = pathWithoutRoot
         .split('/')
         .map(segment => segment.replace(/~1/g, '/').replace(/~0/g, '~'));
-    return pathSegmentsToLodashPath(pathSegments);
+    return pathSegmentsToLodashPath(canonicalParts(pathSegments));
 }
 
 function extractJsonPatch(patch: any): Command[] {
@@ -368,6 +368,10 @@ function extractJsonPatch(patch: any): Command[] {
 
     for (const op of patch) {
         const path = jsonPatchPathToCommandPath(op.path ?? op.to);
+        // JSON Pointer segments remain distinct, including literal dots in entity names.
+        if (Object.prototype.hasOwnProperty.call(op, 'value')) {
+            op.value = migrateAtPath(op.value, _.toPath(path));
+        }
         switch (op.op) {
             case 'replace':
                 translated_commands.push({

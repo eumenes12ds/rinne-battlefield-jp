@@ -1,5 +1,6 @@
 import { decodeMvuSettings, encodeMvuSettings } from '../src/settings_compat';
 import { canonicalParts, migrateStatData } from '../src/card_protocol';
+import { extractCommands } from '../src/function/update_variables';
 
 test('legacy settings import is private, preserves false/zero and locks main output', () => {
     const prior = { 更新方式: '额外模型解析', 额外模型解析配置: { 启用自动请求: true, 最大回复token数: 0 }, 自动清理变量: { 启用: false }, unknown: { keep: false } };
@@ -12,6 +13,18 @@ test('legacy settings import is private, preserves false/zero and locks main out
     expect(next.unknown.keep).toBe(false);
     expect(encodeMvuSettings({ ...next, 更新方式: '追加モデル解析' }).更新方式).toBe('主AI追従出力');
     expect(JSON.stringify(prior)).toBe(before);
+});
+
+test('historical JSON Pointer inserts use canonical containers without splitting entity names', () => {
+    const commands = extractCommands('<UpdateVariable><JSONPatch>[{"op":"insert","path":"/キャラ/道具/名前.状態","value":{"品質":"F","数量":1}}]</JSONPatch></UpdateVariable>');
+    expect(commands).toHaveLength(1);
+    expect(commands[0].args[0]).toBe('["キャラ"]["アイテム"]');
+    expect(JSON.parse(commands[0].args[1])).toBe('名前.状態');
+});
+
+test('open attribute maps migrate protocol attributes while preserving unknown values', () => {
+    const next = migrateStatData({ キャラ: { 状態: { 祝福: { 原始属性: { 力量: 2, 魔法独自値: 9 } } } } });
+    expect(next.キャラ.状態.祝福.原始属性).toEqual({ 筋力: 2, 魔法独自値: 9 });
 });
 
 test('schema migration preserves entity identities and prose, and is idempotent', () => {
