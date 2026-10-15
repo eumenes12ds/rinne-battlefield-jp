@@ -11,7 +11,7 @@
  */
 (function () {
     'use strict';
-    var STATUS_BAR_VERSION = '1.1.2-JP-inline';
+    var STATUS_BAR_VERSION = '1.1.3-JP-settings';
     try { console.log('%c[主神端末] ⚡ 輪廻端末 v2 接続中...', 'color:#8f9fff;font-weight:bold'); } catch (e) {}
 
     /* ===== 1. 親ウィンドウへのリダイレクト ===== */
@@ -4271,13 +4271,13 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
         });
         var html = secBlock('🎨 スキン変更',
               '<div class="sam-settings-grid">'+themeHtml+'</div>'
-            + '<div class="sam-toggle-row"><div><div style="font-weight:bold;">✏️ データ編集</div><div style="font-size:11px;color:var(--sam-sub);">有効にすると任意の数値をクリックしてその場で編集(レイアウトは崩れず),保存でMVUに書き戻し</div></div>'
+            + '<div class="sam-toggle-row" hidden data-rinne-hidden-setting style="display:none"><div><div style="font-weight:bold;">✏️ データ編集</div><div style="font-size:11px;color:var(--sam-sub);">有効にすると任意の数値をクリックしてその場で編集(レイアウトは崩れず),保存でMVUに書き戻し</div></div>'
             + '<div class="sam-toggle-switch '+(editOn?'on':'')+'" data-toggle="edit"><div class="knob"></div></div></div>'
-            + '<div class="sam-toggle-row"><div><div style="font-weight:bold;">🌐 世界超安定</div><div style="font-size:11px;color:var(--sam-sub);">有効にすると世界の安定度が固定され,因果軌道がずれなくなる</div></div>'
+            + '<div class="sam-toggle-row" hidden data-rinne-hidden-setting style="display:none"><div><div style="font-weight:bold;">🌐 世界超安定</div><div style="font-size:11px;color:var(--sam-sub);">有効にすると世界の安定度が固定され,因果軌道がずれなくなる</div></div>'
             + '<div class="sam-toggle-switch '+(superStable?'on':'')+'" data-toggle="世界超安定"><div class="knob"></div></div></div>'
-            + '<div class="sam-toggle-row"><div><div style="font-weight:bold;">🪐 単一世界</div><div style="font-size:11px;color:var(--sam-sub);">有効にすると単一の世界だけが存在し,無効にすると複数の世界から選択できる</div></div>'
+            + '<div class="sam-toggle-row" hidden data-rinne-hidden-setting style="display:none"><div><div style="font-weight:bold;">🪐 単一世界</div><div style="font-size:11px;color:var(--sam-sub);">有効にすると単一の世界だけが存在し,無効にすると複数の世界から選択できる</div></div>'
             + '<div class="sam-toggle-switch '+(singleWorld?'on':'')+'" data-toggle="単一世界"><div class="knob"></div></div></div>'
-            + '<div class="sam-toggle-row"><div><div style="font-weight:bold;">🌍 世界進行</div><div id="sam-world-engine-state" style="font-size:11px;color:var(--sam-sub);">'+(worldAdvanceOn?(worldAdvanceReady?'有効 · 独立世界エンジンが引き継ぎ':worldAdvanceWaitingText):'無効 · 元の世界パネルと元のシミュレーションルールを使用')+'</div></div>'
+            + '<div class="sam-toggle-row" hidden data-rinne-hidden-setting style="display:none"><div><div style="font-weight:bold;">🌍 世界進行</div><div id="sam-world-engine-state" style="font-size:11px;color:var(--sam-sub);">'+(worldAdvanceOn?(worldAdvanceReady?'有効 · 独立世界エンジンが引き継ぎ':worldAdvanceWaitingText):'無効 · 元の世界パネルと元のシミュレーションルールを使用')+'</div></div>'
             + '<div class="sam-toggle-switch '+(worldAdvanceOn?'on':'')+'" data-toggle="world-engine"><div class="knob"></div></div></div>');
 
         var difficulty = ['体験', '正常', '困難', '挑戦'].indexOf(cfg.難易度) >= 0 ? cfg.難易度 : '体験';
@@ -4287,12 +4287,12 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             '困難': '原始属性の品質を 4 階級上昇、体質は最低 S 保証；血統・スキルは最低でも人物の生命階級と同水準、装備・状態・形態は人物の生命階級より最低 1 階級上。',
             '挑戦': '原始属性の品質を 6 階級上昇、体質は SSS；血統・装備・状態・形態は人物の生命階級より最低 1 階級上、スキルは最低でも人物の生命階級と同水準。'
         };
-        html += secBlock('⚔️ 難易度 (実験機能)', '<div id="sam-difficulty-note" aria-live="polite" style="margin-bottom:10px;min-height:3em;font-size:12px;line-height:1.5;color:var(--sam-sub);">'+difficultyNotes[difficulty]+'</div><div role="group" aria-label="難易度選択" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;">' + ['体験', '正常', '困難', '挑戦'].map(function(mode) {
+        html += secBlock('⚔️ 難易度', '<div id="sam-difficulty-note" aria-live="polite" style="margin-bottom:10px;min-height:3em;font-size:12px;line-height:1.5;color:var(--sam-sub);">'+difficultyNotes[difficulty]+'</div><div role="group" aria-label="難易度選択" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;">' + ['体験', '正常', '困難', '挑戦'].map(function(mode) {
             return '<button type="button" class="sam-varmode-btn '+(difficulty===mode?'active':'')+'" data-difficulty="'+mode+'" aria-pressed="'+(difficulty===mode?'true':'false')+'" style="text-align:center;padding:9px 4px;">'+mode+'</button>';
         }).join('') + '</div><div style="margin-top:8px;color:var(--sam-sub);font-size:11px;">以降に新規作成され好感度が負の非チームメイト NPCにのみ影響。各コンポーネントは選択した基準を補うだけで、すでにより高い品質のものは下げない；原始属性は引き続き独立して上昇し、困難/挑戦の体質は固定段階で補う。品質の上限は SSS、生命階級の上限は Ⅸ。</div>');
         var variableMode = getVariableApiMode();
         var variableModeHtml = '<div class="sam-varmode-status" id="sam-varmode-status">主AI追従出力（固定）：本文と変数更新を同じ応答で処理します。</div>';
-        html += secBlock('🧭 変数更新方式', variableModeHtml);
+        html += '<div hidden data-rinne-hidden-setting style="display:none">' + secBlock('🧭 変数更新方式', variableModeHtml) + '</div>';
 
         /* ----- 🔌 API 設定ブロック( Zsdオンラインゲームフォーラム_ローカル内蔵版から移植) ----- */
         var apiCfg = getApiConfig();
@@ -4355,7 +4355,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             + '</div>'
             + '</div>';
 
-        html += '<div class="sam-api-section" style="margin-top:12px;">' + apiHtml + '</div>';
+        html += '<div class="sam-api-section" hidden data-rinne-hidden-setting style="margin-top:12px;display:none">' + apiHtml + '</div>';
         showModal('⚙️ 設定', html, true);   // 第三引数 true = 設定ダイアログは枠外クリックでの自動クローズを禁止(誤タッチでフォーム入力が消えるのを防ぐ)
         /* ===== API 設定: 宣言( apiRefreshFields の呼び出し前に配置する必要がある, そうでないと $apiModal が undefinedの状態になり, jQuery が document にフォールバックして命中はするが脆弱な経路) ===== */
         var $apiModal = $('#samsara-modal');
@@ -4636,7 +4636,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
         var $panel = inlinePanel || $('#samsara-panel');
         if (!statData || !statData.キャラ) {
             // ターミナル未応答: 上部バーには 更新/閉じる ボタンを引き続き表示(更新は.sam-icon-btn.refreshを再利用, イベントは bindUIEventsで委譲済み)
-            $panel.html('<div class="sam-topbar"><div class="tl-info"><div class="tl-time" style="color:var(--sam-sub);">ターミナル未応答</div></div><div class="tl-actions"><div class="sam-icon-btn refresh" title="データを更新">🔄</div></div></div><div class="sam-empty"><div style="font-size:36px;opacity:0.6;animation:samPulse 2s infinite;">📡</div><div style="margin-top:10px;">因果チェーンはまだ接続されていません...</div><div style="font-size:11px;opacity:0.6;">(新しいシナリオの初期化か時間の進行を待つか, 右上の🔄で更新してください)</div></div>');
+            $panel.html('<div class="sam-topbar"><div class="tl-info"><div class="tl-time" style="color:var(--sam-sub);">ターミナル未応答</div></div><div class="tl-actions"><div class="sam-icon-btn refresh" title="データを更新" hidden style="display:none">🔄</div></div></div><div class="sam-empty"><div style="font-size:36px;opacity:0.6;animation:samPulse 2s infinite;">📡</div><div style="margin-top:10px;">因果チェーンはまだ接続されていません...</div><div style="font-size:11px;opacity:0.6;">(新しいシナリオの初期化か時間の進行を待つか, 右上の🔄で更新してください)</div></div>');
             $('#samsara-ball').removeClass('combat-mode');
             // "ターミナル未応答"の場合にのみ5秒の自動更新タイマーを起動; データを受信して正常にレンダリングしたら下部で解除する
             if (!window.samsaraRefreshTimer) {
@@ -4719,7 +4719,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
         // 主神空間では「世界選択」を表示；インスタンス内で非戦闘のときは常時「決算任務」を表示し、任務の達成可否は判定しない。
         var worldBtn = '';
         if (sys && sys.主神空間滞在中 === true && sys.戦闘中 !== true) {
-            worldBtn = '<div class="sam-icon-btn choose-world" title="世界選択" data-choose-world>🌐世界選択</div>';
+            worldBtn = '<div class="sam-icon-btn choose-world" title="世界選択" data-choose-world hidden style="display:none">🌐世界選択</div>';
         }
         var settlementBtn = '';
         if (shouldShowSettlementButton(sd)) {
@@ -4730,7 +4730,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             + '<div class="tl-actions">'
             + worldBtn
             + settlementBtn
-            + '<div class="sam-icon-btn refresh" title="更新">🔄</div>'
+            + '<div class="sam-icon-btn refresh" title="更新" hidden style="display:none">🔄</div>'
             + '<div class="sam-icon-btn settings '+(editMode?'edit-on':'')+'" title="設定">⚙️</div>'
             + ''
             + '</div></div>';
@@ -9922,6 +9922,8 @@ if (hasReq) {
     /* ===== 34. 起動処理 ===== */
     function init() {
         initSamsaraCSS();
+        // 編集入口は非表示。以前のブラウザー設定で編集状態が残っていても通常表示へ戻す。
+        setEditMode(false);
         initSamsaraDOM();
         // 共有するのは呼び出し能力のみ、キーは引き続き端末が管理する。パネルの受け渡しは正式なスイッチを変更しない。
         GS_PARENT.Samsara = GS_PARENT.Samsara || {};

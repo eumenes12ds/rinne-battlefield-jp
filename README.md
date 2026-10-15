@@ -1,6 +1,6 @@
 # 輪廻戦場 再構築版 V3.7.1-JP runtime
 
-Japanese card-owned runtime assets. Release: v2026.10.16.5. Creative Workshop, its test script, asset-library integration, update endpoints and workshop UI are excluded. Remote model-list probes are disabled. Normal shop and crafting actions remain.
+Japanese card-owned runtime assets. Release: v2026.10.16-settings.1. Remote update endpoints and model-list probes are disabled. Normal shop and crafting actions remain.
 
 ## Sources and licensing
 

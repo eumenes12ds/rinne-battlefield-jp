@@ -2256,7 +2256,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
 
 
-    // イベント登録の初期化；すべての購読は Runtime が保持し、ワークショップのホットリロード前に旧インスタンスを安全に停止できる。
+    // イベント登録の初期化；すべての購読は Runtime が保持し、再読み込み前に旧インスタンスを安全に停止できる。
     const init = async () => {
         await waitGlobalInitialized('Mvu');
         if (CALCULATOR_HOST.SamsaraCalculatorRuntime !== CALCULATOR_RUNTIME) return;
