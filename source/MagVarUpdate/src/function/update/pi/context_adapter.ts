@@ -619,7 +619,7 @@ function convertToolCalls(
         const existingName = toolNamesById.get(call.id);
         if (existingName && existingName !== call.function.name) {
             throw new PiContextAdapterError(
-                `工具调用 ID ${call.id} 对应了多个工具名`,
+                `ツール呼び出し ID ${call.id} 对应了多个工具名`,
                 'invalid-tool-call',
                 sourceIndex
             );

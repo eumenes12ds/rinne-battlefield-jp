@@ -135,7 +135,7 @@ function assertSuccessfulStopReason(message: AssistantMessage): void {
         case 'pending':
         case 'deferred':
             throw new PiResultAdapterError(
-                '更多来源回复尚未完成，当前不支持 deferred 结果',
+                "更多来源回复尚未完成，当前不支持 deferred 結果",
                 'deferred'
             );
         default: {
@@ -166,7 +166,7 @@ export function fromPiAssistantMessage(message: AssistantMessage): string | Gene
 
     if (message.stopReason === 'toolUse' && toolCalls.length === 0) {
         throw new PiResultAdapterError(
-            '更多来源以 toolUse 结束，但没有返回工具调用',
+            "更多来源以 toolUse 終了，但没有返回工具调用",
             'invalid-tool-call'
         );
     }

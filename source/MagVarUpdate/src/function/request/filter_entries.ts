@@ -14,7 +14,7 @@ import { PLOT_REGEX, UPDATE_REGEX } from '@/variable_def';
 /** 将规则来源转换为提示和日志中显示的本地化名称。 */
 function getFilterSourceLabel(source: EntryCommentFilterSource): string {
     return tr(
-        source === '用户全局配置'
+        source === "ユーザー共通設定"
             ? 'runtime.filter.globalSettingsSource'
             : 'runtime.filter.characterSettingsSource'
     );
@@ -61,26 +61,26 @@ export type EntryFilterContext = {
  */
 export async function createEntryFilterContext(
     is_extra_analysis = useDataStore().runtimes.is_during_extra_analysis,
-    request_settings = useDataStore().settings.额外模型解析配置
+    request_settings = useDataStore().settings.追加モデル解析設定
 ): Promise<EntryFilterContext> {
     const store = useDataStore();
     const character_settings = store.character_settings.is_valid
-        ? store.character_settings.draft.额外模型解析配置
+        ? store.character_settings.draft.追加モデル解析設定
         : undefined;
     const context: EntryFilterContext = {
         update_method: store.effective_settings.更新方式,
         is_extra_analysis,
         tool_calling_unsupported:
-            request_settings.应答格式 === '工具调用' &&
-            request_settings.模型来源 !== '更多' &&
+            request_settings.応答フォーマット === "ツール呼び出し" &&
+            request_settings.モデル出典 !== "その他" &&
             !isFunctionCallingSupported(),
         extra_model_supported: false,
-        whitelist: request_settings.世界书条目白名单正则,
-        blacklist: request_settings.世界书条目黑名单正则,
-        character_whitelist: character_settings?.世界书条目白名单正则 ?? '',
-        character_blacklist: character_settings?.世界书条目黑名单正则 ?? '',
+        whitelist: request_settings.ワールドブックエントリホワイトリスト正規表現,
+        blacklist: request_settings.ワールドブックエントリブラックリスト正規表現,
+        character_whitelist: character_settings?.ワールドブックエントリホワイトリスト正規表現 ?? '',
+        character_blacklist: character_settings?.ワールドブックエントリブラックリスト正規表現 ?? '',
     };
-    if (context.update_method !== '随AI输出' && !context.tool_calling_unsupported) {
+    if (context.update_method !== "主AI追従出力" && !context.tool_calling_unsupported) {
         context.extra_model_supported = await isExtraModelSupported();
     }
     return context;
@@ -100,11 +100,11 @@ export async function filterEntries(lores: LoreEntries, context?: EntryFilterCon
     const filter_context = context ?? (await createEntryFilterContext());
     store.runtimes.unsupported_warnings = '';
     if (filter_context.is_extra_analysis) {
-        store.runtimes.上次世界书条目过滤结果 = [];
+        store.runtimes.前回の世界書エントリー選別結果 = [];
     }
 
     //在这个回调中，会将所有lore的条目传入，此处可以去除所有 [mvu_update] 相关的条目，避免在非更新的轮次中输出相关内容。
-    if (filter_context.update_method === '随AI输出') {
+    if (filter_context.update_method === "主AI追従出力") {
         return;
     }
     if (filter_context.tool_calling_unsupported) {
@@ -196,12 +196,12 @@ export async function filterEntries(lores: LoreEntries, context?: EntryFilterCon
     // 白名单任一来源命中即可保留，角色卡规则不会抹掉用户的全局规则；
     // 黑名单则是任一来源命中即过滤。
     const white_regexes = [
-        compile_filter_regex('白名单正则', '用户全局配置', filter_context.whitelist),
-        compile_filter_regex('白名单正则', '角色卡配置', filter_context.character_whitelist),
+        compile_filter_regex('白名单正则', "ユーザー共通設定", filter_context.whitelist),
+        compile_filter_regex('白名单正则', "キャラクターカード設定", filter_context.character_whitelist),
     ].filter(value => value !== undefined);
     const black_regexes = [
-        compile_filter_regex('黑名单正则', '用户全局配置', filter_context.blacklist),
-        compile_filter_regex('黑名单正则', '角色卡配置', filter_context.character_blacklist),
+        compile_filter_regex('黑名单正则', "ユーザー共通設定", filter_context.blacklist),
+        compile_filter_regex('黑名单正则', "キャラクターカード設定", filter_context.character_blacklist),
     ].filter(value => value !== undefined);
 
     if (white_regexes.length === 0 && black_regexes.length === 0) {
@@ -223,7 +223,7 @@ export async function filterEntries(lores: LoreEntries, context?: EntryFilterCon
             !white_regexes.some(({ regex }) => testEntryCommentRegex(regex, comment))
         ) {
             return {
-                reason: '白名单',
+                reason: "許可リスト",
                 sources: white_regexes.map(({ source }) => source),
             };
         }
@@ -232,7 +232,7 @@ export async function filterEntries(lores: LoreEntries, context?: EntryFilterCon
             .map(({ source }) => source);
         if (matched_blacklist_sources.length > 0) {
             return {
-                reason: '黑名单',
+                reason: "拒否リスト",
                 sources: matched_blacklist_sources,
             };
         }
@@ -263,7 +263,7 @@ export async function filterEntries(lores: LoreEntries, context?: EntryFilterCon
     apply_comment_regex_filter('chatLore', lores.chatLore);
     apply_comment_regex_filter('personaLore', lores.personaLore);
 
-    store.runtimes.上次世界书条目过滤结果 = filtered_entries;
+    store.runtimes.前回の世界書エントリー選別結果 = filtered_entries;
     if (filtered_entries.length > 0) {
         logEntryCommentFilterResult(filtered_entries);
     }

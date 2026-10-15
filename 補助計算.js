@@ -41,7 +41,7 @@
             var previous = CALCULATOR_HOST.SamsaraCalculatorRuntime;
             if (previous && typeof previous.stopSubscriptions === 'function') previous.stopSubscriptions();
             else if (previous && typeof previous.stop === 'function') previous.stop();
-            try { CALCULATOR_HOST.__辅助计算脚本_loaded__ = false; } catch (_) {}
+            try { CALCULATOR_HOST.__補助計算_loaded__ = false; } catch (_) {}
         } catch (error) {
             try { console.warn("[補助計算] ホットリロード事前クリーンアップに失敗:", error && error.message ? error.message : error); } catch (_) {}
         }
@@ -85,7 +85,7 @@
     /* 半移行(接頭辞 JP + 葉 CN)のパスはどちらのスキーマでも解決しないため, 旧セーブだけでなく
        移行期に書かれたデータもここで回収する。canonical が既にあれば常にそちらを優先する。 */
 var LEGACY_KEY_PREFERRED = {"关系リスト":true};
-    var LEGACY_KEY_RENAMES = {"传闻":"噂","布告与檄文":"布告と檄文","发布者":"発布者","张贴位置":"掲示位置","街头巷议":"街頭の噂","可信度":"信頼度","来源":"出典","情报交易":"情報取引","卖家":"売り手","情报评级":"情報評価","要价":"要求価格","摘要":"要約","真实内幕":"真の内幕","关系リスト":"関係リスト","背景故事":"背景","层级":"階層","当前形态":"現在形態","标签":"タグ","标签[]":"タグ[]","类型":"タイプ","描述":"説明","品质":"品質","效果":"効果","状态":"状態","消耗":"消費","身份":"身分","身份[]":"身分[]","是否队友":"仲間","态度":"態度","外貌":"外見","喜爱":"好み","形态库":"形態庫","力量":"筋力","体质":"体力","血统":"血統","在场":"登場","着装":"服装","职业":"職業","种族":"種族","装备":"装備","持续":"持続","最终属性":"最終属性","魔法减伤率":"魔法軽減率","物理减伤率":"物理軽減率","先攻DC":"先制DC","角色":"キャラ","空间币":"スペースコイン","权限凭证":"権限証憑","任务":"任務","副本成就":"インスタンス実績","奖励":"報酬","难度":"難易度","说明":"説明","击杀":"撃破","列表":"リスト","惩罚":"罰則","交付":"納品","目标":"目標","委托方":"依頼元","隐藏真相":"隠された真実","成员商库":"メンバー商品庫","道具列表":"道具リスト","道具列表[]":"道具リスト[]","价格":"価格","技能列表":"技能リスト","技能列表[]":"技能リスト[]","升级列表":"升級リスト","升级列表[]":"升級リスト[]","所属大类":"所属カテゴリ","替换目标":"置換対象","血统列表":"血統リスト","血统列表[]":"血統リスト[]","装备列表":"装備リスト","装备列表[]":"装備リスト[]","设置":"設定","单一世界":"単一世界","世界超稳":"世界超安定","法则":"法則","法则[]":"法則[]","后台":"バックステージ","货币":"通貨","购买力基准":"購買力基準","经济波动":"経済変動","历法":"暦法","闰年规则":"閏年規則","月份天数":"月日数","月份天数[]":"月日数[]","时间":"時間","势力":"勢力","领地":"領地","实力":"実力","风险":"リスク","稳定":"安定","异端雷达":"異端レーダー","当前模式":"現在モード","名单":"名簿","经历":"経歴","阵营":"陣営","因果轨道":"因果軌道","当前阶段":"現在段階","故事线":"ストーリーライン","偏移记录":"偏移記録","引发者":"誘発者","影响程度":"影響度","下一节点":"次ノード","系统状态":"システム状態","待播报记录":"配信待ち記録","当前轮次":"現在ラウンド","上次世界日期":"前回世界日付","试炼任务名单":"試練任務名簿","试炼任务名单[]":"試練任務名簿[]","试炼已完成":"試練完了","是否可试炼":"試練可能","是否试炼任务":"試練任務中","是否在主神空间":"主神空間滞在中","是否战斗中":"戦闘中","游玩天数":"プレイ日数","待办事件":"待機イベント","待办事件[]":"待機イベント[]","建设序列":"建設シーケンス","产出":"産出","功能":"機能","阶段":"段階","下次产出日期":"次回産出日","下次产出游天":"次回産出游日","能源":"エネルギー","当前":"現在","所属对象":"所属対象","所属对象[]":"所属対象[]","完整度":"完全度","消耗单元":"消耗ユニット","余量":"残量","主体规模":"主体規模","驻扎人员":"駐留人員","关系列表":"関係リスト"};
+    var LEGACY_KEY_RENAMES = {"传闻":"噂","布告与檄文":"布告と檄文","发布者":"発布者","张贴位置":"掲示位置","街头巷议":"街頭の噂","可信度":"信頼度","来源":"出典","情报交易":"情報取引","卖家":"売り手","情报评级":"情報評価","要价":"要求価格","摘要":"要約","真实内幕":"真の内幕","关系リスト":"関係リスト","背景故事":"背景","层级":"階層","当前形态":"現在形態","标签":"タグ","标签[]":"タグ[]","类型":"タイプ","描述":"説明","品质":"品質","效果":"効果","状态":"状態","消耗":"消費","身份":"身分","身份[]":"身分[]","是否队友":"仲間","态度":"態度","外貌":"外見","喜爱":"好み","形态库":"形態庫","力量":"筋力","体质":"体力","血统":"血統","在场":"登場","着装":"服装","职业":"職業","种族":"種族","装备":"装備","持续":"持続","最终属性":"最終属性","魔法减伤率":"魔法軽減率","物理减伤率":"物理軽減率","先攻DC":"先制DC","角色":"キャラ","空间币":"スペースコイン","权限凭证":"権限証憑","任务":"任務","副本成就":"インスタンス実績","奖励":"報酬","难度":"難易度","说明":"説明","击杀":"撃破","列表":"リスト","惩罚":"罰則","交付":"納品","目标":"目標","委托方":"依頼元","隐藏真相":"隠された真実","成员商库":"メンバー商品庫","道具列表":"道具リスト","道具列表[]":"道具リスト[]","价格":"価格","技能列表":"技能リスト","技能列表[]":"技能リスト[]","升级列表":"強化リスト","升级列表[]":"強化リスト[]","所属大类":"所属カテゴリ","替换目标":"置換対象","血统列表":"血統リスト","血统列表[]":"血統リスト[]","装备列表":"装備リスト","装备列表[]":"装備リスト[]","设置":"設定","单一世界":"単一世界","世界超稳":"世界超安定","法则":"法則","法则[]":"法則[]","后台":"バックステージ","货币":"通貨","购买力基准":"購買力基準","经济波动":"経済変動","历法":"暦法","闰年规则":"閏年規則","月份天数":"月日数","月份天数[]":"月日数[]","时间":"時間","势力":"勢力","领地":"領地","实力":"実力","风险":"リスク","稳定":"安定","异端雷达":"異端レーダー","当前模式":"現在モード","名单":"名簿","经历":"経歴","阵营":"陣営","因果轨道":"因果軌道","当前阶段":"現在段階","故事线":"ストーリーライン","偏移记录":"偏移記録","引发者":"誘発者","影响程度":"影響度","下一节点":"次ノード","系统状态":"システム状態","待播报记录":"配信待ち記録","当前轮次":"現在ラウンド","上次世界日期":"前回世界日付","试炼任务名单":"試練任務名簿","试炼任务名单[]":"試練任務名簿[]","试炼已完成":"試練完了","是否可试炼":"試練可能","是否试炼任务":"試練任務中","是否在主神空间":"主神空間滞在中","是否战斗中":"戦闘中","游玩天数":"プレイ日数","待办事件":"待機イベント","待办事件[]":"待機イベント[]","建设序列":"建設シーケンス","产出":"産出","功能":"機能","阶段":"段階","下次产出日期":"次回産出日","下次产出游天":"次回産出プレイ日","能源":"エネルギー","当前":"現在","所属对象":"所属対象","所属对象[]":"所属対象[]","完整度":"完全度","消耗单元":"消耗ユニット","余量":"残量","主体规模":"主体規模","驻扎人员":"駐留人員","关系列表":"関係リスト"};
     /* F5B_ENGINE_RECORD_SCOPE: 世界エンジン自身の自由形式レコードコンテナ。ZOD はこれらを
        z.record(z.string(), z.any()) / z.array(z.any()) として宣言しており、内部キーは MVU キーでは
        なくエンジン自身の記録モデル(RECORDS/DETAILS, 簡体字のまま読む)である。再帰リネームの
@@ -221,7 +221,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
      *   - mutator(sd) はディープコピーした副本に対して変更を行い、MVU のメモリスナップショットを汚染しない。
      *   - VARIABLE_UPDATE_ENDEDはブロードキャストしない：決算クリーンアップが変更するのは剧情/世界/任务データであり、属性を再計算する必要もなく、
      *     決算の途中で onUpdateData が走ることによる schema reconciliation のリスクも避けられる。
-     *   - 実装は 悬浮球状态栏.js の writeBackMvu と揃えている(イベントブロードキャストのみ削除)。
+     *   - 実装は ステータスパネル.js の writeBackMvu と揃えている(イベントブロードキャストのみ削除)。
      * @param {(sd:object)=>void} mutator 変更関数。stat_data の副本を受け取る
      * @returns {boolean} 書き戻しに成功したか
      */
@@ -490,7 +490,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
      */
     function syncAlienLifecycle(statData, statDataBefore) {
         const roster = statData?.世界?.異端レーダー?.名簿;
-        if (!roster || typeof roster !== 'object' || Array.isArray(roster)) return { 死亡: [], 删除关系: [], 删除后台: [] };
+        if (!roster || typeof roster !== 'object' || Array.isArray(roster)) return { 死亡: [], 関係削除: [], 背景状態削除: [] };
 
         const beforeRoster = statDataBefore?.世界?.異端レーダー?.名簿 || {};
         const relations = statData.関係リスト && typeof statData.関係リスト === 'object' ? statData.関係リスト : {};
@@ -510,7 +510,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             return statuses.some(key => String(key).includes('死亡'));
         };
 
-        const report = { 死亡: [], 删除关系: [], 删除后台: [] };
+        const report = { 死亡: [], 関係削除: [], 背景状態削除: [] };
         for (const [alienName, alien] of Object.entries(roster)) {
             if (!alien || typeof alien !== 'object') continue;
             const previousName = uniqueMatch(beforeRoster, alienName);
@@ -520,7 +520,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
             if (wasDead && alien.状態 !== '死亡') {
                 alien.状態 = '死亡';
-                console.warn('[異端ライフサイクル] ' + alienName + ' は死亡済みのため、活跃 への復帰を拒否。');
+                console.warn('[異端ライフサイクル] ' + alienName + " は死亡済みのため、活動中 への復帰を拒否。");
             }
             if (alien.状態 !== '死亡' && relationDead(npc)) {
                 alien.状態 = '死亡';
@@ -531,12 +531,12 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             report.死亡.push(alienName);
             if (relationName && Object.prototype.hasOwnProperty.call(relations, relationName)) {
                 delete relations[relationName];
-                report.删除关系.push(relationName);
+                report.関係削除.push(relationName);
             }
             const backendName = uniqueMatch(backendPeople, alienName);
             if (backendName && Object.prototype.hasOwnProperty.call(backendPeople, backendName)) {
                 delete backendPeople[backendName];
-                report.删除后台.push(backendName);
+                report.背景状態削除.push(backendName);
             }
         }
         return report;
@@ -591,7 +591,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         Object.entries(previousList).forEach(([taskName, oldTask]) => {
             if (!oldTask || typeof oldTask !== 'object') return;
             const oldOwner = String(oldTask.依頼元 || '').trim();
-            if (oldOwner !== '主神任務' && oldOwner !== '主神任务' && oldOwner !== '昇格試練' && oldOwner !== '晋升试炼') return;
+            if (oldOwner !== '主神任務' && oldOwner !== "主神任務" && oldOwner !== '昇格試練' && oldOwner !== "昇格試練") return;
 
             const currentTask = currentList[taskName];
             if (!currentTask || typeof currentTask !== 'object') return;
@@ -1140,7 +1140,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
      *   マッピング: Ⅰ↔F Ⅱ↔E Ⅲ↔D Ⅳ↔C Ⅴ↔B Ⅵ↔A Ⅶ↔S Ⅷ↔SS Ⅸ↔SSS ( ROMAN_TO_QUALITY / TIER_ORDER) を再利用
      */
     const NATIVE_SPECIAL_IDENTITY_SET = {
-        '輪廻者': 1, '轮回者': 1, '穿越者': 1, '守护者': 1, '织梦者': 1, '篡夺者': 1, '残魂': 1,
+        '輪廻者': 1, "輪廻者": 1, "輪廻者": 1, "守護者": 1, "夢織り": 1, "簒奪者": 1, "簒奪者": 1,
         '守護者': 1, '簒奪者': 1, '夢織り': 1
     };
     function clampNativeNpcToWorldTier(statData, statDataBefore) {
@@ -1301,7 +1301,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
     /**
      * 現在の形態が発動中かどうかを判定する（発動中なら形態の真属性を血統へ加算する）
-     * 状態フィールドは AI の叙事記録にすぎず、発動可否は 悬浮球状态栏.js が決定するため、ここでは検査しない
+     * 状態フィールドは AI の叙事記録にすぎず、発動可否は ステータスパネル.js が決定するため、ここでは検査しない
      * @returns {object|null} 発動中の形態ライブラリ項目；未発動なら null
      */
     function getActiveForm(char) {
@@ -1431,9 +1431,9 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         const 装備 = char.装備 || {};
         const 状態 = char.状態 || {};
         // 前フレームの対応するサブコレクション（resolveRealAttr が品質変化を判定するため。未変更なら旧乱数を再利用する）
-        const 血统Before = (charBefore && charBefore.血統) || {};
+        const 血統Before = (charBefore && charBefore.血統) || {};
         const 装备Before = (charBefore && charBefore.装備) || {};
-        const 状态Before = (charBefore && charBefore.状態) || {};
+        const 状態Before = (charBefore && charBefore.状態) || {};
 
         // —— 0. 形態の発動判定（発動後は形態の真属性を血統へ加算する）——
         const activeForm = getActiveForm(char);
@@ -1463,7 +1463,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         ATTR_NAMES.forEach(a => { statusSix[a] = 0; });
         Object.entries(状態).forEach(([sname, s]) => {
             if (s && typeof s === 'object' && s.原始属性) {
-                const sb = 状态Before[sname];
+                const sb = 状態Before[sname];
                 const rs = resolveRealAttr(s, 'status', sb, effectiveTier, effectiveTierBefore);
                 // ★ デバフ状態: 原始属性が品質字母のとき, その項目の真属性は負値として最終五維に計上する
                 //   (真属性自体は正値のまま保持し, resolveRealAttr の段位区間キャッシュの安定を保つ;
@@ -1495,7 +1495,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         ATTR_NAMES.forEach(a => { bloodSix[a] = 0; });
         Object.entries(血統).forEach(([bname, b]) => {
             if (b && typeof b === 'object' && b.原始属性) {
-                const bb = 血统Before[bname];
+                const bb = 血統Before[bname];
                 const rb = resolveRealAttr(b, 'blood', bb, effectiveTier, effectiveTierBefore);
                 ATTR_NAMES.forEach(a => { bloodSix[a] += safeNum(rb[a]); });
             }
@@ -1535,7 +1535,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         ATTR_NAMES.forEach(a => {
             let m = calcModifier(finalBase[a]);
             if (Number.isFinite(modifierCap)) m = Math.min(m, modifierCap);
-            const modifierKey = ({ 筋力: '力量', 体力: '体质' }[a] || a) + '修正';
+            const modifierKey = ({ 筋力: "筋力", 体力: "体力" }[a] || a) + '修正';
             attr[modifierKey] = m;
             if (modifierKey !== `${a}修正`) delete attr[`${a}修正`];
         });
@@ -1566,7 +1566,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         // 状态.原始属性：派生項目はすべてbonusに計上；デバフ型の品質属性は負値で計算する
         Object.entries(状態).forEach(([sname, s]) => {
             if (s && typeof s === 'object' && s.原始属性) {
-                const sb = 状态Before[sname];
+                const sb = 状態Before[sname];
                 const rs = resolveRealAttr(s, 'status', sb, effectiveTier, effectiveTierBefore);
                 const isDebuff = String(s.タイプ).trim() === 'デバフ';
                 BONUS_KEYS.forEach(k => {
@@ -1619,7 +1619,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         const unarmedMATK = Math.floor(精神 / 2) + bonus.MATK;
         // 武器オブジェクトを再構築する(毎回全量を再構築し, 外した後の旧項目の残留を防ぐ)
         attr.武器 = {};
-        attr.武器.无武装 = { ATK: unarmedATK, MATK: unarmedMATK };
+        attr.武器.非武装 = { ATK: unarmedATK, MATK: unarmedMATK };
         weapons.forEach(w => {
             attr.武器[w.name] = { ATK: w.atk + unarmedATK, MATK: w.matk + unarmedMATK };
         });
@@ -1637,7 +1637,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
         // —— 7. 判定（基礎値 + 装備加値；先攻DC/防御DC のみ）——
         attr.先制DC = Math.floor((attr.敏捷修正 + attr.精神修正 / 2) / 2) + bonus.先制DC;
-        attr.防御DC = 30 + Math.floor((attr.体质修正 + attr.敏捷修正) / 2) + bonus.防御DC;
+        attr.防御DC = 30 + Math.floor((attr.体力修正 + attr.敏捷修正) / 2) + bonus.防御DC;
 
         const formTag = formActive ? `[形態:${char.現在形態.名称}]` : '[血統]';
         // console.log(
@@ -1764,7 +1764,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         return (!!playerName && value === playerName)
             || value === '<user>'
             || value === '{{user}}'
-            || value === '玩家';
+            || value === "プレイヤー";
     }
 
     function isPlayerOwnedAsset(asset) {
@@ -1780,11 +1780,11 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         if (!statData || !statDataBefore) return [];
         // 通常のインスタンス決算で主神空間へ戻る際の一括削除は世界ライフサイクルの整理であり、世界をまたぐ資産墓碑として記録してはならない。
         if (statData?.システム状態?.主神空間滞在中 === true && statDataBefore?.システム状態?.主神空間滞在中 !== true) return [];
-        const beforeAssets = statDataBefore.资产 && typeof statDataBefore.资产 === 'object' ? statDataBefore.资产 : {};
-        const currentAssets = statData.资产 && typeof statData.资产 === 'object' ? statData.资产 : {};
+        const beforeAssets = statDataBefore.資産 && typeof statDataBefore.資産 === 'object' ? statDataBefore.資産 : {};
+        const currentAssets = statData.資産 && typeof statData.資産 === 'object' ? statData.資産 : {};
         statData.世界 = statData.世界 || {};
         statData.世界.バックステージ = statData.世界.バックステージ || {};
-        const tombstones = statData.世界.バックステージ.资产墓碑 = statData.世界.バックステージ.资产墓碑 || {};
+        const tombstones = statData.世界.バックステージ.削除済み資産 = statData.世界.バックステージ.削除済み資産 || {};
         const removed = [];
         Object.keys(beforeAssets).forEach(name => {
             if (Object.prototype.hasOwnProperty.call(currentAssets, name)) return;
@@ -1798,7 +1798,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
     /** 資産の自動収穫：システム状態.プレイ日数 のみでスケジュールし、期限到来時は待辦のみを生成する。 */
     function autoHarvestAssets(statData, statDataBefore) {
-        const assets = statData?.资产;
+        const assets = statData?.資産;
         const sys = statData?.システム状態;
         if (!assets || typeof assets !== 'object' || !sys) return;
 
@@ -1816,24 +1816,24 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             Object.entries(seqs).forEach(([seqName, seq]) => {
                 if (!seq || typeof seq !== 'object') return;
                 const output = String(seq.産出 || '').trim();
-                if (!output || output === '无' || output === '待定') {
+                if (!output || output === "なし" || output === '待定') {
                     seq.次回産出日 = '';
-                    seq.次回産出游日 = 0;
+                    seq.次回産出プレイ日 = 0;
                     return;
                 }
 
-                let nextPlay = Number(seq.次回産出游日);
+                let nextPlay = Number(seq.次回産出プレイ日);
                 if (!Number.isFinite(nextPlay) || nextPlay <= 0) {
                     // 旧形式の相対表示/プレイ日表示に対応；旧世界の絶対日付はもうスケジュールに関与しない。
                     const shown = String(seq.次回産出日 || '').trim();
-                    const remainingMatch = shown.match(/^(\d+)\s*(?:天后|日後)$/);
+                    const remainingMatch = shown.match(/^(\d+)\s*(?:(?:天后|日後)|日後)$/);
                     const legacyPlayMatch = shown.match(/^第?\s*(\d+)\s*游玩日$/);
                     if (remainingMatch) nextPlay = playDays + Number(remainingMatch[1]);
                     else if (legacyPlayMatch) nextPlay = Number(legacyPlayMatch[1]);
                     else nextPlay = playDays + cycle;
                 }
 
-                seq.次回産出游日 = nextPlay;
+                seq.次回産出プレイ日 = nextPlay;
 
                 if (playDays >= nextPlay) {
                     const harvestCount = Math.floor((playDays - nextPlay) / cycle) + 1;
@@ -1858,7 +1858,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                     else asset.待機イベント.push(todoMsg);
 
                     nextPlay += harvestCount * cycle;
-                    seq.次回産出游日 = nextPlay;
+                    seq.次回産出プレイ日 = nextPlay;
                 }
 
                 seq.次回産出日 = formatRemaining(nextPlay);
@@ -1958,9 +1958,9 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
         Object.entries(char.技能).forEach(([skillName, skill]) => {
             // 「熟練度」フィールドで制御することを想定
-            if (skill.熟练度 === undefined || skill.掌握程度 === undefined) return;
+            if (skill.熟練度 === undefined || skill.掌握程度 === undefined) return;
 
-            let currentExp = safeNum(skill.熟练度, 0);
+            let currentExp = safeNum(skill.熟練度, 0);
             let currentTier = skill.掌握程度; // 例 "入门"
             
             let threshold = TIER_THRESHOLDS[currentTier] || Infinity;
@@ -1983,19 +1983,19 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
             // データを書き戻す
             skill.掌握程度 = currentTier;
-            skill.熟练度 = currentExp;
+            skill.熟練度 = currentExp;
             skill.升阶阈值 = threshold;
         });
     }
 
     /** アイテム数量がゼロになったものの整理 */
     function cleanupZeroQuantityItems(char) {
-        if (!char || !char.道具) return;
-        Object.keys(char.道具).forEach(itemName => {
-            const item = char.道具[itemName];
+        if (!char || !char.アイテム) return;
+        Object.keys(char.アイテム).forEach(itemName => {
+            const item = char.アイテム[itemName];
             // 数量 <= 0、またはフィールドが欠落している場合は直ちに削除する
             if (item && (item.数量 === undefined || item.数量 === null || item.数量 <= 0)) {
-                delete char.道具[itemName];
+                delete char.アイテム[itemName];
                 console.log(`[道具整理] アイテム "${itemName}" の数量がゼロになったため、自動的に削除した。`);
             }
         });
@@ -2010,7 +2010,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             if (!statusData || typeof statusData.持続 !== 'string') return;
             
             // 戦闘中のみ、「回合」の文字を含む状態のカウントダウンを処理する
-            if (isCombat && statusData.持続.includes('回合')) {
+            if (isCombat && statusData.持続.includes("ターン")) {
                 let rounds = parseInt(statusData.持続);
                 if (!isNaN(rounds) && rounds > 0) {
                     rounds -= 1; // ターン数を -1
@@ -2018,7 +2018,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                         statusesToRemove.push(statusName);
                     } else {
                         // 文字列へ書き戻す。例 "2回合"
-                        statusData.持続 = `${rounds}回合`;
+                        statusData.持続 = `${rounds}ターン`;
                     }
                 }
             }
@@ -2075,8 +2075,8 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         let totalOffset = 0;
         if (records && typeof records === 'object') {
             Object.values(records).forEach(record => {
-                if (record && typeof record.影响程度 === 'number') {
-                    totalOffset += record.影响程度;
+                if (record && typeof record.影響度 === 'number') {
+                    totalOffset += record.影響度;
                 }
             });
         }
@@ -2101,7 +2101,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
         let deltaRound = 0;
         let isCombatNow = combat.戦闘中 === true;
-        const wasCombatBefore = combatBefore?.是否战斗中 === true;
+        const wasCombatBefore = combatBefore?.戦闘中 === true;
 
         // —— 0. 戦場の敵対勢力の生存検出：登場中で生存している敵対 NPC がいない場合は強制的に戦闘離脱させる ——
         //   敵対の定義: 登場中 かつ 非チームメイト かつ 好感度<0(仇視以上の敵意)
@@ -2227,7 +2227,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                     }
 
                     // 標準フォーマットで書き戻す
-                    const finalStr = finalCur === 0 ? "0" : `${finalCur}/${newCD.max} 回合`;
+                    const finalStr = finalCur === 0 ? "0" : `${finalCur}/${newCD.max} ターン`;
                     if (item.冷却 !== finalStr) {
                         // console.log(`[クールダウンシステム] ${label} の [${name}] クールダウン進行: ${item.冷却} -> ${finalStr}`);
                         item.冷却 = finalStr;
@@ -2257,15 +2257,22 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     // イベント登録の初期化；すべての購読は Runtime が保持し、ワークショップのホットリロード前に旧インスタンスを安全に停止できる。
     const init = async () => {
         await waitGlobalInitialized('Mvu');
+        if (CALCULATOR_HOST.SamsaraCalculatorRuntime !== CALCULATOR_RUNTIME) return;
         initializeTurnMessageBaseline();
         var subscription = eventOn(Mvu.events.VARIABLE_UPDATE_ENDED, onUpdateData);
         trackCalculatorSubscription(subscription);
-        try { CALCULATOR_HOST.__辅助计算脚本_loaded__ = true; } catch (_) {}
+        try { CALCULATOR_HOST.__補助計算_loaded__ = true; CALCULATOR_HOST.dispatchEvent(new Event('rinne-calculator-ready')); } catch (_) {}
         try { toastr.success('[補助計算スクリプト] スクリプトを読み込みました '); } catch (_) {}
     };
 
     try {
-        var pagehideHandler = function () { calculatorPreClean(); };
+        var pagehideHandler = function () {
+            CALCULATOR_RUNTIME.stopSubscriptions();
+            if (CALCULATOR_HOST.SamsaraCalculatorRuntime === CALCULATOR_RUNTIME) {
+                CALCULATOR_HOST.__補助計算_loaded__ = false;
+                CALCULATOR_HOST.dispatchEvent(new Event('rinne-calculator-ready'));
+            }
+        };
         if (window && typeof window.addEventListener === 'function') {
             window.addEventListener('pagehide', pagehideHandler);
             trackCalculatorSubscription({ stop: function () { try { window.removeEventListener('pagehide', pagehideHandler); } catch (_) {} } });

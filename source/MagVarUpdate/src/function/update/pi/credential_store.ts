@@ -98,7 +98,7 @@ export function createPiCredentialStore(
     hooks: CredentialStoreHooks = {}
 ): CredentialStore {
     const references = credentialIds === undefined ? undefined : { ...credentialIds };
-    const getPersistedCredentials = () => dataStore.settings.额外模型解析配置.pi.credentials;
+    const getPersistedCredentials = () => dataStore.settings.追加モデル解析設定.pi.credentials;
     const resolveId = (providerId: string) =>
         references === undefined ? providerId : references[providerId];
     const chains = storeChains.get(dataStore) ?? new Map<string, Promise<void>>();
@@ -223,17 +223,17 @@ export function createPiCredentialStore(
 
 /** 捕获操作发起时所属的方案及活动连接，回调提交前复核原引用。 */
 function captureBinding(dataStore: DataStore) {
-    const config = dataStore.settings.额外模型解析配置;
-    const profileName = config.当前api方案;
-    const profile = config.api方案列表.find(
-        item => item.名称 === profileName && item.backend === 'pi'
+    const config = dataStore.settings.追加モデル解析設定;
+    const profileName = config.現在のapiプロファイル;
+    const profile = config.apiプロファイル一覧.find(
+        item => item.名前 === profileName && item.backend === 'pi'
     );
     const activeReferences = resolvePiCredentialReferences(config.pi, config.pi.credentials);
     const profileReferences =
         profile?.pi === undefined
             ? undefined
             : resolvePiCredentialReferences(profile.pi, config.pi.credentials);
-    const source = config.模型来源;
+    const source = config.モデル出典;
     const provider = config.pi.provider;
     const authType = config.pi.authType;
     const generations = bindingGenerations.get(dataStore) ?? new Map<string, number>();
@@ -248,16 +248,16 @@ function captureBinding(dataStore: DataStore) {
         if ((generations.get(generationKey) ?? 0) !== generation) {
             throw new Error('The OAuth connection was changed by another authentication operation');
         }
-        const current = dataStore.settings.额外模型解析配置;
+        const current = dataStore.settings.追加モデル解析設定;
         const target =
             profileReferences === undefined
                 ? undefined
-                : current.api方案列表.find(
-                      item => item.名称 === profileName && item.backend === 'pi'
+                : current.apiプロファイル一覧.find(
+                      item => item.名前 === profileName && item.backend === 'pi'
                   );
         const isActive =
-            current.当前api方案 === profileName &&
-            current.模型来源 === source &&
+            current.現在のapiプロファイル === profileName &&
+            current.モデル出典 === source &&
             current.pi.provider === provider &&
             current.pi.authType === authType;
         const currentRefs = resolvePiCredentialReferences(current.pi, current.pi.credentials);
@@ -292,10 +292,10 @@ function captureBinding(dataStore: DataStore) {
 
 /** 是否仍有方案或活动连接引用该凭证；未迁移的旧方案也参与引用检查。 */
 function isCredentialReferenced(dataStore: DataStore, credentialId: string): boolean {
-    const config = dataStore.settings.额外模型解析配置;
+    const config = dataStore.settings.追加モデル解析設定;
     const connections = [
         config.pi,
-        ...config.api方案列表.flatMap(profile =>
+        ...config.apiプロファイル一覧.flatMap(profile =>
             profile.backend === 'pi' && profile.pi ? [profile.pi] : []
         ),
     ];
@@ -309,7 +309,7 @@ function isCredentialReferenced(dataStore: DataStore, credentialId: string): boo
 /** 捕获当前连接的凭证引用；随后切换方案不会改变此对象读写的账号。 */
 export function getPiCredentialStore(pi?: { credentialIds?: unknown }): CredentialStore {
     const dataStore = useDataStore();
-    const settings = dataStore.settings.额外模型解析配置.pi;
+    const settings = dataStore.settings.追加モデル解析設定.pi;
     const references = resolvePiCredentialReferences(pi ?? settings, settings.credentials);
     return createPiCredentialStore(references, dataStore);
 }

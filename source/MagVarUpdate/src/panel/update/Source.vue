@@ -10,11 +10,11 @@
                     >
                         <option value="">{{ t('panel.source.profile.manual') }}</option>
                         <option
-                            v-for="profile in store.settings.额外模型解析配置.api方案列表"
-                            :key="profile.名称"
-                            :value="profile.名称"
+                            v-for="profile in store.settings.追加モデル解析設定.apiプロファイル一覧"
+                            :key="profile.名前"
+                            :value="profile.名前"
                         >
-                            {{ profile.名称 }} · {{ getProfileBackendLabel(profile.backend) }}
+                            {{ profile.名前 }} · {{ getProfileBackendLabel(profile.backend) }}
                         </option>
                     </select>
 
@@ -53,7 +53,7 @@
         <ApiOptions />
 
         <Select
-            :model-value="store.settings.额外模型解析配置.模型来源"
+            :model-value="store.settings.追加モデル解析設定.モデル出典"
             :options="model_source_options"
             @update:model-value="selectModelSource"
         />
@@ -66,7 +66,7 @@
             <div class="mvu-field-grid">
                 <Field :label="t('panel.source.apiAddress')">
                     <input
-                        v-model="store.settings.额外模型解析配置.api地址"
+                        v-model="store.settings.追加モデル解析設定.apiアドレス"
                         type="text"
                         class="text_pole"
                         placeholder="http://localhost:1234/v1"
@@ -75,7 +75,7 @@
 
                 <Field :label="t('panel.source.apiKey')">
                     <input
-                        v-model="store.settings.额外模型解析配置.密钥"
+                        v-model="store.settings.追加モデル解析設定.APIキー"
                         type="password"
                         class="text_pole"
                         :placeholder="t('panel.source.apiKeyPlaceholder')"
@@ -84,7 +84,7 @@
 
                 <Field :label="t('panel.source.modelName')">
                     <ModelSelect
-                        v-model="store.settings.额外模型解析配置.模型名称"
+                        v-model="store.settings.追加モデル解析設定.モデル名"
                         :load-models="loadCustomModels"
                         :reset-key="custom_model_list_revision"
                     />
@@ -115,7 +115,7 @@
                         <HelpIcon :help="t('panel.source.pi.endpointHelp')" />
                     </template>
                     <input
-                        :value="store.settings.额外模型解析配置.pi.endpoint"
+                        :value="store.settings.追加モデル解析設定.pi.endpoint"
                         type="text"
                         class="text_pole"
                         :placeholder="pi_endpoint_placeholder"
@@ -125,7 +125,7 @@
                 </Field>
 
                 <div v-if="show_pi_custom_endpoint_proxy" class="mvu-pi-proxy-option">
-                    <Checkbox v-model="store.settings.额外模型解析配置.pi.useProxy">
+                    <Checkbox v-model="store.settings.追加モデル解析設定.pi.useProxy">
                         <span>{{ t('panel.source.pi.proxy.use') }}</span>
                         <HelpIcon :help="t('panel.source.pi.proxy.help')" />
                     </Checkbox>
@@ -133,7 +133,7 @@
 
                 <Field v-if="show_pi_api_key" :label="t('panel.source.apiKey')">
                     <input
-                        v-model="store.settings.额外模型解析配置.密钥"
+                        v-model="store.settings.追加モデル解析設定.APIキー"
                         type="password"
                         class="text_pole"
                         :placeholder="t('panel.source.apiKeyPlaceholder')"
@@ -145,7 +145,7 @@
                         <HelpIcon v-if="pi_capability_summary" :help="pi_capability_summary" />
                     </template>
                     <ModelSelect
-                        v-model="store.settings.额外模型解析配置.pi.model"
+                        v-model="store.settings.追加モデル解析設定.pi.model"
                         class="mvu-pi-model-controls"
                         :catalog-models="pi_catalog_model_options"
                         :load-models="loadPiModels"
@@ -291,7 +291,7 @@
 
                 <Field :label="t('panel.source.maxTokens')">
                     <input
-                        v-model.number="store.settings.额外模型解析配置.最大回复token数"
+                        v-model.number="store.settings.追加モデル解析設定.最大応答トークン数"
                         :disabled="custom_advanced_disabled"
                         type="number"
                         class="text_pole"
@@ -315,7 +315,7 @@
 
                 <Field :label="t('panel.source.chatHistory')">
                     <RangeNumber
-                        v-model="store.settings.额外模型解析配置.max_chat_history"
+                        v-model="store.settings.追加モデル解析設定.max_chat_history"
                         :disabled="custom_advanced_disabled"
                         :min="2"
                         :max="100"
@@ -325,7 +325,7 @@
 
                 <Field :label="t('panel.source.temperature')">
                     <RangeNumber
-                        v-model="store.settings.额外模型解析配置.温度"
+                        v-model="store.settings.追加モデル解析設定.温度"
                         :disabled="temperature_disabled"
                         :min="0"
                         :max="pi_temperature_max"
@@ -335,7 +335,7 @@
 
                 <Field :label="t('panel.source.frequencyPenalty')">
                     <RangeNumber
-                        v-model="store.settings.额外模型解析配置.频率惩罚"
+                        v-model="store.settings.追加モデル解析設定.頻度ペナルティ"
                         :disabled="frequency_penalty_disabled"
                         :min="-2"
                         :max="2"
@@ -345,7 +345,7 @@
 
                 <Field :label="t('panel.source.presencePenalty')">
                     <RangeNumber
-                        v-model="store.settings.额外模型解析配置.存在惩罚"
+                        v-model="store.settings.追加モデル解析設定.存在ペナルティ"
                         :disabled="presence_penalty_disabled"
                         :min="-2"
                         :max="2"
@@ -355,7 +355,7 @@
 
                 <Field :label="t('panel.source.topP')">
                     <RangeNumber
-                        v-model="store.settings.额外模型解析配置.top_p"
+                        v-model="store.settings.追加モデル解析設定.top_p"
                         :disabled="top_p_disabled"
                         :min="0"
                         :max="1"
@@ -365,7 +365,7 @@
 
                 <Field :label="t('panel.source.topK')">
                     <RangeNumber
-                        v-model="store.settings.额外模型解析配置.top_k"
+                        v-model="store.settings.追加モデル解析設定.top_k"
                         :disabled="top_k_disabled"
                         :min="0"
                         :max="500"
@@ -378,7 +378,7 @@
                         <HelpIcon :help="t('panel.source.pi.customHeadersHelp')" />
                     </template>
                     <textarea
-                        v-model="store.settings.额外模型解析配置.pi.customHeaders"
+                        v-model="store.settings.追加モデル解析設定.pi.customHeaders"
                         class="text_pole mvu-pi-advanced-textarea"
                         rows="5"
                         autocomplete="off"
@@ -391,9 +391,9 @@
                             type="button"
                             :value="t('panel.source.pi.clearCustomField')"
                             :disabled="
-                                store.settings.额外模型解析配置.pi.customHeaders.length === 0
+                                store.settings.追加モデル解析設定.pi.customHeaders.length === 0
                             "
-                            @click="store.settings.额外模型解析配置.pi.customHeaders = ''"
+                            @click="store.settings.追加モデル解析設定.pi.customHeaders = ''"
                         />
                     </div>
                 </Field>
@@ -403,7 +403,7 @@
                         <HelpIcon :help="t('panel.source.pi.customIncludeBodyHelp')" />
                     </template>
                     <textarea
-                        v-model="store.settings.额外模型解析配置.pi.customIncludeBody"
+                        v-model="store.settings.追加モデル解析設定.pi.customIncludeBody"
                         class="text_pole mvu-pi-advanced-textarea"
                         rows="6"
                         autocomplete="off"
@@ -416,9 +416,9 @@
                             type="button"
                             :value="t('panel.source.pi.clearCustomField')"
                             :disabled="
-                                store.settings.额外模型解析配置.pi.customIncludeBody.length === 0
+                                store.settings.追加モデル解析設定.pi.customIncludeBody.length === 0
                             "
-                            @click="store.settings.额外模型解析配置.pi.customIncludeBody = ''"
+                            @click="store.settings.追加モデル解析設定.pi.customIncludeBody = ''"
                         />
                     </div>
                 </Field>
@@ -428,7 +428,7 @@
                         <HelpIcon :help="t('panel.source.pi.customExcludeBodyHelp')" />
                     </template>
                     <textarea
-                        v-model="store.settings.额外模型解析配置.pi.customExcludeBody"
+                        v-model="store.settings.追加モデル解析設定.pi.customExcludeBody"
                         class="text_pole mvu-pi-advanced-textarea"
                         rows="4"
                         autocomplete="off"
@@ -441,9 +441,9 @@
                             type="button"
                             :value="t('panel.source.pi.clearCustomField')"
                             :disabled="
-                                store.settings.额外模型解析配置.pi.customExcludeBody.length === 0
+                                store.settings.追加モデル解析設定.pi.customExcludeBody.length === 0
                             "
-                            @click="store.settings.额外模型解析配置.pi.customExcludeBody = ''"
+                            @click="store.settings.追加モデル解析設定.pi.customExcludeBody = ''"
                         />
                     </div>
                 </Field>
@@ -552,8 +552,8 @@ const additional_extra_configuration_supported = compare(
     '>='
 );
 const pi_multiprovider_enabled = isPiMultiproviderEnabled();
-const is_custom_source = computed(() => store.settings.额外模型解析配置.模型来源 === '自定义');
-const is_pi_source_selected = computed(() => store.settings.额外模型解析配置.模型来源 === '更多');
+const is_custom_source = computed(() => store.settings.追加モデル解析設定.モデル出典 === "カスタム");
+const is_pi_source_selected = computed(() => store.settings.追加モデル解析設定.モデル出典 === "その他");
 const is_pi_source = computed(() => is_pi_source_selected.value && pi_multiprovider_enabled);
 const pi_feature_disabled = computed(
     () => is_pi_source_selected.value && !pi_multiprovider_enabled
@@ -565,23 +565,23 @@ const custom_advanced_disabled = computed(
 
 const model_source_options = computed(() => {
     const options = [
-        { value: '与插头相同', label: t('panel.source.sameAsConnection') },
-        { value: '自定义', label: t('panel.source.custom') },
+        { value: "プラグと同じ", label: t('panel.source.sameAsConnection') },
+        { value: "カスタム", label: t('panel.source.custom') },
     ];
     if (pi_multiprovider_enabled || is_pi_source_selected.value) {
-        options.push({ value: '更多', label: t('panel.source.more') });
+        options.push({ value: "その他", label: t('panel.source.more') });
     }
     return options;
 });
 
-type ExtraModelSource = '与插头相同' | '自定义' | '更多';
+type ExtraModelSource = "プラグと同じ" | "カスタム" | "その他";
 
 /** 捕获活动来源的认证方式和密钥归属，作为切换前后缓存转移的依据。 */
 function getApiKeyContext() {
-    const config = store.settings.额外模型解析配置;
+    const config = store.settings.追加モデル解析設定;
     const definition = getPiProviderDefinition(config.pi.provider);
     return {
-        source: config.模型来源,
+        source: config.モデル出典,
         authType: config.pi.authType,
         keyScope: resolvePiApiKeyScope(
             definition,
@@ -597,9 +597,9 @@ function getApiKeyContext() {
  * 共享输入框中的值不能直接流入另一个端点或 OAuth 来源。
  */
 function applyApiKeyTransition(mutator: () => void): void {
-    const config = store.settings.额外模型解析配置;
+    const config = store.settings.追加モデル解析設定;
     const previous = getApiKeyContext();
-    const active_api_key = config.密钥;
+    const active_api_key = config.APIキー;
     mutator();
     const transitioned = transitionPiApiKey(previous, getApiKeyContext(), active_api_key, {
         customApiKey: config.customApiKey,
@@ -607,12 +607,12 @@ function applyApiKeyTransition(mutator: () => void): void {
     });
     config.customApiKey = transitioned.customApiKey;
     config.pi.apiKeys = transitioned.apiKeys;
-    config.密钥 = transitioned.activeApiKey;
+    config.APIキー = transitioned.activeApiKey;
 }
 
 /** 取得活动 Pi 请求目标的规范化标识，用于判断请求覆盖是否仍适用。 */
 function getPiRequestTargetIdentity(): string {
-    const pi = store.settings.额外模型解析配置.pi;
+    const pi = store.settings.追加モデル解析設定.pi;
     return resolvePiRequestTargetIdentity(
         getPiProviderDefinition(pi.provider),
         pi.provider,
@@ -625,7 +625,7 @@ function getPiRequestTargetIdentity(): string {
 /** 统一切换密钥缓存与请求覆盖；实际目标变化时清除原目标的自定义请求头和正文配置。 */
 function applyPiConnectionTransition(mutator: () => void): void {
     const previous_target = getPiRequestTargetIdentity();
-    const pi = store.settings.额外模型解析配置.pi;
+    const pi = store.settings.追加モデル解析設定.pi;
     const previous_overrides = {
         customHeaders: pi.customHeaders,
         customIncludeBody: pi.customIncludeBody,
@@ -644,31 +644,31 @@ function applyPiConnectionTransition(mutator: () => void): void {
 
 /** 把当前输入框密钥同步到其所属连接缓存，并清理没有合法归属的活动密钥。 */
 function cacheCurrentApiKey(): void {
-    const config = store.settings.额外模型解析配置;
+    const config = store.settings.追加モデル解析設定;
     const context = getApiKeyContext();
-    const transitioned = transitionPiApiKey(context, context, config.密钥, {
+    const transitioned = transitionPiApiKey(context, context, config.APIキー, {
         customApiKey: config.customApiKey,
         apiKeys: config.pi.apiKeys,
     });
     config.customApiKey = transitioned.customApiKey;
     config.pi.apiKeys = transitioned.apiKeys;
-    config.密钥 = transitioned.activeApiKey;
+    config.APIキー = transitioned.activeApiKey;
 }
 
 /** 初始化来源各自的密钥缓存，遗留自定义密钥只进入能确认归属的位置。 */
 function initializeApiKeyCache(): void {
-    const config = store.settings.额外模型解析配置;
+    const config = store.settings.追加モデル解析設定;
     const context = getApiKeyContext();
-    if (context.source === '自定义' || (context.source === '更多' && context.keyScope !== '')) {
+    if (context.source === "カスタム" || (context.source === "その他" && context.keyScope !== '')) {
         cacheCurrentApiKey();
         return;
     }
 
-    if (context.source === '与插头相同') {
+    if (context.source === "プラグと同じ") {
         // Before Pi existed, the dormant root key belonged to the stored Custom endpoint. Migrate
         // it only into that slot; it must never become a Pi provider key implicitly.
-        if (config.customApiKey === '' && config.密钥 !== '') {
-            config.customApiKey = config.密钥;
+        if (config.customApiKey === '' && config.APIキー !== '') {
+            config.customApiKey = config.APIキー;
         }
         cacheCurrentApiKey();
         return;
@@ -676,7 +676,7 @@ function initializeApiKeyCache(): void {
 
     // A legacy root key under OAuth has no active wire meaning. Preserve it only in a valid API-key
     // scope for the same provider/endpoint, then clear the shared field.
-    if (context.source === '更多') {
+    if (context.source === "その他") {
         const definition = getPiProviderDefinition(config.pi.provider);
         const inactive_scope = resolvePiApiKeyScope(
             definition,
@@ -686,10 +686,10 @@ function initializeApiKeyCache(): void {
         );
         if (
             inactive_scope !== '' &&
-            config.密钥 !== '' &&
+            config.APIキー !== '' &&
             !Object.prototype.hasOwnProperty.call(config.pi.apiKeys, inactive_scope)
         ) {
-            config.pi.apiKeys = { ...config.pi.apiKeys, [inactive_scope]: config.密钥 };
+            config.pi.apiKeys = { ...config.pi.apiKeys, [inactive_scope]: config.APIキー };
         }
         cacheCurrentApiKey();
     }
@@ -697,11 +697,11 @@ function initializeApiKeyCache(): void {
 
 /** 校验来源选项并通过统一密钥转移流程切换，避免跨来源沿用活动密钥。 */
 function selectModelSource(source: string): void {
-    if (!['与插头相同', '自定义', '更多'].includes(source)) {
+    if (!["プラグと同じ", "カスタム", "その他"].includes(source)) {
         return;
     }
     applyApiKeyTransition(() => {
-        store.settings.额外模型解析配置.模型来源 = source as ExtraModelSource;
+        store.settings.追加モデル解析設定.モデル出典 = source as ExtraModelSource;
     });
 }
 
@@ -737,7 +737,7 @@ const pi_source_choices = _.sortBy(
     }
 );
 const pi_source_choice_value = computed(() =>
-    getPiSourceChoiceValue(store.settings.额外模型解析配置.pi)
+    getPiSourceChoiceValue(store.settings.追加モデル解析設定.pi)
 );
 const pi_provider_options = computed(() =>
     pi_source_choices.map(choice => ({
@@ -746,16 +746,16 @@ const pi_provider_options = computed(() =>
     }))
 );
 const selected_pi_provider = computed<PiProviderDefinition | undefined>(() =>
-    getPiProviderDefinition(store.settings.额外模型解析配置.pi.provider)
+    getPiProviderDefinition(store.settings.追加モデル解析設定.pi.provider)
 );
 const show_pi_endpoint = computed(
     () =>
         selected_pi_provider.value?.fields.endpoint === 'editable' &&
-        store.settings.额外模型解析配置.pi.authType === 'api_key'
+        store.settings.追加モデル解析設定.pi.authType === 'api_key'
 );
 const show_pi_custom_endpoint_proxy = computed(() => {
     const provider = selected_pi_provider.value;
-    const pi = store.settings.额外模型解析配置.pi;
+    const pi = store.settings.追加モデル解析設定.pi;
     return (
         show_pi_endpoint.value &&
         pi.endpoint.trim() !== '' &&
@@ -764,23 +764,23 @@ const show_pi_custom_endpoint_proxy = computed(() => {
     );
 });
 const pi_uses_cors_proxy = computed(() => {
-    const pi = store.settings.额外模型解析配置.pi;
+    const pi = store.settings.追加モデル解析設定.pi;
     return shouldUsePiCorsProxy(selected_pi_provider.value, pi.api, pi.endpoint, pi.useProxy);
 });
 const show_pi_api_key = computed(
     () =>
-        store.settings.额外模型解析配置.pi.authType === 'api_key' &&
+        store.settings.追加モデル解析設定.pi.authType === 'api_key' &&
         selected_pi_provider.value?.fields.apiKey === 'when-api-key'
 );
 const show_pi_oauth = computed(
     () =>
-        store.settings.额外模型解析配置.pi.authType === 'oauth' &&
+        store.settings.追加モデル解析設定.pi.authType === 'oauth' &&
         selected_pi_provider.value?.fields.oauth === 'when-oauth' &&
         selected_pi_provider.value.oauth !== undefined
 );
 const pi_endpoint_placeholder = computed(() => {
     const provider = selected_pi_provider.value;
-    const api = store.settings.额外模型解析配置.pi.api as PiWireApi;
+    const api = store.settings.追加モデル解析設定.pi.api as PiWireApi;
     const endpoint = provider ? getPiProviderApiBaseUrl(provider, api) : '';
     return endpoint
         ? t('panel.source.pi.endpointDefault', { endpoint })
@@ -791,20 +791,20 @@ const pi_catalog_models = computed<readonly Model<Api>[]>(() => {
     if (!provider) {
         return [];
     }
-    const api = store.settings.额外模型解析配置.pi.api;
+    const api = store.settings.追加モデル解析設定.pi.api;
     return getPiCatalogModels(provider.key).filter(model =>
         isPiCatalogModelApiCompatible(provider, model, api as PiWireApi)
     );
 });
 const selected_catalog_model = computed(() =>
-    findPiCatalogModel(pi_catalog_models.value, store.settings.额外模型解析配置.pi.model)
+    findPiCatalogModel(pi_catalog_models.value, store.settings.追加モデル解析設定.pi.model)
 );
 const pi_catalog_model_options = computed(() =>
     pi_catalog_models.value.map(model => ({ id: model.id, label: getPiModelLabel(model) }))
 );
 const effective_context_window = computed(() => {
     const provider = selected_pi_provider.value;
-    const pi = store.settings.额外模型解析配置.pi;
+    const pi = store.settings.追加モデル解析設定.pi;
     return provider
         ? resolvePiSourceContextWindow(
               provider,
@@ -816,15 +816,15 @@ const effective_context_window = computed(() => {
         : resolvePiContextWindow(pi.contextWindow);
 });
 const pi_context_window_input_value = computed(() => {
-    const configured = store.settings.额外模型解析配置.pi.contextWindow;
+    const configured = store.settings.追加モデル解析設定.pi.contextWindow;
     return configured === 0 ? effective_context_window.value || '' : configured;
 });
 const uses_catalog_context_window = computed(
     () =>
-        store.settings.额外模型解析配置.pi.contextWindow === 0 && effective_context_window.value > 0
+        store.settings.追加モデル解析設定.pi.contextWindow === 0 && effective_context_window.value > 0
 );
 const uses_manual_context_window = computed(() => {
-    const configured = store.settings.额外模型解析配置.pi.contextWindow;
+    const configured = store.settings.追加モデル解析設定.pi.contextWindow;
     return typeof configured === 'number' && Number.isInteger(configured) && configured > 0;
 });
 const pi_context_window_help = computed(() => {
@@ -841,7 +841,7 @@ const pi_token_errors = computed(() =>
     is_pi_source.value
         ? validatePiTokenSettings(
               effective_context_window.value,
-              store.settings.额外模型解析配置.最大回复token数
+              store.settings.追加モデル解析設定.最大応答トークン数
           )
         : []
 );
@@ -852,8 +852,8 @@ const selected_pi_capabilities = computed(() => {
     }
     return resolvePiSourceCapabilities(
         provider,
-        store.settings.额外模型解析配置.pi.api as PiWireApi,
-        store.settings.额外模型解析配置.pi.endpoint,
+        store.settings.追加モデル解析設定.pi.api as PiWireApi,
+        store.settings.追加モデル解析設定.pi.endpoint,
         selected_catalog_model.value
     );
 });
@@ -896,7 +896,7 @@ const pi_capability_summary = computed(() => {
 /** 将服务商、协议和认证方式规范为支持的组合，并清理不允许的自定义端点。 */
 function applyPiSourceSelection(definition: PiProviderDefinition, api: string, auth: string): void {
     const resolved = resolvePiSourceSelection(definition, api, auth);
-    const pi = store.settings.额外模型解析配置.pi;
+    const pi = store.settings.追加モデル解析設定.pi;
     pi.provider = definition.key;
     pi.api = resolved.api;
     pi.authType = resolved.authType;
@@ -922,7 +922,7 @@ function selectPiEndpoint(event: Event): void {
         return;
     }
     applyPiConnectionTransition(() => {
-        store.settings.额外模型解析配置.pi.endpoint = input.value;
+        store.settings.追加モデル解析設定.pi.endpoint = input.value;
     });
 }
 
@@ -930,7 +930,7 @@ function selectPiEndpoint(event: Event): void {
 function normalizePiEndpointInput(event: Event): void {
     const input = event.target as HTMLInputElement | null;
     const definition = selected_pi_provider.value;
-    const pi = store.settings.额外模型解析配置.pi;
+    const pi = store.settings.追加モデル解析設定.pi;
     if (
         !input ||
         pi.endpoint.trim() === '' ||
@@ -959,20 +959,20 @@ const pi_configuration_error = computed(() => {
     if (!is_pi_source.value) {
         return '';
     }
-    const pi = store.settings.额外模型解析配置.pi;
+    const pi = store.settings.追加モデル解析設定.pi;
     const definition = selected_pi_provider.value;
     if (!definition) {
         return t('panel.source.pi.error.unknownProvider', { provider: pi.provider });
     }
     if (!definition.allowedApis.includes(pi.api as PiWireApi)) {
         return t('panel.source.pi.error.unsupportedApi', {
-            provider: definition.displayName[locale.value === 'zh-CN' ? 'zh-CN' : 'en'],
+            provider: definition.displayName[locale.value === "ja-JP" ? "ja-JP" : 'en'],
             api: pi.api,
         });
     }
     if (!definition.allowedAuthTypes.includes(pi.authType as PiAuthType)) {
         return t('panel.source.pi.error.unsupportedAuth', {
-            provider: definition.displayName[locale.value === 'zh-CN' ? 'zh-CN' : 'en'],
+            provider: definition.displayName[locale.value === "ja-JP" ? "ja-JP" : 'en'],
             auth: pi.authType,
         });
     }
@@ -1031,7 +1031,7 @@ function withPiProxySuffix(label: string, use_proxy: boolean): string {
 /** 生成服务商、认证与协议组合的显示名称，并标明所需代理。 */
 function getPiProviderOptionLabel(choice: PiSourceChoice): string {
     const definition = getPiProviderDefinition(choice.provider)!;
-    const pi = store.settings.额外模型解析配置.pi;
+    const pi = store.settings.追加モデル解析設定.pi;
     const is_selected = getPiSourceChoiceValue(choice) === pi_source_choice_value.value;
     const uses_proxy = shouldUsePiCorsProxy(
         definition,
@@ -1045,7 +1045,7 @@ function getPiProviderOptionLabel(choice: PiSourceChoice): string {
     if (pinned) {
         return withPiProxySuffix(pinned.label, uses_proxy);
     }
-    let label = definition.displayName[locale.value === 'zh-CN' ? 'zh-CN' : 'en'];
+    let label = definition.displayName[locale.value === "ja-JP" ? "ja-JP" : 'en'];
     if (definition.allowedApis.length > 1) {
         label += ` · ${getPiApiLabel(choice.api)}`;
     }
@@ -1095,15 +1095,15 @@ function getPiModelLabel(model: Model<Api>): string {
 
 /** 使用自定义来源的连接信息通过酒馆兼容接口发现模型，并保留取消信号。 */
 async function loadCustomModels(signal: AbortSignal): Promise<readonly string[]> {
-    const config = store.settings.额外模型解析配置;
-    return fetchOpenAICompatibleModelList(config.api地址, config.密钥, signal, {
+    const config = store.settings.追加モデル解析設定;
+    return fetchOpenAICompatibleModelList(config.apiアドレス, config.APIキー, signal, {
         sillyTavernRequestHeaders: () => SillyTavern.getRequestHeaders(),
     });
 }
 
 /** 先捕获连接快照，再按需刷新 OAuth 凭证并查询模型，防止等待期间切换目标影响请求。 */
 async function loadPiModels(signal: AbortSignal): Promise<readonly string[]> {
-    const config = store.settings.额外模型解析配置;
+    const config = store.settings.追加モデル解析設定;
     const pi = config.pi;
     const snapshot = {
         provider: pi.provider,
@@ -1111,7 +1111,7 @@ async function loadPiModels(signal: AbortSignal): Promise<readonly string[]> {
         authType: pi.authType,
         endpoint: pi.endpoint,
         useProxy: pi.useProxy,
-        apiKey: config.密钥,
+        apiKey: config.APIキー,
         customHeaders: pi.customHeaders,
     };
     const definition = getPiProviderDefinition(snapshot.provider);
@@ -1148,13 +1148,13 @@ async function loadPiModels(signal: AbortSignal): Promise<readonly string[]> {
 /** 将数字输入的原始值和浏览器 badInput 状态交给统一解析，保留无效配置以供提示。 */
 function updatePiContextWindow(event: Event): void {
     const input = event.target as HTMLInputElement | null;
-    store.settings.额外模型解析配置.pi.contextWindow = parsePiContextWindowInput(
+    store.settings.追加モデル解析設定.pi.contextWindow = parsePiContextWindowInput(
         input?.value ?? '',
         input?.validity.badInput ?? false
     );
 }
 
-const selectedProfileName = ref(store.settings.额外模型解析配置.当前api方案);
+const selectedProfileName = ref(store.settings.追加モデル解析設定.現在のapiプロファイル);
 const newProfileName = ref('');
 const isApplyingProfile = ref(false);
 const isRevertingProfileSelection = ref(false);
@@ -1164,7 +1164,7 @@ const isRevertingProfileSelection = ref(false);
 const canDeleteCurrentProfile = computed(
     () =>
         selectedProfileName.value.trim().length > 0 &&
-        store.settings.额外模型解析配置.api方案列表.length >= 2
+        store.settings.追加モデル解析設定.apiプロファイル一覧.length >= 2
 );
 
 /** 根据方案后端显示自定义或 Pi 标签，兼容没有显式后端的旧自定义方案。 */
@@ -1176,14 +1176,14 @@ function getProfileBackendLabel(backend?: ExtraModelApiProfileBackend): string {
 
 /** 先应用完整方案快照，再将方案密钥写入新目标的缓存，避免污染旧目标。 */
 function assignProfileConfig(next_config: ExtraModelApiProfileFields): void {
-    Object.assign(store.settings.额外模型解析配置, next_config);
+    Object.assign(store.settings.追加モデル解析設定, next_config);
     // The profile root key is authoritative only for its exact Custom/API-key endpoint. Install it
     // after the complete snapshot, never into the previous slot. OAuth/invalid Pi targets clear it.
     cacheCurrentApiKey();
 }
 
 watch(
-    () => store.settings.额外模型解析配置.当前api方案,
+    () => store.settings.追加モデル解析設定.現在のapiプロファイル,
     value => {
         if (!isApplyingProfile.value) {
             selectedProfileName.value = value;
@@ -1201,7 +1201,7 @@ watch(selectedProfileName, async (value, old_value) => {
         return;
     }
 
-    if (isActiveExtraModelApiProfileDirty(store.settings.额外模型解析配置)) {
+    if (isActiveExtraModelApiProfileDirty(store.settings.追加モデル解析設定)) {
         const result = await SillyTavern.callGenericPopup(
             t('panel.source.switchDirty'),
             SillyTavern.POPUP_TYPE.CONFIRM,
@@ -1225,7 +1225,7 @@ watch(selectedProfileName, async (value, old_value) => {
         try {
             isApplyingProfile.value = true;
             assignProfileConfig(
-                clearUnboundExtraModelApiProfileFields(store.settings.额外模型解析配置)
+                clearUnboundExtraModelApiProfileFields(store.settings.追加モデル解析設定)
             );
         } finally {
             isApplyingProfile.value = false;
@@ -1235,11 +1235,11 @@ watch(selectedProfileName, async (value, old_value) => {
 
     try {
         isApplyingProfile.value = true;
-        assignProfileConfig(selectExtraModelApiProfile(store.settings.额外模型解析配置, value));
+        assignProfileConfig(selectExtraModelApiProfile(store.settings.追加モデル解析設定, value));
     } catch (error) {
         toastr.error(format_error(error), t('panel.source.switchFailureTitle'));
         isRevertingProfileSelection.value = true;
-        selectedProfileName.value = store.settings.额外模型解析配置.当前api方案;
+        selectedProfileName.value = store.settings.追加モデル解析設定.現在のapiプロファイル;
     } finally {
         isApplyingProfile.value = false;
     }
@@ -1249,14 +1249,14 @@ watch(selectedProfileName, async (value, old_value) => {
 function saveCurrentProfile() {
     try {
         const saved = saveCurrentExtraModelApiProfile(
-            store.settings.额外模型解析配置,
+            store.settings.追加モデル解析設定,
             selectedProfileName.value || newProfileName.value
         );
         isApplyingProfile.value = true;
         assignProfileConfig(saved);
-        selectedProfileName.value = saved.当前api方案;
+        selectedProfileName.value = saved.現在のapiプロファイル;
         toastr.success(
-            t('panel.source.profileSaved', { name: _.escape(saved.当前api方案) }),
+            t('panel.source.profileSaved', { name: _.escape(saved.現在のapiプロファイル) }),
             t('runtime.common.mvuTitle')
         );
     } catch (error) {
@@ -1275,13 +1275,13 @@ function saveAsNewProfile() {
     }
 
     try {
-        const saved = saveAsNewExtraModelApiProfile(store.settings.额外模型解析配置, profile_name);
+        const saved = saveAsNewExtraModelApiProfile(store.settings.追加モデル解析設定, profile_name);
         isApplyingProfile.value = true;
         assignProfileConfig(saved);
-        selectedProfileName.value = saved.当前api方案;
+        selectedProfileName.value = saved.現在のapiプロファイル;
         newProfileName.value = '';
         toastr.success(
-            t('panel.source.profileSavedAs', { name: _.escape(saved.当前api方案) }),
+            t('panel.source.profileSavedAs', { name: _.escape(saved.現在のapiプロファイル) }),
             t('runtime.common.mvuTitle')
         );
     } catch (error) {
@@ -1298,14 +1298,14 @@ async function deleteCurrentProfile() {
         return;
     }
     // 与 canDeleteCurrentProfile 同一产品规则，见上方注释
-    if (store.settings.额外模型解析配置.api方案列表.length < 2) {
+    if (store.settings.追加モデル解析設定.apiプロファイル一覧.length < 2) {
         toastr.warning(t('panel.source.keepTwoProfiles'), t('runtime.common.mvuTitle'));
         return;
     }
 
     try {
         const next_config = await deleteActiveExtraModelApiProfileWithConfirmation(
-            store.settings.额外模型解析配置,
+            store.settings.追加モデル解析設定,
             profile_name,
             async confirmation => {
                 const is_discard_confirmation = confirmation === 'discard_unsaved_changes';
@@ -1336,7 +1336,7 @@ async function deleteCurrentProfile() {
 
         isApplyingProfile.value = true;
         assignProfileConfig(next_config);
-        selectedProfileName.value = next_config.当前api方案;
+        selectedProfileName.value = next_config.現在のapiプロファイル;
         toastr.info(
             t('panel.source.profileDeleted', { name: _.escape(profile_name) }),
             t('runtime.common.mvuTitle')
@@ -1366,7 +1366,7 @@ function captureOAuthUiContext(provider: PiProviderDefinition): PiOAuthUiContext
     return {
         generation: oauthUiGeneration,
         providerId: provider.providerId,
-        profileName: store.settings.额外模型解析配置.当前api方案,
+        profileName: store.settings.追加モデル解析設定.現在のapiプロファイル,
     };
 }
 
@@ -1375,7 +1375,7 @@ function isOAuthUiContextCurrent(context: PiOAuthUiContext): boolean {
     return isPiOAuthUiContextCurrent(context, {
         generation: oauthUiGeneration,
         providerId: selected_pi_provider.value?.providerId,
-        profileName: store.settings.额外模型解析配置.当前api方案,
+        profileName: store.settings.追加モデル解析設定.現在のapiプロファイル,
         mounted: oauthComponentMounted,
         active: is_pi_source.value && show_pi_oauth.value,
     });
@@ -1399,10 +1399,10 @@ const oauth_expiry_label = computed(() =>
 watch(
     () =>
         [
-            store.settings.额外模型解析配置.模型来源,
-            store.settings.额外模型解析配置.当前api方案,
-            store.settings.额外模型解析配置.api地址,
-            store.settings.额外模型解析配置.密钥,
+            store.settings.追加モデル解析設定.モデル出典,
+            store.settings.追加モデル解析設定.現在のapiプロファイル,
+            store.settings.追加モデル解析設定.apiアドレス,
+            store.settings.追加モデル解析設定.APIキー,
         ] as const,
     () => {
         custom_model_list_revision.value += 1;
@@ -1412,16 +1412,16 @@ watch(
 watch(
     () =>
         [
-            store.settings.额外模型解析配置.模型来源,
-            store.settings.额外模型解析配置.当前api方案,
-            store.settings.额外模型解析配置.pi.provider,
-            store.settings.额外模型解析配置.pi.api,
-            store.settings.额外模型解析配置.pi.authType,
-            store.settings.额外模型解析配置.pi.endpoint,
-            store.settings.额外模型解析配置.pi.useProxy,
-            store.settings.额外模型解析配置.pi.customHeaders,
-            store.settings.额外模型解析配置.pi.credentialIds,
-            store.settings.额外模型解析配置.密钥,
+            store.settings.追加モデル解析設定.モデル出典,
+            store.settings.追加モデル解析設定.現在のapiプロファイル,
+            store.settings.追加モデル解析設定.pi.provider,
+            store.settings.追加モデル解析設定.pi.api,
+            store.settings.追加モデル解析設定.pi.authType,
+            store.settings.追加モデル解析設定.pi.endpoint,
+            store.settings.追加モデル解析設定.pi.useProxy,
+            store.settings.追加モデル解析設定.pi.customHeaders,
+            store.settings.追加モデル解析設定.pi.credentialIds,
+            store.settings.追加モデル解析設定.APIキー,
             oauthBusy.value,
         ] as const,
     () => {
@@ -1495,10 +1495,10 @@ async function refreshOAuthStatus(): Promise<void> {
 watch(
     () =>
         [
-            store.settings.额外模型解析配置.模型来源,
-            store.settings.额外模型解析配置.当前api方案,
-            store.settings.额外模型解析配置.pi.provider,
-            store.settings.额外模型解析配置.pi.authType,
+            store.settings.追加モデル解析設定.モデル出典,
+            store.settings.追加モデル解析設定.現在のapiプロファイル,
+            store.settings.追加モデル解析設定.pi.provider,
+            store.settings.追加モデル解析設定.pi.authType,
         ] as const,
     (value, old_value) => {
         if (old_value && !_.isEqual(value, old_value)) {
@@ -1510,7 +1510,7 @@ watch(
 );
 
 watch(
-    () => store.settings.额外模型解析配置.pi.credentialIds,
+    () => store.settings.追加モデル解析設定.pi.credentialIds,
     () => void refreshOAuthStatus(),
     { deep: true }
 );
@@ -1682,7 +1682,7 @@ async function logoutOAuth(): Promise<void> {
     }
     const confirmation_context = captureOAuthUiContext(provider);
     const credentialStore = createPiOAuthLogoutStore();
-    const display_name = provider.displayName[locale.value === 'zh-CN' ? 'zh-CN' : 'en'];
+    const display_name = provider.displayName[locale.value === "ja-JP" ? "ja-JP" : 'en'];
     const result = await SillyTavern.callGenericPopup(
         t('panel.source.pi.oauth.logoutConfirm', { provider: display_name }),
         SillyTavern.POPUP_TYPE.CONFIRM,

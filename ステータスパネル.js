@@ -75,7 +75,7 @@
         return (!!playerName && text === playerName)
             || text === '<user>'
             || text === '{{user}}'
-            || text === '玩家';
+            || text === "プレイヤー";
     }
     function canonicalPlayerIdentity(value) {
         var text = String(value == null ? '' : value).trim();
@@ -83,7 +83,7 @@
     }
     function displayPlayerIdentity(value) {
         var text = String(value == null ? '' : value).trim();
-        return isPlayerIdentity(text) ? (getPlayerName() || '玩家') : text;
+        return isPlayerIdentity(text) ? (getPlayerName() || "プレイヤー") : text;
     }
     refreshPlayerName();
 
@@ -132,7 +132,7 @@
         {label:'武器', type:0, cap:2},
         {label:'手袋', type:1, cap:1},
         {label:'頭部', type:2, cap:1},
-        {label:'胸部', type:3, cap:1},
+        {label:"胴", type:3, cap:1},
         {label:'脚部', type:4, cap:1},
         {label:'靴', type:5, cap:1},
         {label:'マント', type:6, cap:1},
@@ -153,10 +153,10 @@
         // NPC の HP_MAX / EP_MAX / 最终属性 / 层级
         if (/^関係リスト\.[^.]+\.HP_MAX$/.test(path)) return true;
         if (/^関係リスト\.[^.]+\.EP_MAX$/.test(path)) return true;
-        if (/^関係リスト\.[^.]+\.最终属性/.test(path)) return true;
-        if (/^関係リスト\.[^.]+\.层级$/.test(path)) return true;
+        if (/^関係リスト\.[^.]+\.(?:最终属性|最終属性)/.test(path)) return true;
+        if (/^関係リスト\.[^.]+\.(?:层级|階層)$/.test(path)) return true;
         // 装備/スキルの"类型"は数値列挙(武器/胸部/.../主动/被动/特殊), ユーザーが文字列に変更すると"未知"と解析されるため, 一律読み取り専用; (道具の"类型"は文字列なので, 編集可)
-        if (/\.(装备|技能)\.[^.]+\.类型$/.test(path)) return true;
+        if (/\.((?:装备|装備)|技能)\.[^.]+\.(?:类型|タイプ)$/.test(path)) return true;
         return false;
     }
 
@@ -197,7 +197,7 @@
     /* 半移行(接頭辞 JP + 葉 CN)のパスはどちらのスキーマでも解決しないため, 旧セーブだけでなく
        移行期に書かれたデータもここで回収する。canonical が既にあれば常にそちらを優先する。 */
 var LEGACY_KEY_PREFERRED = {"关系リスト":true};
-    var LEGACY_KEY_RENAMES = {"传闻":"噂","布告与檄文":"布告と檄文","发布者":"発布者","张贴位置":"掲示位置","街头巷议":"街頭の噂","可信度":"信頼度","来源":"出典","情报交易":"情報取引","卖家":"売り手","情报评级":"情報評価","要价":"要求価格","摘要":"要約","真实内幕":"真の内幕","关系リスト":"関係リスト","背景故事":"背景","层级":"階層","当前形态":"現在形態","标签":"タグ","标签[]":"タグ[]","类型":"タイプ","描述":"説明","品质":"品質","效果":"効果","状态":"状態","消耗":"消費","身份":"身分","身份[]":"身分[]","是否队友":"仲間","态度":"態度","外貌":"外見","喜爱":"好み","形态库":"形態庫","力量":"筋力","体质":"体力","血统":"血統","在场":"登場","着装":"服装","职业":"職業","种族":"種族","装备":"装備","持续":"持続","最终属性":"最終属性","魔法减伤率":"魔法軽減率","物理减伤率":"物理軽減率","先攻DC":"先制DC","角色":"キャラ","空间币":"スペースコイン","权限凭证":"権限証憑","任务":"任務","副本成就":"インスタンス実績","奖励":"報酬","难度":"難易度","说明":"説明","击杀":"撃破","列表":"リスト","惩罚":"罰則","交付":"納品","目标":"目標","委托方":"依頼元","隐藏真相":"隠された真実","成员商库":"メンバー商品庫","道具列表":"道具リスト","道具列表[]":"道具リスト[]","价格":"価格","技能列表":"技能リスト","技能列表[]":"技能リスト[]","升级列表":"升級リスト","升级列表[]":"升級リスト[]","所属大类":"所属カテゴリ","替换目标":"置換対象","血统列表":"血統リスト","血统列表[]":"血統リスト[]","装备列表":"装備リスト","装备列表[]":"装備リスト[]","设置":"設定","单一世界":"単一世界","世界超稳":"世界超安定","法则":"法則","法则[]":"法則[]","后台":"バックステージ","货币":"通貨","购买力基准":"購買力基準","经济波动":"経済変動","历法":"暦法","闰年规则":"閏年規則","月份天数":"月日数","月份天数[]":"月日数[]","时间":"時間","势力":"勢力","领地":"領地","实力":"実力","风险":"リスク","稳定":"安定","异端雷达":"異端レーダー","当前模式":"現在モード","名单":"名簿","经历":"経歴","阵营":"陣営","因果轨道":"因果軌道","当前阶段":"現在段階","故事线":"ストーリーライン","偏移记录":"偏移記録","引发者":"誘発者","影响程度":"影響度","下一节点":"次ノード","系统状态":"システム状態","待播报记录":"配信待ち記録","当前轮次":"現在ラウンド","上次世界日期":"前回世界日付","试炼任务名单":"試練任務名簿","试炼任务名单[]":"試練任務名簿[]","试炼已完成":"試練完了","是否可试炼":"試練可能","是否试炼任务":"試練任務中","是否在主神空间":"主神空間滞在中","是否战斗中":"戦闘中","游玩天数":"プレイ日数","待办事件":"待機イベント","待办事件[]":"待機イベント[]","建设序列":"建設シーケンス","产出":"産出","功能":"機能","阶段":"段階","下次产出日期":"次回産出日","下次产出游天":"次回産出游日","能源":"エネルギー","当前":"現在","所属对象":"所属対象","所属对象[]":"所属対象[]","完整度":"完全度","消耗单元":"消耗ユニット","余量":"残量","主体规模":"主体規模","驻扎人员":"駐留人員","关系列表":"関係リスト"};
+    var LEGACY_KEY_RENAMES = {"传闻":"噂","布告与檄文":"布告と檄文","发布者":"発布者","张贴位置":"掲示位置","街头巷议":"街頭の噂","可信度":"信頼度","来源":"出典","情报交易":"情報取引","卖家":"売り手","情报评级":"情報評価","要价":"要求価格","摘要":"要約","真实内幕":"真の内幕","关系リスト":"関係リスト","背景故事":"背景","层级":"階層","当前形态":"現在形態","标签":"タグ","标签[]":"タグ[]","类型":"タイプ","描述":"説明","品质":"品質","效果":"効果","状态":"状態","消耗":"消費","身份":"身分","身份[]":"身分[]","是否队友":"仲間","态度":"態度","外貌":"外見","喜爱":"好み","形态库":"形態庫","力量":"筋力","体质":"体力","血统":"血統","在场":"登場","着装":"服装","职业":"職業","种族":"種族","装备":"装備","持续":"持続","最终属性":"最終属性","魔法减伤率":"魔法軽減率","物理减伤率":"物理軽減率","先攻DC":"先制DC","角色":"キャラ","空间币":"スペースコイン","权限凭证":"権限証憑","任务":"任務","副本成就":"インスタンス実績","奖励":"報酬","难度":"難易度","说明":"説明","击杀":"撃破","列表":"リスト","惩罚":"罰則","交付":"納品","目标":"目標","委托方":"依頼元","隐藏真相":"隠された真実","成员商库":"メンバー商品庫","道具列表":"道具リスト","道具列表[]":"道具リスト[]","价格":"価格","技能列表":"技能リスト","技能列表[]":"技能リスト[]","升级列表":"強化リスト","升级列表[]":"強化リスト[]","所属大类":"所属カテゴリ","替换目标":"置換対象","血统列表":"血統リスト","血统列表[]":"血統リスト[]","装备列表":"装備リスト","装备列表[]":"装備リスト[]","设置":"設定","单一世界":"単一世界","世界超稳":"世界超安定","法则":"法則","法则[]":"法則[]","后台":"バックステージ","货币":"通貨","购买力基准":"購買力基準","经济波动":"経済変動","历法":"暦法","闰年规则":"閏年規則","月份天数":"月日数","月份天数[]":"月日数[]","时间":"時間","势力":"勢力","领地":"領地","实力":"実力","风险":"リスク","稳定":"安定","异端雷达":"異端レーダー","当前模式":"現在モード","名单":"名簿","经历":"経歴","阵营":"陣営","因果轨道":"因果軌道","当前阶段":"現在段階","故事线":"ストーリーライン","偏移记录":"偏移記録","引发者":"誘発者","影响程度":"影響度","下一节点":"次ノード","系统状态":"システム状態","待播报记录":"配信待ち記録","当前轮次":"現在ラウンド","上次世界日期":"前回世界日付","试炼任务名单":"試練任務名簿","试炼任务名单[]":"試練任務名簿[]","试炼已完成":"試練完了","是否可试炼":"試練可能","是否试炼任务":"試練任務中","是否在主神空间":"主神空間滞在中","是否战斗中":"戦闘中","游玩天数":"プレイ日数","待办事件":"待機イベント","待办事件[]":"待機イベント[]","建设序列":"建設シーケンス","产出":"産出","功能":"機能","阶段":"段階","下次产出日期":"次回産出日","下次产出游天":"次回産出プレイ日","能源":"エネルギー","当前":"現在","所属对象":"所属対象","所属对象[]":"所属対象[]","完整度":"完全度","消耗单元":"消耗ユニット","余量":"残量","主体规模":"主体規模","驻扎人员":"駐留人員","关系列表":"関係リスト"};
     /* F5B_ENGINE_RECORD_SCOPE: 世界エンジン自身の自由形式レコードコンテナ。ZOD はこれらを
        z.record(z.string(), z.any()) / z.array(z.any()) として宣言しており、内部キーは MVU キーでは
        なくエンジン自身の記録モデル(RECORDS/DETAILS, 簡体字のまま読む)である。再帰リネームの
@@ -400,8 +400,8 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         // ★ tags 型(タグ配列): カンマ/読点区切りの入力を配列へ分割
         if (type === 'tags') {
             val = String(val).split(/[,，、]/).map(function(s){return s.trim();}).filter(Boolean);
-            if (/^资产\.[^.]+\.所属对象$/.test(path)) {
-                val = val.filter(function(owner, idx, arr){ return owner !== '无主' && arr.indexOf(owner) === idx; });
+            if (/^(?:资产|資産)\.[^.]+\.(?:所属对象|所属対象)$/.test(path)) {
+                val = val.filter(function(owner, idx, arr){ return owner !== "無主" && arr.indexOf(owner) === idx; });
             }
         }
         // ★ json 型(ネストオブジェクト): オブジェクトへの復元を試みる; 不正なJSONは元の文字列を保持(ZOD層が拒否してフォールバック)
@@ -470,7 +470,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         // F~SSS 列挙の完全一致
         if (['F','E','D','C','B','A','S','SS','SSS'].indexOf(s) >= 0) return s;
         // 寛容な解析: "D级"/"S级"/"SSS级" など"级"接尾辞付きの変種に対応(複数文字の段位は長い順にマッチし, SSS が Sに切り詰められるのを防ぐ)
-        var m = s.match(/^(SSS|SS|S|A|B|C|D|E|F)\s*级?$/);
+        var m = s.match(/^(SSS|SS|S|A|B|C|D|E|F)\s*(?:级|級)?$/);
         return m ? m[1] : 'E';
     }
     /* 生命階層(Ⅰ~Ⅸ) ↔ 品質アルファベット(F~SSS) の双方向マッピング: ローマ数字は表示テキスト用, 品質アルファベットは着色CSSクラス用
@@ -608,7 +608,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 return;
             }
             if (latest.credentialQty < 1) {
-                samToast('warning', '不足 '+latest.credentialName+' ×1');
+                samToast('warning', "が不足 "+latest.credentialName+' ×1');
                 return;
             }
 
@@ -789,7 +789,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         .sam-ava-ph .sam-ava-ico { font-size:30px; opacity:0.7; }
         .sam-ava-ph .sam-ava-hint { font-size:9px; text-align:center; line-height:1.2; opacity:0.8; }
         .sam-reincarnator-text { display:flex; flex-direction:column; min-width:0; flex:1 1 auto; gap:5px; }
-        /* 戦闘状態バッジ: 赤いパルス, 通常は描画しない(JSが 是否战斗中 に応じて出力) */
+        /* 戦闘状態バッジ: 赤いパルス, 通常は描画しない(JSが 戦闘中 に応じて出力) */
         .sam-reincarnator-combat { align-self:flex-start; display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:bold; color:#fff; background:linear-gradient(135deg, rgba(228,88,125,0.92), rgba(170,38,66,0.9)); border:1px solid var(--sam-hp); border-radius:10px; padding:2px 10px; letter-spacing:0.5px; box-shadow:0 0 8px rgba(228,88,125,0.5); animation:samCombatPulse 1.4s ease-in-out infinite; }
         @keyframes samCombatPulse { 0%,100% { box-shadow:0 0 7px rgba(228,88,125,0.45); } 50% { box-shadow:0 0 16px rgba(228,88,125,0.85); } }
         /* 階層: 品質ストロークのバッジ(文字色は .q-X が提供, 枠線は currentColorに追従) - 独立した行
@@ -975,7 +975,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         /* 血統融合中: 🧬 拡大縮小のイージング(回転ではない), ショップ更新の回転アイコンと区別 */
         .sam-fusion-pulse { display:inline-block; font-size:26px; line-height:1; transform-origin:center; animation:samFusionPulse 1.4s ease-in-out infinite; }
         @keyframes samFusionPulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.25); } }
-        /* 商品カード( 开局.html の .item-card 選択/無効モードを参考) */
+        /* 商品カード( 開始画面.html の .item-card 選択/無効モードを参考) */
         .sam-shop-item { background:var(--sam-card); border:1px solid var(--sam-border); border-radius:8px; padding:10px; cursor:pointer; transition:all 0.15s; position:relative; overflow:visible; }
         .sam-shop-item::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--sam-border); opacity:0; transition:opacity 0.15s; border-radius:8px 0 0 8px; }
         .sam-shop-item:hover:not(.disabled) { border-color:var(--sam-accent); transform:translateY(-1px); }
@@ -1545,7 +1545,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         .sam-reincarnator-tier.q-S,.sam-tier-side.q-S,.sam-npc-tier.q-S,.sam-nd-tier.q-S { color:var(--sam-q-s); text-shadow:0 0 4px rgba(234,179,8,0.5); }
         .sam-reincarnator-tier.q-SS,.sam-tier-side.q-SS,.sam-npc-tier.q-SS,.sam-nd-tier.q-SS { color:var(--sam-q-ss); text-shadow:0 0 5px rgba(239,68,68,0.6); }
         .sam-reincarnator-tier.q-SSS,.sam-tier-side.q-SSS,.sam-npc-tier.q-SSS,.sam-nd-tier.q-SSS { color:var(--sam-q-sss); text-shadow:0 0 6px rgba(236,72,153,0.7); }
-        /* ★ 職業記録の描画: 折りたたみパネル {职业名:{类型,特性[],来源}} */
+        /* ★ 職業記録の描画: 折りたたみパネル {职业名:{タイプ,特性[],出典}} */
         .sam-occ-panel { margin:4px 0; border:1px solid var(--sam-border); border-radius:8px; background:rgba(143,159,255,0.04); overflow:hidden; }
         .sam-occ-summary { list-style:none; cursor:pointer; padding:8px 10px; font-weight:bold; font-size:13px; color:var(--sam-text); display:flex; align-items:center; gap:8px; flex-wrap:wrap; user-select:none; }
         .sam-occ-summary::-webkit-details-marker { display:none; }
@@ -1594,7 +1594,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         .sam-fc-rows { font-size:12px; }
         .sam-fc-rows .sam-row { padding:3px 0; }
         .sam-fc-rows .sam-row .v { max-width:75%; }
-        /* 効果/描述 の全幅ブロック(ラベルが上、内容は左揃えで行全体を占有) */
+        /* 効果/説明 の全幅ブロック(ラベルが上、内容は左揃えで行全体を占有) */
         .sam-fc-body { margin-top:4px; }
         .sam-fc-block { margin-bottom:5px; }
         .sam-fc-block .sam-fc-label { font-size:11px; font-weight:bold; color:var(--sam-sub); margin-bottom:2px; }
@@ -1826,7 +1826,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
        力量→筋力・体质→体力 (LEGACY_KEY_RENAMES と同じ対応)、補正値 (✨ 補正値 セクション見出し)。
        --------------------------------------------------------------------------- */
     var DISPLAY_LABELS = {
-        '力量修正': '筋力補正', '敏捷修正': '敏捷補正', '体质修正': '体力補正',
+        "筋力修正": '筋力補正', '敏捷修正': '敏捷補正', "体力修正": '体力補正',
         '精神修正': '精神補正', '魅力修正': '魅力補正'
     };
     function displayLabel(v) {
@@ -2369,7 +2369,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             if (preCredentialRequirement.required) preCredentialRequirements[preCredentialRequirement.grade] = 1;
             var preCredentialShortages = shopCredentialShortages(preSd && preSd.キャラ && preSd.キャラ.権限証憑, preCredentialRequirements);
             if (preCredentialShortages.length) { samToast('warning', '権限証憑が不足：'+shopCredentialShortageText(preCredentialShortages)); return; }
-            var preActorLib = shopGetActorLibRaw(preSd && preSd.商城, preActor);
+            var preActorLib = shopGetActorLibRaw(preSd && preSd.ショップ, preActor);
             var preBloodArr = (preActorLib && Array.isArray(preActorLib.血統リスト)) ? preActorLib.血統リスト.slice() : null;
             // コイン控除/証憑消費/商品削除の前のスナップショットを保存し、失敗/停止時のロールバックに供する
             bloodFusionSnap = {
@@ -2384,7 +2384,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 statData.キャラ.権限証憑 = statData.キャラ.権限証憑 || {};
                 if (!shopCredentialConsume(statData.キャラ.権限証憑, preCredentialRequirements)) throw new Error('権限証憑の控除に失敗');
                 statData.キャラ.スペースコイン = Math.max(0, safeNum(statData.キャラ.スペースコイン, 0) - prePrice);
-                var _lib = shopGetActorLibRaw(statData.商城, preActor);
+                var _lib = shopGetActorLibRaw(statData.ショップ, preActor);
                 if (_lib && Array.isArray(_lib.血統リスト)) {
                     _lib.血統リスト = _lib.血統リスト.filter(function(item) { return safeStr(item.名称) !== bloodFusionShopItem.name; });
                 }
@@ -2393,7 +2393,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             // ローカルキャッシュを即時同期、ストア一覧から当該血統が即座に消える
             try {
                 var freshSd = getStatData();
-                var freshLib0 = shopGetActorLibRaw(freshSd && freshSd.商城, preActor);
+                var freshLib0 = shopGetActorLibRaw(freshSd && freshSd.ショップ, preActor);
                 if (freshLib0) {
                     shopMarketData = shopNormalizeMarketData(freshLib0);
                     if (!shopTabHasData(shopActiveTab)) shopActiveTab = shopPickFirstAvailableTab();
@@ -2438,9 +2438,9 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 if (bloodFusionSnap && bloodFusionShopItem) {
                     shopAppendReceipt(statData, shopReceiptLine('血統融合', bloodFusionShopItem.name+' → '+rollName0, bloodFusionSnap.price, statData.キャラ.スペースコイン, (bloodFusionActionActor === SHOP_ACTOR_REINCARNATOR ? 'キャラ' : bloodFusionActionActor)));
                 }
-                var _ulib0 = shopGetActorLibRaw(statData.商城, _actor0);
-                if (_ulib0 && Array.isArray(_ulib0.升級リスト) && consumedNames0.length) {
-                    _ulib0.升級リスト = _ulib0.升級リスト.filter(function(u) {
+                var _ulib0 = shopGetActorLibRaw(statData.ショップ, _actor0);
+                if (_ulib0 && Array.isArray(_ulib0.強化リスト) && consumedNames0.length) {
+                    _ulib0.強化リスト = _ulib0.強化リスト.filter(function(u) {
                         var upCat = String(shopPick(u, 'category','所属カテゴリ','タイプ','type') || '');
                         var tgt = String(shopPick(u, 'replace_target','置換対象') || '');
                         if (upCat === '血統' && tgt && consumedNames0.indexOf(tgt) >= 0) return false;
@@ -2456,12 +2456,12 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                             statData.キャラ.スペースコイン = safeNum(statData.キャラ.スペースコイン, 0) + bloodFusionSnap.price;
                             statData.キャラ.権限証憑 = statData.キャラ.権限証憑 || {};
                             shopCredentialRefund(statData.キャラ.権限証憑, bloodFusionSnap.credentialRequirements || {});
-                            if (bloodFusionSnap.preBloodLib !== null && statData.商城) {
-                                var _rlib0 = shopGetActorLibRaw(statData.商城, bloodFusionSnap.preActor);
+                            if (bloodFusionSnap.preBloodLib !== null && statData.ショップ) {
+                                var _rlib0 = shopGetActorLibRaw(statData.ショップ, bloodFusionSnap.preActor);
                                 if (_rlib0) _rlib0.血統リスト = bloodFusionSnap.preBloodLib.slice();
                             }
                         });
-                    } catch(eRoll0) { try { console.warn('[主神终端] '+rollName0+' 書き戻し失敗時のロールバック例外:', eRoll0.message); } catch(e2){} }
+                    } catch(eRoll0) { try { console.warn("[主神端末] "+rollName0+' 書き戻し失敗時のロールバック例外:', eRoll0.message); } catch(e2){} }
                 }
                 bloodFusionBusy = false; bloodFusionShopItem = null; bloodFusionResult = null; bloodFusionConsumedNames = []; bloodFusionSnap = null; closeModal();
                 renderAll();
@@ -2471,7 +2471,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             // アップグレード欄のローカルキャッシュ同期
             try {
                 var freshSd0 = getStatData();
-                var freshLib0a = shopGetActorLibRaw(freshSd0 && freshSd0.商城, bloodFusionActionActor);
+                var freshLib0a = shopGetActorLibRaw(freshSd0 && freshSd0.ショップ, bloodFusionActionActor);
                 if (freshLib0a) {
                     shopMarketData = shopNormalizeMarketData(freshLib0a);
                     if (!shopTabHasData(shopActiveTab)) shopActiveTab = shopPickFirstAvailableTab();
@@ -2507,7 +2507,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             + '    THP: 一時生命値/シールド、ダメージを受けた際に優先して減算、重複せず、戦闘離脱でゼロに戻る\n'
             + '    EP: エネルギー値、スキル消費に使用\n'
             + '    EP_MAX: エネルギー値の上限\n'
-            + '  衍生属性:\n'
+            + "  派生属性:\n"
             + '    ATK: 物理攻撃\n'
             + '    DEF: 物理防御\n'
             + '    MATK: 術法攻撃\n'
@@ -2556,7 +2556,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 + '今回の融合結果(システムが確定済み): ' + result.name + '\n'
                 + 'この結果に対応する規則は以下のとおりで、必ずこの規則に厳密に従ってフォーマットデータを生成すること:\n' + rulesText + '\n\n'
                 + '  - 【组件替换规则】:\n'
-                + '     * 融合結果が新形態を生み出して旧形態を置き換える場合、替换目标 を必ず記入すること。\n'
+                + "     * 融合結果が新形態を生み出して旧形態を置き換える場合、置換対象 を必ず記入すること。\n"
                 + "     * 置換対象 は下記の【既存の形態】の実際の名簿から一字一句選ぶこと; 名簿外・削除済み・存在しない形態名を使用してはならない。\n"
                 + '     * 置換対象 に対応するコンポーネントはバックグラウンドで削除され、説明文の形で残すことは許されない。\n'
                 + '     * 融合規則が詞条の消去を要求する場合、再構築を許可し、旧詞条は継承しない。\n'
@@ -2576,12 +2576,12 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 + '    原始属性: {筋力: C, 敏捷: E, 体力: D, 精神: F, 魅力: E}\n'
                 + '    効果: {词条: 説明}\n'
                 + '    説明: 結果の説明\n\n'
-                + '形态列表:\n'
+                + "形態リスト:\n"
                 + '  - 名称: 形態名\n'
                 + '    置換対象: 元の形態の正確な名称 (例: 人狼形態)\n'
                 + '    階層: {形態自身の戦闘位格に従って生成, Ⅰ－Ⅸ}\n'
                 + '    消費: HP/EP/特殊資源\n'
-                + '    状態: 完好\n'
+                + "    状態: 正常\n"
                 + '    タグ: ["主神空間", 依存する道具/血統/来源など]\n'
                 + '    原始属性: {筋力: C, 敏捷: E, 体力: D, 精神: F, 魅力: E, ATK: C, DEF: D, MATK: E, MDEF: E, AP: D}\n'
                 + '    効果: { [词条]: 説明 }\n'
@@ -2592,7 +2592,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 + "       タグ: [\"主神空間\", \"パッシブ\"]\n"
                 + '       効果: {射击校准: 射击检定+5}\n'
                 + '       説明: 簡潔な説明\n'
-                + '       消費: 无}\n'
+                + "       消費: なし}\n"
                 + '    説明: 簡潔な説明\n'
                 + '注意: "遺伝子崩壊" と "崩壊消散" は新しい血統を生まない, ただし結果として A の元血統を返す必要がある(説明の中で B が永久消耗することを述べる)。\n\n'
                 + 'A=' + JSON.stringify(a)
@@ -2613,7 +2613,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 var v = dict[k] || {};
                 var info = [];
 
-                if (v.品質) info.push(v.品質 + '级');
+                if (v.品質) info.push(v.品質 + "級");
                 if (v.数量 != null) info.push('数量:' + v.数量);
                 if (v.消費) info.push('消費:' + v.消費);
                 if (Array.isArray(v.タグ) && v.タグ.length > 0) info.push('タグ:' + v.タグ.join('、'));
@@ -2645,7 +2645,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             var resultName = result.名称;
             // AI が 形态列表(融合で新形態を生成)を返す場合がある, 升级列表 の replace_target と同じ処理方式:
             // 先に"替换目标"に対応する旧形態を削除し, その後 形态库 へ新形態を書き込む
-            var formList = Array.isArray(parsed.形态列表) ? parsed.形态列表 : [];
+            var formList = Array.isArray(parsed.形態リスト) ? parsed.形態リスト : [];
             // 単一の原始形態を正規化( 32e の 形态库 データ構造に整合)
             // 単一の原始形態を正規化 → 形态库 データ構造
             // 注意: ZOD form_item の 技能 は z.record(z.string(), skill_item) のオブジェクトマップ(key=スキル名, スキル値の中国語キー 品质/类型/标签/效果/描述/消耗)
@@ -2674,7 +2674,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                         タグ:  shopEnsureSourceTag(shopPick(s, 'tags','タグ')),
                         効果:  shopPick(s, 'effects','効果') || {},
                         説明:  shopPick(s, 'description','説明','説明') || '',
-                        消費:  shopPick(s, '消费','消費','cost') || '无'
+                        消費:  shopPick(s, '消费','消費','cost') || "なし"
                     };
                 });
                 var tagsVal = shopPick(raw, 'tags','タグ');
@@ -2686,9 +2686,9 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                     階層:       tierRomanOf(shopPick(raw, 'tier','階層','rating','品質','品级','评级') || 'Ⅰ'),
                     消費:       shopPick(raw, 'cost','消費') || '',
                     冷却:       shopPick(raw, 'cooldown','冷却') || '0回合',
-                    状態:       shopPick(raw, 'status','状態') || '完好',
+                    状態:       shopPick(raw, 'status','状態') || "正常",
                     タグ:       shopEnsureSourceTag(Array.isArray(tagsVal) ? tagsVal : []),
-                    原始属性:   shopPick(raw, '原始属性','基础属性','属性') || {},
+                    原始属性:   shopPick(raw, '原始属性',"基礎属性",'属性') || {},
                     効果:       shopPick(raw, 'effects','効果','特效','特殊效果') || {},
                     技能:       skillsMap,
                     説明:       shopPick(raw, 'description','説明','説明') || ''
@@ -2716,9 +2716,9 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                     shopAppendReceipt(statData, shopReceiptLine('血統融合', bloodFusionShopItem.name+' → '+resultName, bloodFusionSnap.price, statData.キャラ.スペースコイン, (bloodFusionActionActor === SHOP_ACTOR_REINCARNATOR ? 'キャラ' : bloodFusionActionActor)));
                 }
                 // 升级列表の整理: "类型=血统 の昇級項目" かつ replace_target が今回消費された元血統名に一致 → 削除
-                var _fulib = shopGetActorLibRaw(statData.商城, _fActor);
-                if (_fulib && Array.isArray(_fulib.升級リスト) && consumedNames.length) {
-                    _fulib.升級リスト = _fulib.升級リスト.filter(function(u) {
+                var _fulib = shopGetActorLibRaw(statData.ショップ, _fActor);
+                if (_fulib && Array.isArray(_fulib.強化リスト) && consumedNames.length) {
+                    _fulib.強化リスト = _fulib.強化リスト.filter(function(u) {
                         var upCat = String(shopPick(u, 'category','所属カテゴリ','タイプ','type') || '');
                         var tgt = String(shopPick(u, 'replace_target','置換対象') || '');
                         if (upCat === '血統' && tgt && consumedNames.indexOf(tgt) >= 0) return false;
@@ -2733,10 +2733,10 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                     for (var fk = 0; fk < forms.length; fk++) {
                         var f = forms[fk];
                         // 防御: AI が記入した"替换目标"が現在の形态库に無い場合(削除済み/編造), 強制的に"无"へ変更して孤立形態への参照が結果テキストへ漏れるのを防ぐ
-                        if (f._replace && f._replace !== '无' && !_fch.形態庫[f._replace]) {
-                            f._replace = '无';
+                        if (f._replace && f._replace !== "なし" && !_fch.形態庫[f._replace]) {
+                            f._replace = "なし";
                         }
-                        if (f._replace && f._replace !== '无' && _fch.形態庫[f._replace]) {
+                        if (f._replace && f._replace !== "なし" && _fch.形態庫[f._replace]) {
                             delete _fch.形態庫[f._replace];
                         }
                         // 派生項目(ATK/DEF/MATK/MDEF/AP)の値が0のものは除外し、データベースへ書き込まない
@@ -2765,7 +2765,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             // 升级区 のローカルキャッシュ同期: shopMarketData.升级区 から整理済みの昇級項目を即時削除
             try {
                 var freshSd2 = getStatData();
-                var freshLib2 = shopGetActorLibRaw(freshSd2 && freshSd2.商城, bloodFusionActionActor);
+                var freshLib2 = shopGetActorLibRaw(freshSd2 && freshSd2.ショップ, bloodFusionActionActor);
                 if (freshLib2) {
                     shopMarketData = shopNormalizeMarketData(freshLib2);
                     if (!shopTabHasData(shopActiveTab)) shopActiveTab = shopPickFirstAvailableTab();
@@ -2781,7 +2781,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             renderAll();
             // 結果説明に残り得る"已删除形态/删除 XX 形态"の誤導テキストを除去(AI が存在しない形態を参照することがある)
             var descRaw = String(result.説明 || '主神融合アルゴリズムが今回の血統再構成を完了しました。');
-            var descClean = descRaw.replace(/已删除(的)?\s*[^，。、;；\n]*形态/g, '形態スロットをリセット済み').replace(/删除\s*[^，。、;；\n]*形态/g, '形態スロットをリセット済み');
+            var descClean = descRaw.replace(/(?:已删除|削除済み)(的)?\s*[^，。、;；\n]*(?:形态|形態)/g, '形態スロットをリセット済み').replace(/(?:删除|削除)\s*[^，。、;；\n]*(?:形态|形態)/g, '形態スロットをリセット済み');
             showModal('融合結果 · '+rollName, '<div class="sam-shop-ok">融合完了：'+esc(rollName)+'</div><div class="sam-full-card">'+esc(descClean)+'</div>'
                 + (forms.length ? '<div class="sam-shop-ok" style="margin-top:8px">今回の融合で獲得した新形態：'+forms.map(function(f){return esc(f._name);}).join('、')+'</div>' : ''));
         } catch(err) {
@@ -2796,8 +2796,8 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                         statData.キャラ.スペースコイン = safeNum(statData.キャラ.スペースコイン, 0) + bloodFusionSnap.price;
                         statData.キャラ.権限証憑 = statData.キャラ.権限証憑 || {};
                         shopCredentialRefund(statData.キャラ.権限証憑, bloodFusionSnap.credentialRequirements || {});
-                        if (bloodFusionSnap.preBloodLib !== null && statData.商城) {
-                            var _rlibF = shopGetActorLibRaw(statData.商城, bloodFusionSnap.preActor);
+                        if (bloodFusionSnap.preBloodLib !== null && statData.ショップ) {
+                            var _rlibF = shopGetActorLibRaw(statData.ショップ, bloodFusionSnap.preActor);
                             if (_rlibF) _rlibF.血統リスト = bloodFusionSnap.preBloodLib.slice();
                         }
                     });
@@ -2832,7 +2832,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             statData.キャラ.権限証憑 = statData.キャラ.権限証憑 || {};
             if (!shopCredentialConsume(statData.キャラ.権限証憑, dpCredentialRequirements)) throw new Error('権限証憑の控除に失敗');
             statData.キャラ.スペースコイン = Math.max(0, safeNum(statData.キャラ.スペースコイン, 0) - safeNum(item.price, 0));
-            var _dlib = shopGetActorLibRaw(statData.商城, dpActor);
+            var _dlib = shopGetActorLibRaw(statData.ショップ, dpActor);
             if (_dlib && Array.isArray(_dlib.血統リスト)) _dlib.血統リスト = _dlib.血統リスト.filter(function(x){ return safeStr(x.名称) !== item.name; });
             shopAppendReceipt(statData, shopReceiptLine('血統購入', item.name, item.price, statData.キャラ.スペースコイン, (dpActor === SHOP_ACTOR_REINCARNATOR ? 'キャラ' : dpActor)));
         });
@@ -2888,11 +2888,11 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             delete _rch.血統[targetName];              // 置換される旧血統を削除
             _rch.血統[item.name] = blood;              // ショップで購入した新血統を書き込む
             statData.キャラ.スペースコイン = Math.max(0, safeNum(statData.キャラ.スペースコイン, 0) - safeNum(item.price, 0));
-            var _rlib = shopGetActorLibRaw(statData.商城, rpActor);
+            var _rlib = shopGetActorLibRaw(statData.ショップ, rpActor);
             if (_rlib && Array.isArray(_rlib.血統リスト)) _rlib.血統リスト = _rlib.血統リスト.filter(function(x){ return safeStr(x.名称) !== item.name; });
             // ★ 昇級サービス内の置換対象血統向け商品も同時削除(所属大类=血统 かつ replace_target が当該血統を指す)
-            if (_rlib && Array.isArray(_rlib.升級リスト)) {
-                _rlib.升級リスト = _rlib.升級リスト.filter(function(u) {
+            if (_rlib && Array.isArray(_rlib.強化リスト)) {
+                _rlib.強化リスト = _rlib.強化リスト.filter(function(u) {
                     var upCat = String(shopPick(u, 'category','所属カテゴリ','タイプ','type') || '');
                     var tgt = String(shopPick(u, 'replace_target','置換対象') || '');
                     if (upCat === '血統' && tgt && tgt === targetName) return false;
@@ -2906,18 +2906,18 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
     /* ===== 13.5 物資転送(在场NPCへ装備/アイテムを転送) ===== */
     var transferTarget = null;                  // 転送対象NPC名
-    var transferCart = { 装備: {}, 道具: {} };   // 選択項目: { 装备: {key:1}, 道具: {key:qty} }
+    var transferCart = { 装備: {}, アイテム: {} };   // 選択項目: { 装备: {key:1}, 道具: {key:qty} }
     function openTransferModal(npcName) {
         var sd = getStatData();
         var npc = sd && sd.関係リスト && sd.関係リスト[npcName];
         if (!npc) { samToast('error', '該当キャラクターが見つかりません'); return; }
         transferTarget = npcName;
-        transferCart = { 装備: {}, 道具: {} };
+        transferCart = { 装備: {}, アイテム: {} };
         showModal('「'+npcName+'」へ物資を転送', renderTransferList(sd));
     }
     function renderTransferList(sd) {
         var equips = (sd.キャラ && sd.キャラ.装備) || {};
-        var backpack = (sd.キャラ && sd.キャラ.道具) || {};
+        var backpack = (sd.キャラ && sd.キャラ.アイテム) || {};
         var eqList = [], bpList = [];
         Object.keys(equips).forEach(function(k) {
             var e = equips[k] || {};
@@ -2937,13 +2937,13 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         }
         if (bpList.length) {
             html += '<div class="sam-trf-sec">🎒 アイテム · '+bpList.length+'</div>';
-            bpList.forEach(function(it) { html += transferItemCard('道具', it.key, it.val, it.qty); });
+            bpList.forEach(function(it) { html += transferItemCard("アイテム", it.key, it.val, it.qty); });
         }
         if (!eqList.length && !bpList.length) {
             html += '<div class="sam-empty">転送可能な物資がありません（装備中および特殊装備は自動的に除外）</div>';
         }
         html += '</div>';
-        var hasSel = Object.keys(transferCart.装備).length + Object.keys(transferCart.道具).length > 0;
+        var hasSel = Object.keys(transferCart.装備).length + Object.keys(transferCart.アイテム).length > 0;
         html += '<div class="sam-trf-footer">';
         html += '<div class="sam-trf-warn">⚠️ 転送を確定すると<strong>取り消し・回収は不可</strong>。物資は直接対象キャラクターに帰属します。よく検討してください。</div>';
         html += '<div class="sam-trf-actions">';
@@ -2956,7 +2956,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var sel = transferCart[cat][key] != null;
         var selQty = sel ? transferCart[cat][key] : 0;
         var q = parseRarity(item.品質);
-        var isItem = (cat === '道具');
+        var isItem = (cat === "アイテム");
         var corner = sel ? (isItem ? '選択済み ×'+selQty : '選択済み') : '';
         var typeLabel = isItem ? safeStr(item.タイプ) : (EQUIP_TYPE_MAP[safeNum(item.タイプ, 0)] || '');
         var attrs = item.原始属性 || {};
@@ -2991,7 +2991,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     function transferAdjustQty(cat, key, dir) {
         var sd = getStatData();
         var max = 1;
-        if (cat === '道具') max = safeNum(sd.キャラ.道具[key] && sd.キャラ.道具[key].数量, 1);
+        if (cat === "アイテム") max = safeNum(sd.キャラ.アイテム[key] && sd.キャラ.アイテム[key].数量, 1);
         var cur = transferCart[cat][key] != null ? transferCart[cat][key] : 1;
         if (dir === 'plus') cur = Math.min(max, cur + 1);
         else cur = Math.max(1, cur - 1);
@@ -3001,7 +3001,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     function transferInputQty(cat, key, val) {
         var sd = getStatData();
         var max = 1;
-        if (cat === '道具') max = safeNum(sd.キャラ.道具[key] && sd.キャラ.道具[key].数量, 1);
+        if (cat === "アイテム") max = safeNum(sd.キャラ.アイテム[key] && sd.キャラ.アイテム[key].数量, 1);
         var v = Math.max(1, Math.min(max, parseInt(val, 10) || 1));
         transferCart[cat][key] = v;
         refreshTransferModal();
@@ -3016,17 +3016,17 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     }
     function executeTransfer() {
         var eqKeys = Object.keys(transferCart.装備);
-        var bpKeys = Object.keys(transferCart.道具);
+        var bpKeys = Object.keys(transferCart.アイテム);
         if (eqKeys.length + bpKeys.length === 0) return;
         var npcName = transferTarget;
         samConfirm('転送の確認', '選択した物資を「'+npcName+'」へ転送しますか？この操作は取り消し・回収できません。', function() {
             var ok = writeBackMvu(function(statData) {
                 if (!statData) return;
                 var mc = statData.キャラ = statData.キャラ || {};
-                mc.装備 = mc.装備 || {}; mc.道具 = mc.道具 || {};
+                mc.装備 = mc.装備 || {}; mc.アイテム = mc.アイテム || {};
                 var rel = statData.関係リスト = statData.関係リスト || {};
                 var npc = rel[npcName] = rel[npcName] || {};
-                npc.装備 = npc.装備 || {}; npc.道具 = npc.道具 || {};
+                npc.装備 = npc.装備 || {}; npc.アイテム = npc.アイテム || {};
                 var movedParts = []; // ★ 実際に転送が成功した明細, 配信待ち記録用
                 // 装備: そのままNPCへ複製(0で未装備), キャラクター側は削除
                 eqKeys.forEach(function(key) {
@@ -3040,20 +3040,20 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 });
                 // アイテム: 数量単位で転送(NPCが既に持つ場合は加算, 無ければ新規作成; キャラクター側は減算し, 0なら削除)
                 bpKeys.forEach(function(key) {
-                    var b = mc.道具[key];
+                    var b = mc.アイテム[key];
                     if (!b) return;
                     var have = safeNum(b.数量, 0);
-                    var move = Math.min(transferCart.道具[key] || 1, have);
+                    var move = Math.min(transferCart.アイテム[key] || 1, have);
                     if (move <= 0) return;
-                    if (npc.道具[key]) {
-                        npc.道具[key].数量 = safeNum(npc.道具[key].数量, 0) + move;
+                    if (npc.アイテム[key]) {
+                        npc.アイテム[key].数量 = safeNum(npc.アイテム[key].数量, 0) + move;
                     } else {
                         var copy2 = (_ && _.cloneDeep) ? _.cloneDeep(b) : JSON.parse(JSON.stringify(b));
                         copy2.数量 = move;
-                        npc.道具[key] = copy2;
+                        npc.アイテム[key] = copy2;
                     }
                     b.数量 = have - move;
-                    if (b.数量 <= 0) delete mc.道具[key];
+                    if (b.数量 <= 0) delete mc.アイテム[key];
                     movedParts.push('アイテム「' + key + '」×' + move);
                 });
                 // ★ フロントからNPCへの物資贈与 → 配信待ち記録に登録(今回の書き戻しと同じタイミングで保存, 本文モデルの叙述後に自動クリア)
@@ -3063,7 +3063,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             });
             if (ok) {
                 var cnt = eqKeys.length + bpKeys.length;
-                transferCart = { 装備: {}, 道具: {} };
+                transferCart = { 装備: {}, アイテム: {} };
                 transferTarget = null;
                 closeModal();
                 samToast('success', '「'+npcName+'」へ '+cnt+' 件の物資を転送しました');
@@ -3083,18 +3083,18 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         return !!isExplicitlyDead;
     }
     var lootTarget = null;
-    var lootCart = { 装備: {}, 道具: {} };
+    var lootCart = { 装備: {}, アイテム: {} };
     function openLootModal(npcName) {
         var sd = getStatData();
         var npc = sd && sd.関係リスト && sd.関係リスト[npcName];
         if (!npc) { samToast('error', '該当キャラクターが見つかりません'); return; }
         lootTarget = npcName;
-        lootCart = { 装備: {}, 道具: {} };
+        lootCart = { 装備: {}, アイテム: {} };
         showModal('「'+npcName+'」から遺物を取得', renderLootList(npc));
     }
     function renderLootList(npc) {
         var equips = npc.装備 || {};
-        var backpack = npc.道具 || {};
+        var backpack = npc.アイテム || {};
         var eqList = [], bpList = [];
         Object.keys(equips).forEach(function(k) {
             var e = equips[k] || {};
@@ -3113,13 +3113,13 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         }
         if (bpList.length) {
             html += '<div class="sam-trf-sec">🎒 アイテム · '+bpList.length+'</div>';
-            bpList.forEach(function(it) { html += lootItemCard('道具', it.key, it.val, it.qty); });
+            bpList.forEach(function(it) { html += lootItemCard("アイテム", it.key, it.val, it.qty); });
         }
         if (!eqList.length && !bpList.length) {
             html += '<div class="sam-empty">このキャラクターから取得できる物資はありません</div>';
         }
         html += '</div>';
-        var hasSel = Object.keys(lootCart.装備).length + Object.keys(lootCart.道具).length > 0;
+        var hasSel = Object.keys(lootCart.装備).length + Object.keys(lootCart.アイテム).length > 0;
         html += '<div class="sam-trf-footer">';
         html += '<div class="sam-trf-warn">⚠️ 遺物を取得すると直接キャラクターに帰属し, 返却できません。</div>';
         html += '<div class="sam-trf-actions">';
@@ -3132,7 +3132,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var sel = lootCart[cat][key] != null;
         var selQty = sel ? lootCart[cat][key] : 0;
         var q = parseRarity(item.品質);
-        var isItem = (cat === '道具');
+        var isItem = (cat === "アイテム");
         var corner = sel ? (isItem ? '選択済み ×'+selQty : '選択済み') : '';
         var typeLabel = isItem ? safeStr(item.タイプ) : (EQUIP_TYPE_MAP[safeNum(item.タイプ, 0)] || '');
         var attrs = item.原始属性 || {};
@@ -3169,7 +3169,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var npc = sd && sd.関係リスト && sd.関係リスト[lootTarget];
         if (!npc) return;
         var max = 1;
-        if (cat === '道具') max = safeNum(npc.道具[key] && npc.道具[key].数量, 1);
+        if (cat === "アイテム") max = safeNum(npc.アイテム[key] && npc.アイテム[key].数量, 1);
         var cur = lootCart[cat][key] != null ? lootCart[cat][key] : 1;
         if (dir === 'plus') cur = Math.min(max, cur + 1);
         else cur = Math.max(1, cur - 1);
@@ -3181,7 +3181,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var npc = sd && sd.関係リスト && sd.関係リスト[lootTarget];
         if (!npc) return;
         var max = 1;
-        if (cat === '道具') max = safeNum(npc.道具[key] && npc.道具[key].数量, 1);
+        if (cat === "アイテム") max = safeNum(npc.アイテム[key] && npc.アイテム[key].数量, 1);
         var v = Math.max(1, Math.min(max, parseInt(val, 10) || 1));
         lootCart[cat][key] = v;
         refreshLootModal();
@@ -3196,16 +3196,16 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     }
     function executeLoot() {
         var eqKeys = Object.keys(lootCart.装備);
-        var bpKeys = Object.keys(lootCart.道具);
+        var bpKeys = Object.keys(lootCart.アイテム);
         if (eqKeys.length + bpKeys.length === 0) return;
         var npcName = lootTarget;
         var ok = writeBackMvu(function(statData) {
             if (!statData) return;
             var mc = statData.キャラ = statData.キャラ || {};
-            mc.装備 = mc.装備 || {}; mc.道具 = mc.道具 || {};
+            mc.装備 = mc.装備 || {}; mc.アイテム = mc.アイテム || {};
             var rel = statData.関係リスト = statData.関係リスト || {};
             var npc = rel[npcName] = rel[npcName] || {};
-            npc.装備 = npc.装備 || {}; npc.道具 = npc.道具 || {};
+            npc.装備 = npc.装備 || {}; npc.アイテム = npc.アイテム || {};
             var lootedParts = []; // ★ 実際に取得が成功した明細, 配信待ち記録用
             // 装備: NPCからキャラクターへ複製(0で未装備), NPC側は削除
             eqKeys.forEach(function(key) {
@@ -3215,24 +3215,24 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 copy.状態 = 0;
                 mc.装備[key] = copy;
                 delete npc.装備[key];
-                lootedParts.push('装备「' + key + '」');
+                lootedParts.push("装備「" + key + '」');
             });
             // アイテム: 数量単位でNPCからキャラクターへ転送
             bpKeys.forEach(function(key) {
-                var b = npc.道具[key];
+                var b = npc.アイテム[key];
                 if (!b) return;
                 var have = safeNum(b.数量, 0);
-                var move = Math.min(lootCart.道具[key] || 1, have);
+                var move = Math.min(lootCart.アイテム[key] || 1, have);
                 if (move <= 0) return;
-                if (mc.道具[key]) {
-                    mc.道具[key].数量 = safeNum(mc.道具[key].数量, 0) + move;
+                if (mc.アイテム[key]) {
+                    mc.アイテム[key].数量 = safeNum(mc.アイテム[key].数量, 0) + move;
                 } else {
                     var copy2 = (_ && _.cloneDeep) ? _.cloneDeep(b) : JSON.parse(JSON.stringify(b));
                     copy2.数量 = move;
-                    mc.道具[key] = copy2;
+                    mc.アイテム[key] = copy2;
                 }
                 b.数量 = have - move;
-                if (b.数量 <= 0) delete npc.道具[key];
+                if (b.数量 <= 0) delete npc.アイテム[key];
                 lootedParts.push('アイテム「' + key + '」×' + move);
             });
             // ★ フロントでのNPCからの物資取得 → 配信待ち記録に登録(今回の書き戻しと同じタイミングで保存, 本文モデルの叙述後に自動クリア)
@@ -3242,7 +3242,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         });
         if (ok) {
             var cnt = eqKeys.length + bpKeys.length;
-            lootCart = { 装備: {}, 道具: {} };
+            lootCart = { 装備: {}, アイテム: {} };
             lootTarget = null;
             closeModal();
             samToast('success', '「'+npcName+'」から '+cnt+' 件の遺物を取得しました');
@@ -3667,7 +3667,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 + '    THP: 一時生命値/シールド、ダメージを受けた際に優先して減算、重複せず、戦闘離脱でゼロに戻る\n'
                 + '    EP: エネルギー値、スキル消費に使用\n'
                 + '    EP_MAX: エネルギー値の上限\n'
-                + '  衍生属性:\n'
+                + "  派生属性:\n"
                 + '    ATK: 物理攻撃\n'
                 + '    DEF: 物理防御\n'
                 + '    MATK: 術法攻撃\n'
@@ -3972,22 +3972,21 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
     /* ===== 15. 設定ダイアログ ===== */
     /* ===== 15a. MVU変数更新方式（追加API / 主AI追従） ===== */
-    var VARIABLE_API_MODE_KEY = 'samsara_variable_api_mode';
+    var VARIABLE_API_MODE_KEY = 'rinne_jp_variable_api_mode';
     var VARIABLE_API_WORLD_BOOK_RULES = {
-        "output_format (AI返信と同時更新・主API)": { '随主API': true, '额外API': false },
-        "[mvu_update]output_format (追加モデルで変数更新)": { '随主API': false, '额外API': true }
+        "output_format (AI返信と同時更新・主API)": { "主AI追従出力": true, "追加API": false },
+        "[mvu_update]output_format (追加モデルで変数更新)": { "主AI追従出力": false, "追加API": true }
     };
-    function normalizeVariableApiMode(mode) { return mode === '随主API' ? '随主API' : '额外API'; }
+    function normalizeVariableApiMode(mode) {
+return '主AI追従出力';
+}
     function variableApiStorage() {
         try { if (GS_PARENT && GS_PARENT.localStorage) return GS_PARENT.localStorage; } catch(e) {}
         try { return window.localStorage; } catch(e2) { return null; }
     }
     function getVariableApiMode() {
-        try {
-  var storage = variableApiStorage();
-  return normalizeVariableApiMode(storage ? storage.getItem(VARIABLE_API_MODE_KEY) : '额外API');
-        } catch(e) { return '额外API'; }
-    }
+saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
+}
     function saveVariableApiMode(mode) {
         try {
   var storage = variableApiStorage();
@@ -4016,8 +4015,8 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     }
     function variableApiPresetDesired(name, mode) {
         var text = String(name || '');
-        if (text.indexOf('变量额外API') >= 0) return mode === '额外API';
-        if (text.indexOf('变量主API') >= 0) return mode === '随主API';
+        if (text.indexOf('变量额外API') >= 0) return mode === "追加API";
+        if (text.indexOf('变量主API') >= 0) return mode === "主AI追従出力";
         return null;
     }
     async function applyVariableApiMode(mode) {
@@ -4259,28 +4258,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         return [];
     }
     /* モデル一覧を読み込む: /v1/models を連結し Authorization ヘッダー付きでリクエスト; 成功したら fetchedModels に書き込む */
-    async function apiFetchModels() {
-        var cfg = getApiConfig();
-        var url = (cfg.apiUrl || '').trim();
-        if (!url) throw new Error('先にカスタム API アドレスを入力してください');
-        var endpoint = url;
-        if (endpoint.endsWith('/')) endpoint = endpoint.slice(0, -1);
-        if (!endpoint.endsWith('/models')) {
-            endpoint += (endpoint.indexOf('/v') >= 0) ? '/models' : '/v1/models';
-        }
-        var headers = {};
-        if (cfg.apiKey && cfg.apiKey.trim()) headers.Authorization = 'Bearer ' + cfg.apiKey.trim();
-        var resp = await fetch(endpoint, { headers: headers });
-        if (!resp.ok) {
-            var errTxt = '';
-            try { errTxt = await resp.text(); } catch(_e){}
-            throw new Error('HTTP ' + resp.status + ': ' + resp.statusText + (errTxt ? (' / ' + errTxt.slice(0, 300)) : ''));
-        }
-        var body = await resp.json();
-        var models = ((body && body.data) || []).map(function(m){ return m.id || m.model || m.name || ''; }).filter(Boolean);
-        if (!models.length) throw new Error('API が返したモデル一覧が空です');
-        return models;
-    }
+    async function apiFetchModels(){throw new Error('外部モデル一覧の確認は無効です。モデル名を直接入力してください。');}
     function openSettings() {
         var cur = getTheme();
         var editOn = isEditMode();
@@ -4322,16 +4300,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             return '<button type="button" class="sam-varmode-btn '+(difficulty===mode?'active':'')+'" data-difficulty="'+mode+'" aria-pressed="'+(difficulty===mode?'true':'false')+'" style="text-align:center;padding:9px 4px;">'+mode+'</button>';
         }).join('') + '</div><div style="margin-top:8px;color:var(--sam-sub);font-size:11px;">以降に新規作成され好感度が負の非チームメイト NPCにのみ影響。各コンポーネントは選択した基準を補うだけで、すでにより高い品質のものは下げない；原始属性は引き続き独立して上昇し、困難/挑戦の体質は固定段階で補う。品質の上限は SSS、生命階級の上限は Ⅸ。</div>');
         var variableMode = getVariableApiMode();
-        var variableModeHtml = '<div class="sam-varmode-grid">'
-  + '<button type="button" class="sam-varmode-btn '+(variableMode==='额外API'?'active':'')+'" data-variable-api-mode="额外API">'
-    + '<div class="ttl">追加API出力 <span class="tag">推奨</span></div>'
-    + '<div class="desc">独立したモデルが変数を個別に更新し、本文はよりクリーン； MVU 拡張機能で追加モデルを設定する必要があります。</div></button>'
-  + '<button type="button" class="sam-varmode-btn '+(variableMode==='随主API'?'active':'')+'" data-variable-api-mode="随主API">'
-    + '<div class="ttl">主AI追従出力 <span class="tag">すぐに使える</span></div>'
-    + '<div class="desc">本文モデルが同じターンで変数更新も出力、追加モデルは不要；長文では形式エラーが起きやすくなります。</div></button>'
-  + '</div>'
-  + '<div class="sam-varmode-status" id="sam-varmode-status"></div>'
-  + '<div style="margin-top:5px;font-size:10px;line-height:1.5;color:var(--sam-sub);">この項目は MVU の世界書/プリセットを切り替えるだけです。下の「追加モデル設定」はショップ更新・血統融合で使用；世界進行が専用 API を有効にしていない場合もこのチャネルを再利用します。世界進行が専用 APIを有効にしている場合、二つのインターフェースは完全に分離されます。</div>';
+        var variableModeHtml = '<div class="sam-varmode-status" id="sam-varmode-status">主AI追従出力（固定）：本文と変数更新を同じ応答で処理します。</div>';
         html += secBlock('🧭 変数更新方式', variableModeHtml);
 
         /* ----- 🔌 API 設定ブロック( Zsdオンラインゲームフォーラム_ローカル内蔵版から移植) ----- */
@@ -4388,7 +4357,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
               + '<select class="sam-api-select" data-field="model">'+modelOpts+'</select></div>'
             // モデルを読み込む
             + '<div class="sam-api-row" style="margin-top:6px;">'
-              + '<button class="sam-api-btn" data-act="load-models">📡 モデル一覧を読み込む</button>'
+              + '<span>モデル名を直接入力してください。外部一覧確認は無効です。</span>'
               + '<button class="sam-api-btn" data-act="clear-models">クリア</button>'
               + '<span id="sam-api-models-status" style="margin-left:auto;align-self:center;">'+fetchedTag+'</span>'
             + '</div>'
@@ -4465,13 +4434,13 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         // MVU変数更新方式：開局ページと localStorageを共有し、世界書/現在のプリセットを即座に同期する
         function refreshVariableModeFields(message, state) {
   var mode = getVariableApiMode();
-  $('[data-variable-api-mode]', $apiModal).each(function() {
+  $('[data-variable-api-mode]', $apiModal).prop('disabled', true).hide().each(function() {
       $(this).toggleClass('active', $(this).attr('data-variable-api-mode') === mode);
   });
   var $st = $('#sam-varmode-status', $apiModal);
   if (!$st.length) return;
   $st.removeClass('ok err').addClass(state || '');
-  $st.text(message || (mode === '额外API' ? '現在：追加API出力' : '現在：主AI追従出力'));
+  $st.text(message || (mode === "追加API" ? '現在：追加API出力' : '現在：主AI追従出力'));
         }
         refreshVariableModeFields();
         $apiModal.off('click.samVariableMode').on('click.samVariableMode', '[data-variable-api-mode]', async function() {
@@ -4482,7 +4451,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
   $buttons.prop('disabled', false);
   if (result.ok) {
       refreshVariableModeFields('切り替え完了 · 世界書の変更 '+result.worldbookChanged+' 件 · プリセットの変更 '+result.presetChanged+' 件', 'ok');
-      samToast('success', '変数更新方式を切り替えました：' + (mode === '额外API' ? '追加API出力' : '主AI追従出力'));
+      samToast('success', '変数更新方式を切り替えました：' + (mode === "追加API" ? '追加API出力' : '主AI追従出力'));
   } else {
       refreshVariableModeFields(result.error || '切り替えに失敗', 'err');
       samToast('error', result.error || '変数更新方式の切り替えに失敗');
@@ -5047,9 +5016,9 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 var headExtra = delBtn + diffBadge;
                 // 状態行: editSelect/editInput はHTMLを返すので, fcRowを通してはいけない(二重エスケープで文字化けする)
                 var statusVal = safeStr(q.状態, '進行中');
-                statusVal = ({'进行中':'進行中','可交付':'提出可能','可结算':'決算可能','失败':'失敗'})[statusVal] || statusVal;
+                statusVal = ({"進行中":'進行中',"提出可能":'提出可能',"決算可能":'決算可能',"失敗":'失敗'})[statusVal] || statusVal;
                 if (statusVal === '提出可能' || statusVal === '決算可能') taskDoneCnt++;
-                else if (['失敗','失败'].includes(statusVal)) taskFailCnt++;
+                else if (['失敗',"失敗"].includes(statusVal)) taskFailCnt++;
                 var statusCell = editMode
                     ? editSelect(path+'.状態', ['進行中','提出可能','決算可能','失敗'], statusVal)
                     : esc(statusVal);
@@ -5159,8 +5128,8 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var pct = isMax ? 100 : Math.max(0, Math.min(100, Math.floor((score / TRIAL_SCORE_THRESHOLD) * 100)));
         var advBtnHtml = '';
         var st = sys || {};
-        var canTrial = (st.是否可试炼 === true);
-        var trialDone = (st.试炼已完成 === true);
+        var canTrial = (st.試練可能 === true);
+        var trialDone = (st.試練完了 === true);
         if (!isMax && trialDone) {
             advBtnHtml = '<button type="button" class="sam-tier-adv-btn start" data-tier-act="start" data-tier-next="'+esc(TIER_ROMAN[idx+1])+'">✦ 昇格開始</button>';
         } else if (!isMax && canTrial) {
@@ -5259,7 +5228,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         html += secBlock('💪 基礎属性', baseHtml);
         // 2.補正値(6項目)
         var modHtml = '<div class="sam-grid-2">';
-        ['力量修正','敏捷修正','体质修正','精神修正','魅力修正'].forEach(function(an) {
+        ["筋力修正",'敏捷修正',"体力修正",'精神修正','魅力修正'].forEach(function(an) {
             var v = safeNum(fa[an], 0);
             var path = 'キャラ.最終属性.'+an;
             modHtml += '<div class="sam-row"><span class="k">'+esc(displayLabel(an))+'</span><span class="v">'+(editMode && !isReadonlyPath(path) ? editInput(path, v, 'number') : '<span class="sam-edit-readonly">'+v+'</span>')+'</span></div>';
@@ -5290,9 +5259,9 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var wpn = fa.武器 || {};
         derHtml += '<div class="sam-wpn-divider">⚔ 武器攻撃</div>';
         derHtml += '<div class="sam-wpn-list">';
-        derHtml += '<div class="sam-wpn-row base"><div class="sam-wpn-name">非武装</div><div class="sam-wpn-stat atk">ATK(物理) <b>'+safeNum(wpn.无武装 && wpn.无武装.ATK, 0)+'</b></div><div class="sam-wpn-stat matk">MATK(魔法) <b>'+safeNum(wpn.无武装 && wpn.无武装.MATK, 0)+'</b></div></div>';
+        derHtml += '<div class="sam-wpn-row base"><div class="sam-wpn-name">非武装</div><div class="sam-wpn-stat atk">ATK(物理) <b>'+safeNum(wpn.非武装 && wpn.非武装.ATK, 0)+'</b></div><div class="sam-wpn-stat matk">MATK(魔法) <b>'+safeNum(wpn.非武装 && wpn.非武装.MATK, 0)+'</b></div></div>';
         Object.keys(wpn).forEach(function(name) {
-            if ((name === '无武装' || name === '無武装')) return;
+            if ((name === "非武装" || name === '無武装')) return;
             var w = wpn[name] || {};
             derHtml += '<div class="sam-wpn-row"><div class="sam-wpn-name">⚔ '+esc(name)+'</div><div class="sam-wpn-stat atk">ATK(物理) <b>'+safeNum(w.ATK, 0)+'</b></div><div class="sam-wpn-stat matk">MATK(魔法) <b>'+safeNum(w.MATK, 0)+'</b></div></div>';
         });
@@ -5313,7 +5282,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
        超過(現在>上限)は赤; 満杯(現在==上限かつ上限>0)は青; 特殊(タイプ8)は上限なしで 現在/X を表示 */
     function renderEquipSlotsBar(p) {
         var equips = p.装備 || {};
-        var items = p.道具 || {};
+        var items = p.アイテム || {};
         // 装備タイプと上限はモジュール定数 EQUIP_SLOTS由来; アイテム上限は ITEM_SLOT_CAP 由来
         // タイプ別の装着済み数を集計
         var counts = {};
@@ -5374,7 +5343,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
        戻り値 {counts:{タイプ:件数}, order:[タイプ...]} —— 装備タイプは EQUIP_SLOTS 順が先, アイテムタイプは初出順が後 */
     function holdCollectTypes(sd) {
         var p = sd.キャラ || {};
-        var equips = p.装備 || {}, items = p.道具 || {};
+        var equips = p.装備 || {}, items = p.アイテム || {};
         var statuses, useEquip, useItem;
         if (holdActiveTab === 'tactical')      { statuses = [1]; useEquip = true;  useItem = true;  }
         else if (holdActiveTab === 'equip')    { statuses = [0]; useEquip = true;  useItem = false; }
@@ -5430,7 +5399,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var p = sd.キャラ || {};
         var editMode = isEditMode();
         var equips = p.装備 || {};
-        var items = p.道具 || {};
+        var items = p.アイテム || {};
         // 辞書内で 状态 が statuses に一致する項目数を集計(サブTabバッジの件数用)
         function countByStatus(dict, statuses) {
             var n = 0;
@@ -5481,7 +5450,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var editMode = isEditMode();
         // タイプ絞り込み: holdTypeFilter が非空なら一致タイプの項目のみ残す(元辞書に対する浅いコピーで絞り込み)
         var equips = holdFilterByType(p.装備 || {}, true);
-        var items = holdFilterByType(p.道具 || {}, false);
+        var items = holdFilterByType(p.アイテム || {}, false);
         // [なし]プレースホルダを除去し, 実際のカードHTMLのみ残す(空プレースホルダがgridのセルとして扱われ空白に見えるのを防ぐ)
         function stripEmpty(s){ return (s||'').replace(/<div class="sam-empty">\[なし\]<\/div>/g,'').trim(); }
         function mergeList(htmlA, htmlB, emptyMsg){
@@ -5495,7 +5464,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             // 戦術パネル: 装着済みの装備(status=1) + 装着済みのアイテム(status=1)
             content = mergeList(
                 renderEquipFullList(equips, 'キャラ.装備', editMode, [1]),
-                renderItemFullList(items, 'キャラ.道具', editMode, [1]),
+                renderItemFullList(items, "キャラ.アイテム", editMode, [1]),
                 '戦術パネルに何も装備していません'
             );
         } else if (holdActiveTab === 'equip') {
@@ -5508,7 +5477,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         } else if (holdActiveTab === 'item') {
             // アイテムバッグ: status=0
             content = mergeList(
-                renderItemFullList(items, 'キャラ.道具', editMode, [0]),
+                renderItemFullList(items, "キャラ.アイテム", editMode, [0]),
                 '', 'アイテムバッグは空です'
             );
             hint = '戦闘中は AI に不可視';
@@ -5516,7 +5485,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             // 倉庫: 装備status=2 + アイテムstatus=2
             content = mergeList(
                 renderEquipFullList(equips, 'キャラ.装備', editMode, [2]),
-                renderItemFullList(items, 'キャラ.道具', editMode, [2]),
+                renderItemFullList(items, "キャラ.アイテム", editMode, [2]),
                 '倉庫には何も保管されていません'
             );
             hint = 'AI に不可視';
@@ -5787,7 +5756,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
        present-> 表示可能なものは全て表示+伸縮枠(性格/服装/好み/状態/装備/スキル等)
        absent -> 名前/種族/身分/階層/好感度/外見/背景 */
     /* AIにのみ見える身分キーワード: プレイヤーパネルには表示しない(データベース上でAIに見せるだけ) */
-    var HIDDEN_IDENTITY_KEYWORDS = ['守护者', '篡夺者', '织梦者', '残魂', '穿越者', '守護者', '簒奪者', '夢織り'];
+    var HIDDEN_IDENTITY_KEYWORDS = ["守護者", "簒奪者", "夢織り", "簒奪者", "輪廻者", '守護者', '簒奪者', '夢織り'];
     function isHiddenIdentity(s) {
         if (typeof s !== 'string') return false;
         for (var i = 0; i < HIDDEN_IDENTITY_KEYWORDS.length; i++) {
@@ -5935,7 +5904,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
     /* ===== 28. Tab: 経営(資産) —— 各資産名が折りたたみ欄となり, 展開すると全情報を表示(詳細ウィンドウは使わない) ===== */
     function renderAssetTab(sd) {
-        var assets = sd.资产 || {};
+        var assets = sd.資産 || {};
         var editMode = isEditMode();
         var keys = Object.keys(assets);
         if (keys.length === 0) return ''
@@ -5954,7 +5923,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             + '</div>';
         var html = '<div class="sam-asset-wrap">';
         keys.forEach(function(k) {
-            html += renderAssetBlock(k, assets[k] || {}, '资产.' + k, editMode);
+            html += renderAssetBlock(k, assets[k] || {}, "資産." + k, editMode);
         });
         html += '</div>';
         return html;
@@ -5965,7 +5934,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var out = [];
         source.forEach(function(raw) {
             var owner = canonicalPlayerIdentity(raw);
-            if (!owner || owner === '无主' || out.indexOf(owner) >= 0) return;
+            if (!owner || owner === "無主" || out.indexOf(owner) >= 0) return;
             out.push(owner);
         });
         return out;
@@ -6081,7 +6050,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 + '<div class="sam-asset-sec-t">⚡ エネルギー · ' + esc(safeStr(energy.タイプ, '-')) + '</div>'
                 + '<div class="sam-asset-energy">'
                 +   '<div class="sam-asset-bar"><div class="sam-asset-bar-fill energy" style="width:' + ePct + '%;"></div></div>'
-                +   '<span class="sam-asset-energy-num">' + (editMode ? editInput(path + '.エネルギー.現在', eCur, 'number') : eCur) + ' / ' + (editMode ? editInput(path + '.能源.上限', eMax, 'number') : eMax) + '</span>'
+                +   '<span class="sam-asset-energy-num">' + (editMode ? editInput(path + '.エネルギー.現在', eCur, 'number') : eCur) + ' / ' + (editMode ? editInput(path + ".エネルギー.上限", eMax, 'number') : eMax) + '</span>'
                 + '</div>';
             var eDesc = safeStr(energy.説明, '');
             if (eDesc || editMode) {
@@ -6105,7 +6074,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                     + '<div class="sam-asset-unit-head"><span class="sam-asset-unit-name">' + esc(uk) + '</span>'
                     +   '<span class="sam-asset-unit-num">' + (editMode ? editInput(upath + '.残量', rem, 'number') : rem) + ' / ' + (editMode ? editInput(upath + '.上限', cap, 'number') : cap) + '</span></div>'
                     + '<div class="sam-asset-bar"><div class="sam-asset-bar-fill" style="width:' + upct + '%;"></div></div>'
-                    + (Array.isArray(u.加成) && u.加成.length ? '<div class="sam-asset-unit-bonus">' + assetTagChips(u.加成) + '</div>' : '')
+                    + (Array.isArray(u.補正) && u.補正.length ? '<div class="sam-asset-unit-bonus">' + assetTagChips(u.補正) + '</div>' : '')
                     + '</div>';
             });
             body += '</div>';
@@ -6132,12 +6101,12 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                     +   (function() {
                             var cv = safeStr(s.産出);
                             // 生産が空または"无"の場合はこのフィールドと次回生産日を非表示(編集モードでは入力用に保持)
-                            if (!editMode && (!cv || cv === '无')) return '';
+                            if (!editMode && (!cv || cv === "なし")) return '';
                             return assetKvRow('生産', assetScalar(spath + '.産出', cv, 'text', editMode))
-                                + assetKvRow('次回生産日', assetScalar(spath + '.次回産出日', safeStr(s.次回産出日, '无'), 'text', editMode));
+                                + assetKvRow('次回生産日', assetScalar(spath + '.次回産出日', safeStr(s.次回産出日, "なし"), 'text', editMode));
                         })()
                     + '</div>'
-                    + (Array.isArray(s.加成) && s.加成.length ? '<div class="sam-asset-seq-bonus">' + assetTagChips(s.加成) + '</div>' : '')
+                    + (Array.isArray(s.補正) && s.補正.length ? '<div class="sam-asset-seq-bonus">' + assetTagChips(s.補正) + '</div>' : '')
                     + '</div>';
             });
             body += '</div>';
@@ -6347,7 +6316,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 var alien = alienRoster[name] || {};
                 var status = safeStr(alien.状態) === '死亡' ? '死亡' : '活動中';
                 var stateClass = status === '死亡' ? 'dead' : 'active';
-                var sourceText = alien.出典 ? ((alien.出典 === 'オリジナル' || alien.出典 === '原创') ? 'オリジナル' : '《' + alien.出典 + '》') : '';
+                var sourceText = alien.出典 ? ((alien.出典 === 'オリジナル' || alien.出典 === "オリジナル") ? 'オリジナル' : '《' + alien.出典 + '》') : '';
                 var meta = [sourceText, alien.陣営, alien.職業, alien.階層 ? alien.階層 + '級' : ''].filter(Boolean).join(' · ');
                 alienHtml += '<div class="sam-alien-item"><div class="sam-alien-main"><div class="sam-alien-name">'+esc(name)+'</div>'
                     + (meta ? '<div class="sam-alien-meta">'+esc(meta)+'</div>' : '')
@@ -6420,7 +6389,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             var path = '世界.勢力.'+k;
             var q = f.実力 ? parseRarity(f.実力) : '';
             var rows = '';
-            rows += fcRow('声望', safeNum(f.声望,0), path+'.声望', editMode, 'number');
+            rows += fcRow("名声", safeNum(f.名声,0), path+".名声", editMode, 'number');
             var body = fcRow('説明', f.説明, path+'.説明', editMode);
             forceHtml += fullCard(q, k, rows, body, worldDelBtn(path));
         });
@@ -6512,7 +6481,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             + '</div>';
         // ===== マーケットエリア: stat_data.商城[現在のキャラクターの商庫] から永続化された商品データを読み込む =====
         // キャラクターごとに固有の商品ライブラリ, キャラクター切替時は現在の表示をクリアしてそのキャラクターの在庫を読み込む; 在庫は更新後にAIが書き込み, MVU に永続保存される
-        var rawMarket = (sd.商城 && sd.商城) ? sd.商城 : null;
+        var rawMarket = (sd.ショップ && sd.ショップ) ? sd.ショップ : null;
         var actorLib = shopGetActorLibRaw(rawMarket, shopCurrentActor);
         if (actorLib) {
             shopMarketData = shopNormalizeMarketData(actorLib);
@@ -6564,14 +6533,14 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         return (shopMarketData[cat] || []).length > 0;
     }
     function shopPickFirstAvailableTab() {
-        var order = ['装备区','道具区','技能区','血统区','形态区','升级区'];
+        var order = ['装备区','道具区','技能区',"血統欄","形態欄","強化欄"];
         for (var i = 0; i < order.length; i++) { if (shopTabHasData(order[i])) return order[i]; }
         return '装备区';
     }
     // ショップの全エリアに少なくともひとつの商品があるか検出(カートバーを描画するかの判断に使用)
     function shopMarketHasAnyData() {
         if (!shopMarketData) return false;
-        var cats = ['装备区','道具区','技能区','血统区','形态区','升级区'];
+        var cats = ['装备区','道具区','技能区',"血統欄","形態欄","強化欄"];
         for (var i = 0; i < cats.length; i++) { if (shopTabHasData(cats[i])) return true; }
         return false;
     }
@@ -6736,7 +6705,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         // 固定順: 五維 → 力量修正など(修正) → DEF/MDEF/AP → 武器 → 軽減率 → 判定
         var ATTR_ORDER = [
             '筋力','敏捷','体力','精神','魅力',
-            '力量修正','敏捷修正','体质修正','精神修正','魅力修正',
+            "筋力修正",'敏捷修正',"体力修正",'精神修正','魅力修正',
             'DEF','MDEF','AP',
             '物理軽減率','魔法軽減率',
             '先制DC','防御DC'
@@ -6762,7 +6731,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 html += '<div class="sam-nd-wpn">';
                 wpnKeys.forEach(function(name) {
                     var w = wpn[name] || {};
-                    var isBase = (name === '无武装');
+                    var isBase = (name === "非武装");
                     html += '<div class="sam-nd-wpn-row'+(isBase?' base':'')+'"><div class="nm">'+(isBase?'非武装':'⚔ '+esc(name))+'</div><div class="atk">ATK (物理) <b>'+safeNum(w.ATK,0)+'</b></div><div class="matk">MATK (魔法) <b>'+safeNum(w.MATK,0)+'</b></div></div>';
                 });
                 html += '</div>';
@@ -6787,7 +6756,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         }
         if (profile) html += '<details class="sam-nd-sub" '+(editMode?'open':'')+'><summary>👤 人物プロフィール</summary><div class="sam-nd-sub-body">'+profile+'</div></details>';
         // ⑨ サブシステム (装備/スキル/血統/形態ライブラリ/状態, 空でないときのみ折りたたみ表示)
-        var subs = [{k:'状態',d:n.状態},{k:'血統',d:n.血統},{k:'形態庫',d:n.形態庫},{k:'技能',d:n.技能},{k:'装備',d:n.装備},{k:'道具',d:n.道具}];
+        var subs = [{k:'状態',d:n.状態},{k:'血統',d:n.血統},{k:'形態庫',d:n.形態庫},{k:'技能',d:n.技能},{k:'装備',d:n.装備},{k:"アイテム",d:n.アイテム}];
         subs.forEach(function(s) {
             var d = s.d || {};
             var ks = Object.keys(d);
@@ -6831,11 +6800,11 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         return false;
     }
     /* 列挙の翻訳テーブル(装備タイプ/装備状態/スキルタイプ) */
-    var EQUIP_TYPE_MAP = ['武器','手袋','頭部','胸部','脚部','靴','マント','アクセサリー','世界遺物'];
+    var EQUIP_TYPE_MAP = ['武器','手袋','頭部',"胴",'脚部','靴','マント','アクセサリー','世界遺物'];
     var EQUIP_STATUS_MAP = ['未装備','装備済み','倉庫'];
     var SKILL_TYPE_MAP = ['アクティブ','パッシブ','特殊'];
     // 親コンテナのキー -> 列挙フィールドの判定
-    var ENUM_PARENTS = { 装備: { タイプ: EQUIP_TYPE_MAP, 状態: EQUIP_STATUS_MAP }, 道具: { 状態: EQUIP_STATUS_MAP }, 技能: { タイプ: SKILL_TYPE_MAP }, 形态: { 状態: EQUIP_STATUS_MAP } };
+    var ENUM_PARENTS = { 装備: { タイプ: EQUIP_TYPE_MAP, 状態: EQUIP_STATUS_MAP }, アイテム: { 状態: EQUIP_STATUS_MAP }, 技能: { タイプ: SKILL_TYPE_MAP }, 形態: { 状態: EQUIP_STATUS_MAP } };
     function translateEnum(field, value, ancestors) {
         if (!ancestors || ancestors.length < 2) return null;
         // ancestors: [..., コンテナキー(装备/技能/道具/形态), エントリ名, field]
@@ -6859,11 +6828,11 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         if (typeof c !== 'string') return false;
         var s = String(c).trim();
         if (s === '') return true;
-        if (s === '无' || s === '无消耗' || s === '消耗无' || s === '无消耗。' || s === '无。') return true;
+        if (s === "なし" || s === '无消耗' || s === '消耗无' || s === '无消耗。' || s === "なし。") return true;
         // 純粋な数値 0 / "0"、"0.0" の形
         if (/^[0-9.]+$/.test(s)) return parseFloat(s) === 0 || isNaN(parseFloat(s));
         // "0MP"、"0 EP"、"0EP"、"0 回合"、"0点"… の形は消費量が0
-        if (/^0(\s|点)?(MP|EP|HP|SP|回合|点|怒气|能量|p|P)?$/.test(s)) return true;
+        if (/^0(\s|点)?(MP|EP|HP|SP|(?:回合|ターン)|点|怒气|(?:能量|エネルギー)|p|P)?$/.test(s)) return true;
         return false;
     }
     /* ★ 汎用の再帰詳細レンダリング(世界エントリ/NPCサブシステムなど): editMode+basePath のときスカラー/タグ/数値グリッドをその場で編集
@@ -7236,7 +7205,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var s = String(k == null ? '' : k);
         var exact = LEGACY_EFFECT_KEY_RENAMES[s];
         if (exact) return exact;
-        var m = /^(事迹)(\d+)$/.exec(s);
+        var m = /^((?:事迹|事跡))(\d+)$/.exec(s);
         return m ? '事跡' + m[2] : s;
     }
     function formatEffects(effects, path, editMode) {
@@ -7508,14 +7477,14 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         if (!raw) return out;
         if (typeof raw === 'object' && !Array.isArray(raw)) {
             var keyMap = {
-                hp_bonus:           ['hp_bonus','HP上限','HP加成','生命上限','HP','hp'],
-                mp_bonus:           ['mp_bonus','MP上限','MP加成','法力上限','MP','mp'],
-                atk_bonus:          ['atk_bonus','ATK加成','ATK','攻击','力量加成'],
-                def_bonus:          ['def_bonus','DEF加成','DEF','防御','防御加成'],
-                spell_atk_bonus:    ['spell_atk_bonus','法术ATK加成','法术ATK','法攻','法术攻击'],
-                spell_power_bonus:  ['spell_power_bonus','法术强度加成','法术强度','法强'],
-                mdef_bonus:          ['mdef_bonus','MDEF加成','魔法防御加成','MDEF','魔防'],
-                saving_throw_bonus: ['saving_throw_bonus','豁免','豁免加成']
+                hp_bonus:           ['hp_bonus','HP上限',"HP補正",'生命上限','HP','hp'],
+                mp_bonus:           ['mp_bonus','MP上限',"MP補正",'法力上限','MP','mp'],
+                atk_bonus:          ['atk_bonus',"ATK補正",'ATK','攻击','力量加成'],
+                def_bonus:          ['def_bonus',"DEF補正",'DEF','防御','防御加成'],
+                spell_atk_bonus:    ['spell_atk_bonus',"魔法ATK補正","魔法ATK",'法攻','法术攻击'],
+                spell_power_bonus:  ['spell_power_bonus',"魔法威力補正","魔法威力",'法强'],
+                mdef_bonus:          ['mdef_bonus',"MDEF補正",'魔法防御加成','MDEF','魔防'],
+                saving_throw_bonus: ['saving_throw_bonus','豁免',"抵抗補正"]
             };
             for (var std in keyMap) {
                 if (!keyMap.hasOwnProperty(std)) continue;
@@ -7526,14 +7495,14 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         }
         if (typeof raw === 'string') {
             var attrMap = {
-                hp_bonus:           /HP上限|HP加成|hp_bonus|生命上限|HP/i,
-                mp_bonus:           /MP上限|MP加成|mp_bonus|法力上限|MP/i,
-                atk_bonus:          /atk_bonus|攻击加成|ATK加成|ATK(?!加成)/i,
-                def_bonus:          /def_bonus|防御加成|DEF加成|DEF/i,
-                spell_atk_bonus:    /spell_atk_bonus|法术ATK加成|法术ATK|法攻/i,
-                spell_power_bonus:  /spell_power_bonus|法术强度加成|法术强度|法强/i,
-                mdef_bonus:          /mdef_bonus|MDEF加成|魔法防御加成|MDEF|魔防/i,
-                saving_throw_bonus: /saving_throw_bonus|豁免加成|豁免/i
+                hp_bonus:           /HP上限|HP(?:加成|補正)|hp_bonus|生命上限|HP/i,
+                mp_bonus:           /MP上限|MP(?:加成|補正)|mp_bonus|法力上限|MP/i,
+                atk_bonus:          /atk_bonus|攻击加成|ATK(?:加成|補正)|ATK(?!(?:加成|補正))/i,
+                def_bonus:          /def_bonus|防御加成|DEF(?:加成|補正)|DEF/i,
+                spell_atk_bonus:    /spell_atk_bonus|法术ATK(?:加成|補正)|法术ATK|法攻/i,
+                spell_power_bonus:  /spell_power_bonus|(?:法术强度加成|魔法威力補正)|(?:法术强度|魔法威力)|法强/i,
+                mdef_bonus:          /mdef_bonus|MDEF(?:加成|補正)|魔法防御加成|MDEF|魔防/i,
+                saving_throw_bonus: /saving_throw_bonus|(?:豁免加成|抵抗補正)|豁免/i
             };
             for (var s2 in attrMap) {
                 if (!attrMap.hasOwnProperty(s2)) continue;
@@ -7552,7 +7521,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var category = shopSkillTypeLabel(catNum);
         var item = {
             name:        shopPick(raw, 'name','名称','技能名','技能名称') || '名称未設定',
-            level:       shopPickNum(raw, 'level','等级','数值等级'),
+            level:       shopPickNum(raw, 'level',"レベル",'数值等级'),
             rating:      shopPick(raw, 'rating','品级','品質','评级'),
             price:       parseInt(String(shopPick(raw, 'price','価格','售价','价钱') || '0').replace(/[^0-9]/g,''), 10) || 0,
             category_num: catNum,
@@ -7565,11 +7534,11 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         return item;
     }
     function shopNormalizeBloodline(raw) {
-        var rawAttrs = shopPick(raw, '原始属性','基础属性','属性');  // 新構造: オブジェクト {力量:4, 体质:4}
+        var rawAttrs = shopPick(raw, '原始属性',"基礎属性",'属性');  // 新構造: オブジェクト {力量:4, 体质:4}
         var rawEffects = shopPick(raw, '効果','特殊效果','特效');    // 新構造: オブジェクト {被动:'毎ターン5%HP回復'}
         var item = {
             name:       shopPick(raw, 'name','名称','血统名','血统名称') || '名称未設定',
-            level:      shopPickNum(raw, 'level','等级','数值等级'),
+            level:      shopPickNum(raw, 'level',"レベル",'数值等级'),
             rating:     shopPick(raw, 'rating','品级','品質','评级'),
             price:      parseInt(String(shopPick(raw, 'price','価格','售价','价钱') || '0').replace(/[^0-9]/g,''), 10) || 0,
             raw_attrs:  rawAttrs,
@@ -7592,7 +7561,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             タグ:    shopEnsureSourceTag(shopPick(raw, 'tags','タグ')),
             効果:    shopPick(raw, '効果','effect','技能效果') || {},
             説明:    shopPick(raw, 'description','説明','技能描述','説明') || '',
-            消費:    shopPick(raw, '消費','mp_cost','MP消耗','法力消耗','mp','MP') || '无'
+            消費:    shopPick(raw, '消費','mp_cost','MP消耗','法力消耗','mp','MP') || "なし"
         };
     }
     function shopNormalizeForm(raw) {
@@ -7613,8 +7582,8 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             price:         parseInt(String(shopPick(raw, 'price','価格','售价','价钱') || '0').replace(/[^0-9]/g,''), 10) || 0,
             tier:          String(tier),
             cost:          shopPick(raw, '消費','mp_cost','MP消耗','法力消耗','mp','MP') || '',
-            status:        shopPick(raw, 'status','状態') || '完好',
-            raw_attrs:     shopPick(raw, '原始属性','基础属性','属性') || {},
+            status:        shopPick(raw, 'status','状態') || "正常",
+            raw_attrs:     shopPick(raw, '原始属性',"基礎属性",'属性') || {},
             effects:       shopPick(raw, '効果','特效','特殊效果') || {},
             skills:        skills,
             description:   shopPick(raw, 'description','説明','説明') || '',
@@ -7628,11 +7597,11 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             : (typeof rawType === 'string' && /^\d+$/.test(String(rawType))) ? parseInt(String(rawType), 10) : 0;
         var rawCat = shopPick(raw, '所属カテゴリ','category') || '';
         // 形態アップグレード: 层级(ローマ数字) が 品质 文字に取って代わる, カード右上と保存に使用
-        var formTier = (rawCat === '形态') ? tierRomanOf(shopPick(raw, '階層','level','tier','rating','品質','品级','评级') || 'Ⅰ') : '';
+        var formTier = (rawCat === "形態") ? tierRomanOf(shopPick(raw, '階層','level','tier','rating','品質','品级','评级') || 'Ⅰ') : '';
         // 形態アップグレード: 技能 子配列 + 状态 フィールドを正規化( shopBuildUpgradeCard のスキルブロック描画, shopToFormVar の保存に供する)
-        var formSkills = [], formStatus = '完好';
-        if (rawCat === '形态') {
-            formStatus = shopPick(raw, 'status','状態') || '完好';
+        var formSkills = [], formStatus = "正常";
+        if (rawCat === "形態") {
+            formStatus = shopPick(raw, 'status','状態') || "正常";
             var rawSkills = shopPick(raw, '技能','skills');
             if (Array.isArray(rawSkills)) {
                 for (var si = 0; si < rawSkills.length; si++) {
@@ -7642,7 +7611,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         }
         return {
             name:           shopPick(raw, 'name','名称') || '名称未設定',
-            level:          shopPickNum(raw, 'level','等级','数值等级'),
+            level:          shopPickNum(raw, 'level',"レベル",'数值等级'),
             rating:         shopPick(raw, 'rating','品级','品質','评级'),
             tier:           formTier,
             category:       rawCat,
@@ -7652,7 +7621,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             slot_type:      shopEquipTypeLabel(typeNum),
             slot_type_num:  typeNum,
             cost:           shopPick(raw, '消費','mp_cost','MP消耗','法力消耗','mp','MP') || '',
-            raw_attrs:      shopPick(raw, '原始属性','基础属性','属性'),
+            raw_attrs:      shopPick(raw, '原始属性',"基礎属性",'属性'),
             effects:        shopPick(raw, '効果','特效','特殊效果'),
             description:    shopPick(raw, 'description','説明','説明'),
             '説明':         shopPick(raw, 'description','説明','説明'),
@@ -7670,12 +7639,12 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var slotType = shopEquipTypeLabel(typeNum);
         var item = {
             name:      shopPick(raw, 'name','名称','装备名','装备名称') || '名称未設定',
-            level:     shopPickNum(raw, 'level','等级','数值等级'),
+            level:     shopPickNum(raw, 'level',"レベル",'数值等级'),
             rating:    shopPick(raw, 'rating','品级','品質','评级'),
             price:     parseInt(String(shopPick(raw, 'price','価格','售价','价钱') || '0').replace(/[^0-9]/g,''), 10) || 0,
             slot_type: slotType,
             slot_type_num: typeNum,
-            raw_attrs: shopPick(raw, '原始属性','基础属性','属性'),  // 新構造: オブジェクト {力量:1, 体质:2}
+            raw_attrs: shopPick(raw, '原始属性',"基礎属性",'属性'),  // 新構造: オブジェクト {力量:1, 体质:2}
             effects:   shopPick(raw, '効果','特效','special_effect','特殊效果','特性'),  // 新構造: オブジェクト {被动:'物理防御+3'}
             cost:      shopPick(raw, '消費','mp_cost','MP消耗','法力消耗','mp','MP') || '',
             '説明':    shopPick(raw, '説明','description','説明'),
@@ -7686,10 +7655,10 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     function shopNormalizeConsume(raw) {
         return {
             name:            shopPick(raw, 'name','名称','道具名','物品名') || '名称未設定',
-            level:           shopPickNum(raw, 'level','等级','数值等级'),
+            level:           shopPickNum(raw, 'level',"レベル",'数值等级'),
             rating:          shopPick(raw, 'rating','品级','品質','评级'),
             price:           parseInt(String(shopPick(raw, 'price','価格','售价','价钱') || '0').replace(/[^0-9]/g,''), 10) || 0,
-            consumable_type: shopPick(raw, 'consumable_type','タイプ','道具类型','分类') || '道具',
+            consumable_type: shopPick(raw, 'consumable_type','タイプ','道具类型',"分類") || "アイテム",
             charges:         shopPickNum(raw, 'charges','数量','次数','使用次数'),
             effects:         shopPick(raw, '効果','usage','使用效果'),  // 新構造: オブジェクト {使用:'恢复2d4+2HP'}
             description:     shopPick(raw, 'description','説明','説明'),
@@ -7700,7 +7669,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     // 新構造: 商城.装備リスト/技能列表/血统列表/道具列表 はいずれもフラット配列
     // 装備/スキル/アイテムは「类型」ごとに子オブジェクトへグループ化し, 左navのタイプ切替に供する; 血統は純粋な配列
     function shopNormalizeMarketData(raw) {
-        var out = { 装备区:{}, 道具区:{}, 技能区:{}, 血统区:[], 升级区:[], 形态区:[] };
+        var out = { 装备区:{}, 道具区:{}, 技能区:{}, 血統欄:[], 強化欄:[], 形態欄:[] };
         if (!raw || typeof raw !== 'object') return out;
         // 装备列表(フラット配列) → 类型(数値0-8)ごとに {スロットlabel: [...]} へグループ化
         var equips = raw['装備リスト'];
@@ -7730,7 +7699,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             for (var ci = 0; ci < consumables.length; ci++) {
                 if (!consumables[ci] || typeof consumables[ci] !== 'object') continue;
                 var c = shopNormalizeConsume(consumables[ci]);
-                var ct = c.consumable_type || '道具';
+                var ct = c.consumable_type || "アイテム";
                 if (!out.道具区[ct]) out.道具区[ct] = [];
                 out.道具区[ct].push(c);
             }
@@ -7739,21 +7708,21 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         var bloods = raw['血統リスト'];
         if (Array.isArray(bloods)) {
             for (var bi = 0; bi < bloods.length; bi++) {
-                if (bloods[bi] && typeof bloods[bi] === 'object') out.血统区.push(shopNormalizeBloodline(bloods[bi]));
+                if (bloods[bi] && typeof bloods[bi] === 'object') out.血統欄.push(shopNormalizeBloodline(bloods[bi]));
             }
         }
         // 升级列表(フラット配列, 子グループ無し)
-        var upgrades = raw['升級リスト'];
+        var upgrades = raw["強化リスト"];
         if (Array.isArray(upgrades)) {
             for (var ui = 0; ui < upgrades.length; ui++) {
-                if (upgrades[ui] && typeof upgrades[ui] === 'object') out.升级区.push(shopNormalizeUpgrade(upgrades[ui]));
+                if (upgrades[ui] && typeof upgrades[ui] === 'object') out.強化欄.push(shopNormalizeUpgrade(upgrades[ui]));
             }
         }
         // 形态列表(フラット配列, 子グループ無し)
-        var forms = raw['形态列表'];
+        var forms = raw["形態リスト"];
         if (Array.isArray(forms)) {
             for (var fi = 0; fi < forms.length; fi++) {
-                if (forms[fi] && typeof forms[fi] === 'object') out.形态区.push(shopNormalizeForm(forms[fi]));
+                if (forms[fi] && typeof forms[fi] === 'object') out.形態欄.push(shopNormalizeForm(forms[fi]));
             }
         }
         return out;
@@ -7768,7 +7737,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     // 正規化商品 → キャラクター側変数へ変換(スキル: 类型は数値0-2を出力しskill_itemに一致)
     function shopToSkillVar(item) {
         var out = {
-            等级: item.level,
+            レベル: item.level,
             品質: item.rating,
             タイプ: item.category_num != null ? item.category_num : 0,
             消費: item.cost || '',
@@ -7781,7 +7750,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     // 正規化商品 → キャラクター側変数へ変換(血統: 原始属性/效果はいずれもオブジェクト)
     function shopToBloodlineVar(item) {
         var out = {
-            等级: item.level,
+            レベル: item.level,
             品質: item.rating,
             原始属性: item.raw_attrs || {},
             効果: item.effects || {},
@@ -7808,7 +7777,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     function shopToConsumeVar(item, qty) {
         var out = {
             品質: item.rating,
-            タイプ: item.consumable_type || '道具',
+            タイプ: item.consumable_type || "アイテム",
             数量: qty,
             タグ: (item.tags && item.tags.length) ? item.tags : [],
             効果: item.effects || {},
@@ -7832,13 +7801,13 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 タグ: (sk.タグ && sk.タグ.length) ? sk.タグ : [],
                 効果: sk.効果 || {},
                 説明: sk.説明 || '',
-                消費: sk.消費 || '无'
+                消費: sk.消費 || "なし"
             };
         }
         return {
             階層:     (item.tier != null && item.tier !== '') ? tierRomanOf(item.tier) : '',
             消費:     item.cost || '',
-            状態:     item.status || '完好',
+            状態:     item.status || "正常",
             タグ:     (item.tags && item.tags.length) ? item.tags : [],
             原始属性: item.raw_attrs || {},
             効果:     item.effects || {},
@@ -7849,21 +7818,21 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     // 派生属性を再計算(体力/精神 + 血統パッシブ + 装備済みDEF/MDEF)
     function shopRecalcDerived(character) {
         if (!character) return;
-        var base = character.原始属性 || character.基础属性 || {};
-        var old = character.衍生属性 || {};
+        var base = character.原始属性 || character.基礎属性 || {};
+        var old = character.派生属性 || {};
         var oldHpMax = Math.max(Number(old.HP上限 || old.HP || 1), 1);
         var oldMpMax = Math.max(Number(old.MP上限 || old.MP || 1), 1);
         var hpRatio = Math.min(1, Math.max(0, Number(old.HP || 0) / oldHpMax));
         var mpRatio = Math.min(1, Math.max(0, Number(old.MP || 0) / oldMpMax));
-        var bonus = { HP加成:0, MP加成:0, ATK加成:0, DEF加成:0, 法术ATK加成:0, 法术强度加成:0, MDEF加成:0, 豁免加成:0 };
+        var bonus = { HP補正:0, MP補正:0, ATK補正:0, DEF補正:0, 魔法ATK補正:0, 魔法威力補正:0, MDEF補正:0, 抵抗補正:0 };
         var bloods = character.血統 || {};
         for (var bn in bloods) {
             if (!bloods.hasOwnProperty(bn)) continue;
-            var ps = bloods[bn] ? bloods[bn].被动属性 : null;
+            var ps = bloods[bn] ? bloods[bn].パッシブ属性 : null;
             if (!ps) continue;
             for (var bk in bonus) {
                 if (!bonus.hasOwnProperty(bk)) continue;
-                var val = (bk === '法术强度加成') ? shopParsePercent(ps[bk]) : Number(ps[bk] || 0);
+                var val = (bk === "魔法威力補正") ? shopParsePercent(ps[bk]) : Number(ps[bk] || 0);
                 bonus[bk] += Number.isFinite(val) ? val : 0;
             }
         }
@@ -7872,25 +7841,25 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         for (var en in eqs) {
             if (!eqs.hasOwnProperty(en)) continue;
             var eq = eqs[en];
-            if (!eq || eq.状態 !== '已装备') continue;
+            if (!eq || eq.状態 !== "装備済み") continue;
             equipDef  += Number(eq.DEF || 0);
             equipMdef += Number(eq.MDEF || 0);
         }
-        var hpMax = Math.max(1, Number(base.体力 || 0) * 5 + bonus.HP加成);
-        var mpMax = Math.max(0, Number(base.精神 || 0) * 5 + bonus.MP加成);
+        var hpMax = Math.max(1, Number(base.体力 || 0) * 5 + bonus.HP補正);
+        var mpMax = Math.max(0, Number(base.精神 || 0) * 5 + bonus.MP補正);
         var derived = {};
         for (var ok in old) { if (old.hasOwnProperty(ok)) derived[ok] = old[ok]; }
         derived.HP上限 = hpMax;
         derived.HP = Math.max(1, Math.min(hpMax, Math.round(hpMax * hpRatio)));
         derived.MP上限 = mpMax;
         derived.MP = Math.max(0, Math.min(mpMax, Math.round(mpMax * mpRatio)));
-        derived.ATK = Math.floor(Number(base.筋力 || 0) / 5) + bonus.ATK加成;
-        derived.DEF = equipDef + bonus.DEF加成;
-        derived.MDEF = equipMdef + bonus.MDEF加成;
-        derived.法术ATK = Math.floor(Number(base.智力 || 0) / 5) + bonus.法术ATK加成;
-        derived.法术强度 = shopParsePercent(bonus.法术强度加成) / 100;
-        if (bonus.豁免加成) derived.豁免加成 = bonus.豁免加成;
-        character.衍生属性 = derived;
+        derived.ATK = Math.floor(Number(base.筋力 || 0) / 5) + bonus.ATK補正;
+        derived.DEF = equipDef + bonus.DEF補正;
+        derived.MDEF = equipMdef + bonus.MDEF補正;
+        derived.魔法ATK = Math.floor(Number(base.智力 || 0) / 5) + bonus.魔法ATK補正;
+        derived.魔法威力 = shopParsePercent(bonus.魔法威力補正) / 100;
+        if (bonus.抵抗補正) derived.抵抗補正 = bonus.抵抗補正;
+        character.派生属性 = derived;
     }
     // ---- ショップ状態(モジュール級, チャット切替/再描画時も持続) ----
     var shopMarketData = null;     // 正規化後の市場データ(4区)
@@ -7942,7 +7911,7 @@ var SHOP_PERMISSION_QUALITY_ORDER = ['F','E','D','C','B','A','S','SS','SSS'];
 var SHOP_PERMISSION_TIER_ORDER = ['Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ','Ⅶ','Ⅷ','Ⅸ'];
 var SHOP_CREDENTIAL_SPEND_MIN_RANK = 3; // C級から越階購入/アップグレードの証憑消費を実行
 function shopPermissionRank(value) {
-    var raw = String(value == null ? '' : value).trim().toUpperCase().replace(/\s+/g, '').replace(/级$/, '');
+    var raw = String(value == null ? '' : value).trim().toUpperCase().replace(/\s+/g, '').replace(/(?:级|級)$/, '');
     var qualityIndex = SHOP_PERMISSION_QUALITY_ORDER.indexOf(raw);
     if (qualityIndex >= 0) return qualityIndex;
     var tierIndex = SHOP_PERMISSION_TIER_ORDER.indexOf(raw);
@@ -8100,7 +8069,7 @@ function shopCredentialRefund(credentials, requirements) {
         if (actorName === SHOP_ACTOR_REINCARNATOR) {
             // 旧データ互換: トップレベルに 血统列表/技能列表... があれば 角色 の商庫として扱う
             if (Array.isArray(rawMarket.血統リスト) || Array.isArray(rawMarket.技能リスト)
-                || Array.isArray(rawMarket.装備リスト) || Array.isArray(rawMarket.道具リスト) || Array.isArray(rawMarket.升級リスト) || Array.isArray(rawMarket.形态列表)) {
+                || Array.isArray(rawMarket.装備リスト) || Array.isArray(rawMarket.道具リスト) || Array.isArray(rawMarket.強化リスト) || Array.isArray(rawMarket.形態リスト)) {
                 return rawMarket;
             }
         }
@@ -8171,9 +8140,9 @@ function shopCredentialRefund(credentials, requirements) {
             if (!permission.allowed) { samToast('warning', shopPermissionMessage(permission, item)); return; }
             // ★ 血統区の単一選択: 新しい血統を選ぶ前に, カート内の既存の他の血統エントリを除去する(複数血統の混入を回避),
             //   入口で選択される血統を必ず 1 件にし, 後続の shopHandleExec で追加の収束を不要にする
-            if (cat === '血统区') {
+            if (cat === "血統欄") {
                 for (var j = shopCart.length - 1; j >= 0; j--) {
-                    if (shopCart[j]._cat === '血统区') shopCart.splice(j, 1);
+                    if (shopCart[j]._cat === "血統欄") shopCart.splice(j, 1);
                 }
             }
             var copy = {};
@@ -8252,7 +8221,7 @@ function shopCredentialRefund(credentials, requirements) {
         if (Number.isFinite(n)) return n > 0 ? '+'+n : String(n);
         return String(v);
     }
-    var SHOP_STAT_LABELS = { hp_bonus:'HP', mp_bonus:'MP', atk_bonus:'ATK', def_bonus:'DEF', spell_atk_bonus:'法术ATK', spell_power_bonus:'法术强度', mdef_bonus:'MDEF', saving_throw_bonus:'豁免' };
+    var SHOP_STAT_LABELS = { hp_bonus:'HP', mp_bonus:'MP', atk_bonus:'ATK', def_bonus:'DEF', spell_atk_bonus:"魔法ATK", spell_power_bonus:"魔法威力", mdef_bonus:'MDEF', saving_throw_bonus:'豁免' };
     function shopStatChips(stats) {
         var html = '';
         for (var key in SHOP_STAT_LABELS) {
@@ -8272,8 +8241,8 @@ function shopCredentialRefund(credentials, requirements) {
         return html;
     }
     function shopSpecialSummary(benefits, drawbacks) {
-        var bt = (benefits && benefits.length) ? benefits.join('；') : '无';
-        var dt = (drawbacks && drawbacks.length) ? drawbacks.join('；') : '无';
+        var bt = (benefits && benefits.length) ? benefits.join('；') : "なし";
+        var dt = (drawbacks && drawbacks.length) ? drawbacks.join('；') : "なし";
         return 'バフ：'+bt+'；副作用：'+dt;
     }
     function shopDetail(label, value) {
@@ -8350,7 +8319,7 @@ function shopCredentialRefund(credentials, requirements) {
         // 形態アップグレード: 右上に 层级(ローマ数字) を表示し 品質文字 を代替; スキル子リストを描画(形態商品カードと一致)
         var headTier = null;
         var formExtra = '';
-        if (item.category === '形态' && item.tier) {
+        if (item.category === "形態" && item.tier) {
             headTier = item.tier;
             if (Array.isArray(item.skills) && item.skills.length) formExtra = shopBuildFormSkillsBlock(item.skills);
         }
@@ -8366,7 +8335,7 @@ function shopCredentialRefund(credentials, requirements) {
             var fields = '';
             if (sk.品質) fields += shopDetail('品質', sk.品質);
             fields += shopDetail('タイプ', shopSkillTypeLabel(sk.タイプ != null ? sk.タイプ : 0));
-            if (sk.消費 && sk.消費 !== '无') fields += shopDetail('消費', sk.消費);
+            if (sk.消費 && sk.消費 !== "なし") fields += shopDetail('消費', sk.消費);
             var skTags = (sk.タグ && sk.タグ.length) ? sk.タグ.join('、') : '';
             if (skTags) fields += shopDetail('タグ', skTags);
             var skEf = sk.効果;
@@ -8403,9 +8372,9 @@ function shopCredentialRefund(credentials, requirements) {
             { key:'装备区', label:'装備', data: shopMarketData ? shopMarketData['装备区'] : null },
             { key:'道具区', label:'アイテム', data: shopMarketData ? shopMarketData['道具区'] : null },
             { key:'技能区', label:'スキル', data: shopMarketData ? shopMarketData['技能区'] : null },
-            { key:'血统区', label:'血統', data: shopMarketData ? shopMarketData['血统区'] : null },
-            { key:'形态区', label:'形態', data: shopMarketData ? shopMarketData['形态区'] : null },
-            { key:'升级区', label:'アップグレードサービス', data: shopMarketData ? shopMarketData['升级区'] : null }
+            { key:"血統欄", label:'血統', data: shopMarketData ? shopMarketData["血統欄"] : null },
+            { key:"形態欄", label:'形態', data: shopMarketData ? shopMarketData["形態欄"] : null },
+            { key:"強化欄", label:'アップグレードサービス', data: shopMarketData ? shopMarketData["強化欄"] : null }
         ];
         var html = '<div class="sam-shop-tabs">';
         for (var i = 0; i < cats.length; i++) {
@@ -8468,10 +8437,10 @@ function shopCredentialRefund(credentials, requirements) {
         var inner = '';
         var isConsume = (cat === '道具区');
         if (cat === '技能区') inner = shopBuildSkillCard(item);
-        else if (cat === '血统区') inner = shopBuildBloodlineCard(item);
+        else if (cat === "血統欄") inner = shopBuildBloodlineCard(item);
         else if (cat === '装备区') inner = shopBuildEquipCard(item);
-        else if (cat === '升级区') inner = shopBuildUpgradeCard(item);
-        else if (cat === '形态区') inner = shopBuildFormCard(item);
+        else if (cat === "強化欄") inner = shopBuildUpgradeCard(item);
+        else if (cat === "形態欄") inner = shopBuildFormCard(item);
         else if (isConsume) inner = shopBuildConsumeCard(item);
         else inner = shopBuildSkillCard(item);
         var isSelected = shopIsSelected(item.name, cat, slot);
@@ -8488,13 +8457,13 @@ function shopCredentialRefund(credentials, requirements) {
         var unaffordable = (!isSelected && remain < unitPrice);
         // ★ 血統区の上限: 血統が満杯でも【無効化しない】商品カード(融合は古い血統を置換し, 総数は変わらない),
         //   "満杯·融合が必要"のヒントバーを追加して誘導するのみ; "直接購入"の満額時のグレーアウトは融合ダイアログ内で処理する
-        var bloodFullHint = (cat === '血统区' && !isSelected && shopBloodCount >= shopBloodLimit);
+        var bloodFullHint = (cat === "血統欄" && !isSelected && shopBloodCount >= shopBloodLimit);
         // ★ 血統区が融合進行中(bloodFusionBusy): 未選択の血統商品はグレー表示(血統関連操作がブロックされる);
         //   選択済みは引き続き解除可能; 他の区域(装備/アイテム/スキル/アップグレード)は融合の影響を受けず, 通常どおり購入可能
-        var bloodFusionLock = (cat === '血统区' && !isSelected && bloodFusionBusy);
+        var bloodFusionLock = (cat === "血統欄" && !isSelected && bloodFusionBusy);
         // ★ アップグレード区が融合進行中: そのアップグレードカードの"replace_target = 今回融合されている血統" → グレーロック
         //   (元の血統が消費中であり, 融合結果が出るまで対応するアップグレードサービスの購入を一時停止する)
-        if (cat === '升级区' && !isSelected && bloodFusionBusy && item.category === '血統'
+        if (cat === "強化欄" && !isSelected && bloodFusionBusy && item.category === '血統'
             && bloodFusionConsumedNames.length && bloodFusionConsumedNames.indexOf(item.replace_target || '') >= 0) {
             bloodFusionLock = true;
         }
@@ -8653,7 +8622,7 @@ function shopCredentialRefund(credentials, requirements) {
         if (!character.装備) character.装備 = {};
         if (!character.技能) character.技能 = {};
         if (!character.血統) character.血統 = {};
-        if (!character.道具) character.道具 = {};
+        if (!character.アイテム) character.アイテム = {};
         if (!character.形態庫) character.形態庫 = {};
         var itemStrs = [];
         var receiptLines = [];
@@ -8664,7 +8633,7 @@ function shopCredentialRefund(credentials, requirements) {
             var qty = item.quantity || 1;
             if (item._cat === '技能区') {
                 character.技能[item.name] = shopToSkillVar(item);
-            } else if (item._cat === '血统区') {
+            } else if (item._cat === "血統欄") {
                 // ★ 血統上限の防御(フォールバック): 通常フローでは血統区の商品は shopHandleExec で融合ダイアログへ横取りされ,
                 //   直接購入パス(bloodFusionDirectPurchase)は既に上限チェックを含む; この分岐は将来の変更で
                 //   ルーティングを迂回し血統が純増して BLOODLINE_CAP を突破するのを防ぐ
@@ -8676,17 +8645,17 @@ function shopCredentialRefund(credentials, requirements) {
                 var nextEq = shopToEquipVar(item, item._slot);
                 character.装備[item.name] = nextEq;
             } else if (item._cat === '道具区') {
-                var old = character.道具[item.name];
+                var old = character.アイテム[item.name];
                 var nextCon = shopToConsumeVar(item, qty);
                 if (old && typeof old === 'object') nextCon.数量 = Number(old.数量 || 0) + qty;
                 var merged = {};
                 if (old && typeof old === 'object') { for (var ok2 in old) { if (old.hasOwnProperty(ok2)) merged[ok2] = old[ok2]; } }
                 for (var nk in nextCon) { if (nextCon.hasOwnProperty(nk)) merged[nk] = nextCon[nk]; }
-                character.道具[item.name] = merged;
-            } else if (item._cat === '形态区') {
+                character.アイテム[item.name] = merged;
+            } else if (item._cat === "形態欄") {
                 // 形態商品: 直接購入して 形态库 へ入れる(キーは形態名, 置換は強制しない; 同名は上書き)
                 character.形態庫[item.name] = shopToFormVar(item, item.name);
-            } else if (item._cat === '升级区') {
+            } else if (item._cat === "強化欄") {
                 // アップグレード商品: 所属大分類に応じて書き込むキャラクター項目を決める; 置換対象が回収する旧アイテムを決める
                 var upCat = item.category || '';
                 var tgtName = item.replace_target || item.name;
@@ -8711,7 +8680,7 @@ function shopCredentialRefund(credentials, requirements) {
                     if (oldEquip && typeof oldEquip === 'object' && oldEquip.状態 != null) newEquip.状態 = oldEquip.状態;
                     if (character.装備[tgtName]) delete character.装備[tgtName];
                     character.装備[item.name] = newEquip;
-                } else if (upCat === '形态') {
+                } else if (upCat === "形態") {
                     // 形態アップグレード: 旧形態(置換対象)を削除してから新形態を書き込む; "形態購入"と同じく shopToFormVar を通る
                     if (character.形態庫[tgtName]) delete character.形態庫[tgtName];
                     character.形態庫[item.name] = shopToFormVar(item, item.name);
@@ -8720,7 +8689,7 @@ function shopCredentialRefund(credentials, requirements) {
             var qtyStr = qty > 1 ? ' ×'+qty : '';
             var ratingStr = item.rating ? ('（'+item.rating+'級）') : '';
             // アップグレードサービスのレシート: "置換対象→新名称", 操作は"アップグレード"と記す; その他の商品は"購入 名称"
-            var upTgtName = (item._cat === '升级区' && item.replace_target) ? item.replace_target : '';
+            var upTgtName = (item._cat === "強化欄" && item.replace_target) ? item.replace_target : '';
             var itemDetail = upTgtName ? (upTgtName + ' → ' + item.name + ratingStr) : (item.name + qtyStr + ratingStr);
             var itemAction = upTgtName ? 'アップグレード' : '購入';
             var itemCost = Number(item.price || 0) * Number(qty);
@@ -8743,17 +8712,17 @@ function shopCredentialRefund(credentials, requirements) {
     // (ストアの意味論: プレイヤーが買った時点で陳列終了, 再陳列はしない; アイテムの元数量フィールドは表示専用で, 購入可能上限とはしない)
     // ★ 複数キャラ: actorName はどのキャラクターの専用商庫から削除するかを指定する; 既定は shopCurrentActor を踏襲
     function shopRemovePurchasedFromLibrary(statData, cart, actorName) {
-        if (!statData.商城) return;
-        var libMap = statData.商城[SHOP_ACTOR_LIB_KEY];
+        if (!statData.ショップ) return;
+        var libMap = statData.ショップ[SHOP_ACTOR_LIB_KEY];
         actorName = actorName || shopCurrentActor || SHOP_ACTOR_REINCARNATOR;
         var lib = null;
         if (libMap && libMap[actorName]) {
             lib = libMap[actorName];
         } else if (actorName === SHOP_ACTOR_REINCARNATOR) {
             // 旧データ互換: 角色 の商庫が 商城 のトップレベルに直接並んでいる場合がある
-            if (Array.isArray(statData.商城.装備リスト) || Array.isArray(statData.商城.技能リスト)
-                || Array.isArray(statData.商城.血統リスト) || Array.isArray(statData.商城.道具リスト) || Array.isArray(statData.商城.升級リスト)) {
-                lib = statData.商城;
+            if (Array.isArray(statData.ショップ.装備リスト) || Array.isArray(statData.ショップ.技能リスト)
+                || Array.isArray(statData.ショップ.血統リスト) || Array.isArray(statData.ショップ.道具リスト) || Array.isArray(statData.ショップ.強化リスト)) {
+                lib = statData.ショップ;
             }
         }
         if (!lib) return;
@@ -8763,7 +8732,7 @@ function shopCredentialRefund(credentials, requirements) {
             removeNames[cart[i].name] = true;
         }
         // 新構造: 4本のフラット配列, 逐次フィルタ(丸ごと削除)
-        var listKeys = ['装備リスト','技能リスト','血統リスト','道具リスト','升級リスト','形态列表'];
+        var listKeys = ['装備リスト','技能リスト','血統リスト','道具リスト',"強化リスト","形態リスト"];
         for (var ki = 0; ki < listKeys.length; ki++) {
             var key = listKeys[ki];
             if (Array.isArray(lib[key])) {
@@ -8774,16 +8743,16 @@ function shopCredentialRefund(credentials, requirements) {
         //   升级列表 内の残りの"置換対象=その同一の元物品"のアップグレード項目も意味を失うため, まとめて削除する
         //   例: 人类血统 → 升级列表 に【修仙进化】【科技进化】【血肉进化】があり, いずれも"人类血统"を置換対象とする;
         //       【修仙进化】購入後は人类血统が削除され, 人类血统に対応する残りのアップグレード商品はすべて削除される
-        if (Array.isArray(lib.升級リスト) && lib.升級リスト.length) {
+        if (Array.isArray(lib.強化リスト) && lib.強化リスト.length) {
             var consumeTargets = {};
             for (var ci = 0; ci < cart.length; ci++) {
                 var ce = cart[ci];
-                if (ce && ce._cat === '升级区' && ce.replace_target) {
+                if (ce && ce._cat === "強化欄" && ce.replace_target) {
                     consumeTargets[String(ce.replace_target)] = true;
                 }
             }
             if (Object.keys(consumeTargets).length) {
-                lib.升級リスト = lib.升級リスト.filter(function(u) {
+                lib.強化リスト = lib.強化リスト.filter(function(u) {
                     var upTgt = String(shopPick(u, 'replace_target','置換対象') || '');
                     // 同じ置換対象のアップグレード項目もまとめて削除(購入済み項目は上で丸ごと削除済み, ここはフォールバックの再クリア)
                     return !(upTgt && consumeTargets[upTgt]);
@@ -8818,12 +8787,12 @@ function shopCredentialRefund(credentials, requirements) {
         // ★ アップグレードサービスにも融合進行中のブロックがある: "replace_target=融合中の血統"に該当するアップグレード項目は決算を禁止する
         if (bloodFusionBusy && bloodFusionConsumedNames.length) {
             var upgradeHit = shopCart.filter(function(entry) {
-                return entry && entry._cat === '升级区' && entry.category === '血統'
+                return entry && entry._cat === "強化欄" && entry.category === '血統'
                     && bloodFusionConsumedNames.indexOf(entry.replace_target || '') >= 0;
             });
             if (upgradeHit.length) { samToast('warning', '血統融合中, 対応するアップグレードサービスは購入できません, 融合の完了をお待ちください'); return; }
         }
-        var bloodItems = shopCart.filter(function(entry) { return entry && entry._cat === '血统区'; });
+        var bloodItems = shopCart.filter(function(entry) { return entry && entry._cat === "血統欄"; });
         if (bloodItems.length) {
             // ★ 血統関連操作のブロック: 融合進行中は血統の購入/融合を新たに開始できない; その他の商品取引は影響を受けない
             if (bloodFusionBusy) { samToast('warning', '血統融合中, 融合が完了してから血統を購入してください'); return; }
@@ -8834,7 +8803,7 @@ function shopCredentialRefund(credentials, requirements) {
                 shopCart = [];
                 var merged = {};
                 for (var bk in keepBlood) { if (keepBlood.hasOwnProperty(bk)) merged[bk] = keepBlood[bk]; }
-                merged._cat = '血统区'; merged._slot = ''; merged.quantity = 1;
+                merged._cat = "血統欄"; merged._slot = ''; merged.quantity = 1;
                 shopCart.push(merged);
                 shopRefreshMarket();
                 samToast('info', '血統は単独で決算する必要があるため, カートの他の商品は自動的にクリアされました');
@@ -8870,7 +8839,7 @@ function shopCredentialRefund(credentials, requirements) {
             var rs = result.statData;
             // ★ 書き戻し: 角色(スペースコイン控除を含む, 角色 の買い物時は新装備を含む) + 商城(商品ライブラリは購入済みを削除済み) + 関係リスト(NPCの買い物時は新装備を含む)
             if (rs.キャラ) statData.キャラ = rs.キャラ;
-            if (rs.商城) statData.商城 = rs.商城;
+            if (rs.ショップ) statData.ショップ = rs.ショップ;
             if (rs.関係リスト) statData.関係リスト = rs.関係リスト;
             for (var ri = 0; ri < result.receipts.length; ri++) {
                 shopAppendReceipt(statData, result.receipts[ri]);
@@ -8885,7 +8854,7 @@ function shopCredentialRefund(credentials, requirements) {
         shopCart = [];
         // 現在のキャラクターの商品ライブラリを再読込してローカルキャッシュ(shopMarketData)を同期し, 売却済み商品の表示を回避
         var freshSd = getStatData();
-        var freshLib = shopGetActorLibRaw((freshSd && freshSd.商城) ? freshSd.商城 : null, shopCurrentActor);
+        var freshLib = shopGetActorLibRaw((freshSd && freshSd.ショップ) ? freshSd.ショップ : null, shopCurrentActor);
         if (freshLib) {
             shopMarketData = shopNormalizeMarketData(freshLib);
             if (!shopTabHasData(shopActiveTab)) shopActiveTab = shopPickFirstAvailableTab();
@@ -8959,11 +8928,11 @@ function shopCredentialRefund(credentials, requirements) {
     //   寛容性: ```yaml / ``` のコードフェンスに対応; フィールド名は大文字小文字を区別しない; インライン {a:1,b:2} と ['a','b'] のインライン構文
     //   新ZOD構造に厳密対応: 血统(原始属性/效果) 技能(类型0-2) 装备(类型0-8) 道具(类型str/数量)
     function shopParseMarketText(text) {
-        var result = { 血統リスト: [], 技能リスト: [], 装備リスト: [], 道具リスト: [], 升級リスト: [], 形态列表: [] };
+        var result = { 血統リスト: [], 技能リスト: [], 装備リスト: [], 道具リスト: [], 強化リスト: [], 形態リスト: [] };
         if (!text || typeof text !== 'string') return result;
         // コードフェンスを除去
         var cleaned = text.replace(/```(?:ya?ml|json)?/gi, '').replace(/```/g, '');
-        var marketKeys = Object.assign({}, LEGACY_KEY_RENAMES, {'形態リスト':'形态列表'});
+        var marketKeys = Object.assign({}, LEGACY_KEY_RENAMES, {'形態リスト':"形態リスト"});
         var lines = cleaned.split('\n').map(function(line) {
             // Normalize only the field before its first delimiter. Scalar colons and free text remain intact.
             return line.replace(/^(\s*(?:-\s+)?)([^\s:：]+)\s*[:：]/, function(_, prefix, key) {
@@ -9032,7 +9001,7 @@ function shopCredentialRefund(credentials, requirements) {
             return out;
         }
         // インデント式YAML解析: リスト見出し(血统列表/技能列表/...)で区切り, 各段落内の - 項目が新規エントリ, 同階層のインデントキーがフィールド
-        var listKeys = ['血統リスト', '技能リスト', '装備リスト', '道具リスト', '升級リスト', '形态列表'];
+        var listKeys = ['血統リスト', '技能リスト', '装備リスト', '道具リスト', "強化リスト", "形態リスト"];
         var curList = null;     // 現在のリスト名(resultのkey)
         var curItem = null;     // 現在充填中のエントリオブジェクト
         var itemIndent = -1;    // 現在のエントリの - 行インデント
@@ -9048,7 +9017,7 @@ function shopCredentialRefund(credentials, requirements) {
             // 空行とコメントをスキップ
             if (!line.trim() || /^\s*#/.test(line)) continue;
             // トップレベルのリスト見出し(インデントなしまたは極小インデントの "xxx列表:")
-            var headM = line.match(/^\s{0,2}(血統リスト|技能リスト|装備リスト|道具リスト|升級リスト|形态列表)\s*:\s*$/);
+            var headM = line.match(/^\s{0,2}(血統リスト|技能リスト|装備リスト|(?:道具|アイテム)リスト|升級リスト|(?:形态列表|形態リスト))\s*:\s*$/);
             if (headM) {
                 flushItem();
                 curList = headM[1];
@@ -9079,7 +9048,7 @@ function shopCredentialRefund(credentials, requirements) {
                 // (形態エントリに内蔵される 技能: { - 名称: ...\n  品质: ...\n  类型: ...\n  效果: {...}\n  标签: [...] } のサブリスト,
                 //  サブスキルの 效果/原始属性 も複数行 YAML, という形で展開される場合があるため先読みして収集する必要がある)
                 // 技能 サブブロックの収集: 形态列表 内, または 升级列表 内で現在のエントリの 所属大类=形态(形態アップグレード項目に内蔵される 技能 サブリスト)
-                var _isFormSkillBlock = (curList === '形态列表') || (curList === '升級リスト' && curItem && (curItem.所属カテゴリ === '形态' || curItem.category === '形态'));
+                var _isFormSkillBlock = (curList === "形態リスト") || (curList === "強化リスト" && curItem && (curItem.所属カテゴリ === "形態" || curItem.category === "形態"));
                 if (!v.trim() && _isFormSkillBlock && k === '技能') {
                     var skillsArr = [];
                     var sCur = null;        // 現在充填中のサブスキル
@@ -9235,18 +9204,18 @@ function shopCredentialRefund(credentials, requirements) {
             var _cq = Math.max(0, Math.floor(safeNum(reincarnatorCredentials[_cg], 0)));
             if (_cq > 0) credentialParts.push(_cg + '×' + _cq);
         }
-        parts.push("権限証憑(プレイヤー口座): " + (credentialParts.length ? credentialParts.join(' / ') : '无'));
+        parts.push("権限証憑(プレイヤー口座): " + (credentialParts.length ? credentialParts.join(' / ') : "なし"));
         
         // ★ コア補助関数：アイテムの重要情報をすべて抽出し、コンパクトな単一行テキストに連結。網羅的かつ Token 節約
         function formatDict(dict) {
             var keys = Object.keys(dict || {});
-            if (keys.length === 0) return '无';
+            if (keys.length === 0) return "なし";
             
             return keys.map(function(k) {
                 var v = dict[k] || {};
                 var info = [];
                 
-                if (v.品質) info.push(v.品質 + '级');
+                if (v.品質) info.push(v.品質 + "級");
                 if (v.数量 != null) info.push('数量:' + v.数量);
                 if (v.消費) info.push('消費:' + v.消費);
                 // 属性と効果はオブジェクトなので JSON.stringify で平坦化して表示
@@ -9269,7 +9238,7 @@ function shopCredentialRefund(credentials, requirements) {
         var eqData = p.装備 || {};
         if (Object.keys(eqData).length) parts.push('既存装備:\n' + formatDict(eqData));
         
-        var invData = p.道具 || {};
+        var invData = p.アイテム || {};
         if (Object.keys(invData).length) parts.push('既存アイテム:\n' + formatDict(invData));
 
         var statusData = p.状態 || {};
@@ -9292,9 +9261,9 @@ function shopCredentialRefund(credentials, requirements) {
     var LEGACY_WORLDBOOK_TITLES = {
         '⚙️生命階層と社会生態': '⚙️生命层级与社会生态',
         '⚙️品質効果数値規則': '⚙️品质效果数值规则',
-        '⚙️実体生成規則': '⚙️实体生成规则',
+        '⚙️実体生成規則': "⚙️状態プロトコル",
         '⚙️状態プロトコル': '⚙️状态协议',
-        '⚙️行為判定[mvu_plot]': '⚙️行为判定[mvu_plot]',
+        '⚙️行為判定[mvu_plot]': "⚙️行為判定[mvu_plot]",
         '⚙️行為判定': '⚙️行为判定'
     };
     async function getWorldBookContentCompat(searchTitle) {
@@ -9365,22 +9334,22 @@ function shopCredentialRefund(credentials, requirements) {
             + '   - 【纯净展示】: 権限証憑はショップ視野の決定にのみ使用する；選択と決算はプログラムが同一の上限で厳密に検証する。合法な視野内の商品には権限条件を再度書く必要はなく、ショップ視野を超える商品は生成してはならない。\n'
             + '   - プレイヤーが既に所持するアイテムと機能が完全に重複するものは避けること。\n'
             + '3. アップグレード再鋳造の仕組み: \n'
-            + "   - 【現在のキャラクターデータ】を精査し、プレイヤーが現在所持する低階層の血統・スキル・装備・形態から選び、高階層の強化版を生成して「升級リスト」へ入れること。アップグレード後の完成パネルを直接生成すること。詞条の差分でパッチを当てる方式は絶対に禁止！システムが回収・置換できるよう、正確な `置換対象`を必ず提供すること。同一の対象に複数の選択肢を用意してもよい。\n"
+            + "   - 【現在のキャラクターデータ】を精査し、プレイヤーが現在所持する低階層の血統・スキル・装備・形態から選び、高階層の強化版を生成して「強化リスト」へ入れること。アップグレード後の完成パネルを直接生成すること。詞条の差分でパッチを当てる方式は絶対に禁止！システムが回収・置換できるよう、正確な `置換対象`を必ず提供すること。同一の対象に複数の選択肢を用意してもよい。\n"
             + "   - 【強化後の命名】: 完成品には簡潔で完全な名称を使用すること；旧名称の後ろに“改/強化/進階/精製/Ⅰ/Ⅱ/Plus”などのアップグレード接尾辞を追加・累積することは禁止。改名が必要な場合は全体をそのままリネームすること。\n"
             + "   - 【階層制限】: アップグレードと再鋳造の階位上限は、上記第2条の【品質と商品範囲の権限制御】と厳密に同期させること。プレイヤーの視野上限を超えるアップグレード案を生成してはならない。\n"
             + "   - 【強化時の継承規則】:\n"
             + '      * アップグレード商品は、替换目标が持つ有効な詞条を完全に継承すること。\n'
             + '      * “原能力を融合した”“能力の一部を保持する”などの曖昧な説明で実際の詞条記録を置き換えることは禁止。\n'
-            + '      * 元の装備/スキル/血統が持つ有効な効果は、一件ずつ新しいパネルの【效果】フィールドへ移行すること。\n'
+            + "      * 元の装備/スキル/血統が持つ有効な効果は、一件ずつ新しいパネルの【効果】フィールドへ移行すること。\n"
             + '      * 旧詞条が改造・統合・置換された場合は、旧詞条 → 新詞条の対応関係を明確に記録すること。\n'
             + (hasReq
                 ? "4. コア集中: プレイヤーが明確な【中心となる要望】を提示した。商品生成はこれを絶対的な中心とすること。一部のカテゴリが空（生成しない）であってもよい。他のタイプの商品を生成する場合は、中心となる要望と【ビルドとの連携】を構成する必要がある（例 要望が\"狙撃銃\"なら、\"隠密スキル\"、\"徹甲弾アイテム\"などを併せて生成する）。総数は 16~24 個に収めること。\n"
-                : "4. 均衡更新: 一度に約 18~28 個の商品を生成し、血統/形態/スキル/装備/アイテム を均衡に分布させ、升級リスト は 2~4 項目とする。\n")
+                : "4. 均衡更新: 一度に約 18~28 個の商品を生成し、血統/形態/スキル/装備/アイテム を均衡に分布させ、強化リスト は 2~4 項目とする。\n")
             + '5. 商品責務の分離:\n'
             + "   - 【血統と形態の厳密な分離】: 両者は完全に分離すること。“変身形態を伴う血統”の生成は絶対に禁止。血統は生命の本質を根底から改造するパッシブであり、形態はアクティブ化できる独立した戦闘変身パネル、または外部装備システムである。\n"
             + "   - 【形態リスト】: Ⅶ級以上の形態商品の販売は禁止。\n"
             + "   - 【血統リスト】: プレイヤーが未所持の独立した血統体系のみを生成する。プレイヤーが既に所持する血統の同源強化・進化・覚醒版である場合は、必ず升級リスト へ入れること。S級以上の血統商品の販売は禁止。\n"
-            + "   - 【升級リスト】: \n"
+            + "   - 【強化リスト】: \n"
             + '      * プレイヤーが現在所持する血統・スキル・装備・形態の強化・昇階・再鋳造のみを扱う。正確な替换目标 を必ず記入すること。\n'
             + '      * 同階強化と跨階昇階はいずれも有効なアップグレード案であり、同一の対象に同階強化と跨階昇階の選択肢を同時に提供してもよい。\n'
             + '   - 【世界遺物規則】:\n'
@@ -9393,7 +9362,7 @@ function shopCredentialRefund(credentials, requirements) {
             + '6. 修練系アイテムの規則:\n'
             + "   - 【道具リスト】では秘伝書、功法、心法、修練資料などの成長型アイテムを生成できる。\n"
             + '   - 修練系アイテムは学習の媒体であり、スキルやパッシブ効果を直接生成しない；購入後は修練の過程を経て対応する成長型状態を生成する必要がある。\n'
-            + '   - 商品説明が功法、修真秘伝書、内功心法、魔法研究資料、身体強化案などである場合は、【道具】として生成することを優先し、【技能】としては生成しない。\n'
+            + "   - 商品説明が功法、修真秘伝書、内功心法、魔法研究資料、身体強化案などである場合は、【アイテム】として生成することを優先し、【技能】としては生成しない。\n"
             + '   - 技能リスト はキャラクターが既に習得し直接使用できる能力にのみ用い、学習教材や成長経路の記録には用いない。\n'
             + '   - 技能リスト では、長期的な学習・修練の蓄積・生命構造の変更を要して初めて得られる体系能力を生成することを禁止。\n'
             + '   - 品質の参考:\n'
@@ -9402,21 +9371,21 @@ function shopCredentialRefund(credentials, requirements) {
             + '      * 修練体系・生命進化・長期的な身体改造系の秘伝書: 通常はD級以上、実際の成長潜在力に基づいて評価する\n'
             + "   - 長期的な修練体系を単一のスキルへ圧縮して販売することを禁止。例えば「修真功法」「血脈覚醒法」「内功心法」を直接スキルとして生成してはならない。\n"
             + "【厳密な出力形式】\n"
-            + "出力は YAML テキストのみ, 説明や markdown のコードフェンスは不要。トップレベルは六つのリストキー: 血統リスト / 形態リスト / 技能リスト / 装備リスト / 道具リスト / 升級リスト, 各項目は \"  - \" で始める。\n"
+            + "出力は YAML テキストのみ, 説明や markdown のコードフェンスは不要。トップレベルは六つのリストキー: 血統リスト / 形態リスト / 技能リスト / 装備リスト / 道具リスト / 強化リスト, 各項目は \"  - \" で始める。\n"
             + 'フィールドの型は厳密に従うこと:\n'
             + '  - 階層: 文字列, Ⅰ / Ⅱ / Ⅲ / Ⅳ / Ⅴ / Ⅵ / Ⅶ / Ⅷ / Ⅸ のみ\n'
             + '  - 品質: 文字列, F / E / D / C / B / A / S / SS / SSSのみ\n'
             + '  - タグ: インライン配列 [\'标签1\', \'标签2\'...]\n'
-            + '  - 原始属性: インラインオブジェクト、段階付けは《品質効果数値規則》に従う；血統は五維（筋力、敏捷、体力、精神、魅力）を完全に含むこと、【形态】は五維を完全に含み関連する【衍生属性】を付加する、装備は有効な非0項目のみ記述。\n'
+            + "  - 原始属性: インラインオブジェクト、段階付けは《品質効果数値規則》に従う；血統は五維（筋力、敏捷、体力、精神、魅力）を完全に含むこと、【形態】は五維を完全に含み関連する【派生属性】を付加する、装備は有効な非0項目のみ記述。\n"
             + '  - 効果: インラインオブジェクト {效果名: \'説明\'}, キーは文字列, 値は文字列の説明\n'
             + '  - 価格: 数値(スペースコイン)\n'
             + '  - 説明/消費: 字符串\n'
             + '  - タイプ:\n'
             + '      技能リスト.タイプ = 数値 0(アクティブ) / 1(パッシブ) / 2(特殊)\n'
-            + '      装備リスト.タイプ = 数値 0(武器) / 1(手袋) / 2(頭部) / 3(胸部) / 4(脚部) / 5(靴) / 6(マント) / 7(アクセサリー)\n'
-            + '      道具リスト.タイプ = 文字列(消耗品/材料/特殊など, 同類型は再利用し細分化しない)\n'
-            + "  - 置換対象: 文字列 (【升級リスト】内の商品でのみ必須、プレイヤーが現在所有する元アイテム名と一字一句違わず一致させること！)\n"
-            + "  - 所属カテゴリ: 文字列 (【升級リスト】内の商品でのみ必須、記入可能な値: 血統 / 形态 / 技能 / 装备)\n"
+            + "      装備リスト.タイプ = 数値 0(武器) / 1(手袋) / 2(頭部) / 3(胴) / 4(脚部) / 5(靴) / 6(マント) / 7(アクセサリー)\n"
+            + "      道具リスト.タイプ = 文字列(消耗品/素材/特殊など, 同類型は再利用し細分化しない)\n"
+            + "  - 置換対象: 文字列 (【強化リスト】内の商品でのみ必須、プレイヤーが現在所有する元アイテム名と一字一句違わず一致させること！)\n"
+            + "  - 所属カテゴリ: 文字列 (【強化リスト】内の商品でのみ必須、記入可能な値: 血統 / 形態 / 技能 / 装備)\n"
             + '  - 道具リスト.数量 = 数値(この商品を購入可能な在庫数, ≥1)\n'
             + 'オブジェクトのキーに英語のピリオドは使用禁止、口径系のX.YmmはX·Yと統一して記述（例：5.56mm弾薬→5·56弾薬）;\n'
 
@@ -9440,7 +9409,7 @@ function shopCredentialRefund(credentials, requirements) {
             + "    タグ: [\"主神空間\", \"パッシブ\"]\n"
             + '    効果: {射击校准: 射击检定+5}\n'
             + '    説明: 簡潔な説明\n'
-            + '    消費: 无\n'
+            + "    消費: なし\n"
             + '    価格: 80\n'
             + '装備リスト:\n'
             + '  - 名称: 装備名\n'
@@ -9450,7 +9419,7 @@ function shopCredentialRefund(credentials, requirements) {
             + '    原始属性: {"ATK": "C", "敏捷": "F"}\n'
             + '    効果: {射击稳定: 连续射击检定+15}\n'
             + '    説明: 簡潔な説明\n'
-            + '    消費: 无\n'
+            + "    消費: なし\n"
             + '    価格: 3000\n'
             + '道具リスト:\n'
             + '  - 名称: アイテム名\n'
@@ -9461,11 +9430,11 @@ function shopCredentialRefund(credentials, requirements) {
             + '    効果: {急救: 恢复10HP}\n'
             + '    説明: 簡潔な説明\n'
             + '    価格: 50\n'
-            + '形态列表:\n'
+            + "形態リスト:\n"
             + '  - 名称: 形態名\n'
             + '    階層: {形態自身の戦闘位格に従って生成、Ⅰ－Ⅸ}\n'
             + '    消費: HP/EP/特殊資源\n'
-            + '    状態: 完好\n'
+            + "    状態: 正常\n"
             + '    タグ: ["主神空間", 依存する道具/血統/来源など]\n'
             + '    原始属性: {"筋力": "C", "敏捷": "E", "体力": "D", "精神": "F", "魅力": "E", "ATK": "C", "DEF": "D", "MATK": "E", "MDEF": "E", "AP": "D"}\n'
             + '    効果: { [词条]: 説明 }\n'
@@ -9476,10 +9445,10 @@ function shopCredentialRefund(credentials, requirements) {
             + "       タグ: [\"主神空間\", \"パッシブ\"]\n"
             + '       効果: {射击校准: 射击检定+5}\n'
             + '       説明: 簡潔な説明\n'
-            + '       消費: 无}\n'
+            + "       消費: なし}\n"
             + '    説明: 簡潔な説明\n'
             + '    価格: 300\n'
-            + '升級リスト:\n'
+            + "強化リスト:\n"
             + '  - 名称: アップグレード後の装備/スキル/血統/形態の名称 (例: M16A2突撃銃·改)\n'
             + '    置換対象: 元のアイテムの正確な名称 (例: M16A2突撃銃)\n'
             + "    所属カテゴリ: 装備 (必須: 血統/技能/装備/形態)\n"
@@ -9490,7 +9459,7 @@ function shopCredentialRefund(credentials, requirements) {
             + '    原始属性: {"ATK": "C", "敏捷": "E"}\n'
             + '    効果: {精密射击: 瞄准射击检定+10}\n'
             + '    説明: 旧型を回収し再鋳造・昇階した完成品\n'
-            + '    消費: 无\n'
+            + "    消費: なし\n"
             + '    価格: 300\n'
 // 🌟 コア最適化：動的な末尾指示
 if (hasReq) {
@@ -9505,7 +9474,7 @@ if (hasReq) {
             if (myEpoch !== shopRefreshEpoch || !shopRefreshing) return;
             var parsed = shopParseMarketText(out);
             // 生成数を集計
-            var total = (parsed.血統リスト.length + parsed.技能リスト.length + parsed.装備リスト.length + parsed.道具リスト.length + parsed.升級リスト.length + parsed.形态列表.length);
+            var total = (parsed.血統リスト.length + parsed.技能リスト.length + parsed.装備リスト.length + parsed.道具リスト.length + parsed.強化リスト.length + parsed.形態リスト.length);
             if (total === 0) {
                 // 解析失敗: 更新中状態を解除, 元のリスト表示へ戻し, トースト通知
                 shopRefreshing = false;
@@ -9517,8 +9486,8 @@ if (hasReq) {
             //   角色キーが旧トップレベル構造の場合は 成员商库.角色へ移行し, 複数角色の分離を実現
             var refreshActor = shopCurrentActor || SHOP_ACTOR_REINCARNATOR;
             var ok = writeBackMvu(function (statData) {
-                if (!statData.商城 || typeof statData.商城 !== 'object') statData.商城 = {};
-                var market = statData.商城;
+                if (!statData.ショップ || typeof statData.ショップ !== 'object') statData.ショップ = {};
+                var market = statData.ショップ;
                 // 成员商库 を遅延初期化
                 if (!market[SHOP_ACTOR_LIB_KEY] || typeof market[SHOP_ACTOR_LIB_KEY] !== 'object') {
                     market[SHOP_ACTOR_LIB_KEY] = {};
@@ -9528,24 +9497,24 @@ if (hasReq) {
                 if (refreshActor === SHOP_ACTOR_REINCARNATOR && !libMap[SHOP_ACTOR_REINCARNATOR]) {
                     var oldTop = null;
                     if (Array.isArray(market.血統リスト) || Array.isArray(market.技能リスト)
-                        || Array.isArray(market.装備リスト) || Array.isArray(market.道具リスト) || Array.isArray(market.升級リスト) || Array.isArray(market.形态列表)) {
+                        || Array.isArray(market.装備リスト) || Array.isArray(market.道具リスト) || Array.isArray(market.強化リスト) || Array.isArray(market.形態リスト)) {
                         oldTop = {
                             血統リスト: Array.isArray(market.血統リスト) ? market.血統リスト : [],
                             技能リスト: Array.isArray(market.技能リスト) ? market.技能リスト : [],
                             装備リスト: Array.isArray(market.装備リスト) ? market.装備リスト : [],
                             道具リスト: Array.isArray(market.道具リスト) ? market.道具リスト : [],
-                            升級リスト: Array.isArray(market.升級リスト) ? market.升級リスト : [],
-                            形态列表: Array.isArray(market.形态列表) ? market.形态列表 : []
+                            強化リスト: Array.isArray(market.強化リスト) ? market.強化リスト : [],
+                            形態リスト: Array.isArray(market.形態リスト) ? market.形態リスト : []
                         };
                     }
-                    libMap[SHOP_ACTOR_REINCARNATOR] = oldTop || { 血統リスト:[], 技能リスト:[], 装備リスト:[], 道具リスト:[], 升級リスト:[], 形态列表:[] };
+                    libMap[SHOP_ACTOR_REINCARNATOR] = oldTop || { 血統リスト:[], 技能リスト:[], 装備リスト:[], 道具リスト:[], 強化リスト:[], 形態リスト:[] };
                     // 旧トップレベルの冗長フィールドを削除し, 成员商库 へ統合移行
                     delete market.血統リスト;
                     delete market.技能リスト;
                     delete market.装備リスト;
                     delete market.道具リスト;
-                    delete market.升級リスト;
-                    delete market.形态列表;
+                    delete market.強化リスト;
+                    delete market.形態リスト;
                 }
                 // 現在の角色の新しい更新結果を書き込む(ライブラリ全体を上書き)
                 libMap[refreshActor] = {
@@ -9553,8 +9522,8 @@ if (hasReq) {
                     技能リスト: parsed.技能リスト,
                     装備リスト: parsed.装備リスト,
                     道具リスト: parsed.道具リスト,
-                    升級リスト: parsed.升級リスト,
-                    形态列表: parsed.形态列表
+                    強化リスト: parsed.強化リスト,
+                    形態リスト: parsed.形態リスト
                 };
             });
             // 更新中状態を解除
@@ -9609,8 +9578,8 @@ if (hasReq) {
                     statData.キャラ.スペースコイン = safeNum(statData.キャラ.スペースコイン, 0) + bloodFusionSnap.price;
                     statData.キャラ.権限証憑 = statData.キャラ.権限証憑 || {};
                     shopCredentialRefund(statData.キャラ.権限証憑, bloodFusionSnap.credentialRequirements || {});
-                    if (bloodFusionSnap.preBloodLib !== null && statData.商城) {
-                        var _rlibS = shopGetActorLibRaw(statData.商城, bloodFusionSnap.preActor);
+                    if (bloodFusionSnap.preBloodLib !== null && statData.ショップ) {
+                        var _rlibS = shopGetActorLibRaw(statData.ショップ, bloodFusionSnap.preActor);
                         if (_rlibS) _rlibS.血統リスト = bloodFusionSnap.preBloodLib.slice();
                     }
                 });
@@ -9618,7 +9587,7 @@ if (hasReq) {
             // ショップリストのローカルキャッシュを復元: 削除された血統商品を血統エリアへ戻す
             try {
                 var freshSd = getStatData();
-                var freshLibS = shopGetActorLibRaw(freshSd && freshSd.商城, bloodFusionSnap.preActor);
+                var freshLibS = shopGetActorLibRaw(freshSd && freshSd.ショップ, bloodFusionSnap.preActor);
                 if (freshLibS) {
                     shopMarketData = shopNormalizeMarketData(freshLibS);
                     if (!shopTabHasData(shopActiveTab)) shopActiveTab = shopPickFirstAvailableTab();
@@ -9637,12 +9606,12 @@ if (hasReq) {
         var sd = getStatData();
         if (!sd || !sd.キャラ) { samToast('error', 'データが未準備です'); return; }
         var isEquip = (kind === 'equip');
-        var dict = isEquip ? (sd.キャラ.装備 || {}) : (sd.キャラ.道具 || {});
-        var basePath = isEquip ? 'キャラ.装備' : 'キャラ.道具';
+        var dict = isEquip ? (sd.キャラ.装備 || {}) : (sd.キャラ.アイテム || {});
+        var basePath = isEquip ? 'キャラ.装備' : "キャラ.アイテム";
         // 削除: 辞書から直接取り除く
         if (action === 'delete') {
             var ok = writeBackMvu(function(statData) {
-                var d = isEquip ? (statData.キャラ.装備||{}) : (statData.キャラ.道具||{});
+                var d = isEquip ? (statData.キャラ.装備||{}) : (statData.キャラ.アイテム||{});
                 if (d[key] !== undefined) delete d[key];
             });
             if (ok) { samToast('success', (isEquip?'装備':'アイテム')+'を削除しました: '+key); renderAll(); }
@@ -9696,7 +9665,7 @@ if (hasReq) {
         }
         // 共通: 目標状態を設定
         var ok2 = writeBackMvu(function(statData) {
-            var d = isEquip ? (statData.キャラ.装備||{}) : (statData.キャラ.道具||{});
+            var d = isEquip ? (statData.キャラ.装備||{}) : (statData.キャラ.アイテム||{});
             if (d[key]) d[key].状態 = targetStatus;
         });
         if (ok2) {
@@ -9738,7 +9707,7 @@ if (hasReq) {
             // 当該形態のクールダウンを 2/2 回合に設定(他の形態のクールダウンには触れない)
             var ff = pp.形態庫 || {};
             if (ff[formName]) {
-                ff[formName].冷却 = '2/2 回合';
+                ff[formName].冷却 = "2/2 ターン";
             }
             // ★ フロントの形態アクティブ化 → 待播报记录 へ記録(今回の書き戻しと同じタイミングで保存, 本文モデルの叙述後に自動クリア)
             shopAppendReceipt(statData, '[変身][キャラ] 形態「' + formName + '」をアクティブ化');
@@ -9929,7 +9898,7 @@ if (hasReq) {
                 try {
                     var v = c.val;
                     // ★ 職業は記録オブジェクトに変更済み: 編集モードではJSONテキストとして送信, 書き戻し前にオブジェクトへ復元を試みる
-                    if (/^(?:角色|関係リスト\.[^.]+)\.职业$/.test(c.path) && typeof v === 'string') {
+                    if (/^(?:(?:角色|キャラ)|関係リスト\.[^.]+)\.(?:职业|職業)$/.test(c.path) && typeof v === 'string') {
                         var trimmed = v.trim();
                         if (trimmed === '') { v = {}; }
                         else { try { v = JSON.parse(trimmed); } catch(e2) { /* 不正なJSONは元の文字列を保持,ZOD層が拒否してフォールバックする */ } }
@@ -10048,7 +10017,7 @@ if (hasReq) {
             }
         }, 15000);
         if (GS_PARENT.Samsara.worldEngine && GS_PARENT.Samsara.worldEngine.isOpen()) GS_PARENT.Samsara.terminal.suspend();
-        try { (window.parent || window).__悬浮球状态栏_loaded__ = true; } catch(e) { window.__悬浮球状态栏_loaded__ = true; }
+        try { (window.parent || window).__状態パネル_loaded__ = true; } catch(e) { window.__状態パネル_loaded__ = true; }
         // 注: データ更新タイマーは renderAll() の"端末未応答"分岐内へ移し必要時に起動, データ受信後に自動クリア, 無駄な更新でスクロールとパフォーマンスへ影響するのを避ける
         try { console.log('%c[主神端末] ✅ v2 初期化完了,因果連鎖を監視...', 'color:#86efac;font-weight:bold'); } catch(e){}
     }

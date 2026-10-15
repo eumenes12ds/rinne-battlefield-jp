@@ -2,27 +2,27 @@ import { defineMessages } from '@/i18n/messages/types';
 
 export const commonMessages = defineMessages({
     'common.enabled': {
-        'zh-CN': '启用',
+        "ja-JP": "有効",
         en: 'Enabled',
     },
     'common.disabled': {
-        'zh-CN': '关闭',
+        "ja-JP": '关闭',
         en: 'Disabled',
     },
     'common.yes': {
-        'zh-CN': '是',
+        "ja-JP": '是',
         en: 'Yes',
     },
     'common.no': {
-        'zh-CN': '否',
+        "ja-JP": '否',
         en: 'No',
     },
     'common.confirm': {
-        'zh-CN': '确认',
+        "ja-JP": '确认',
         en: 'Confirm',
     },
     'common.cancel': {
-        'zh-CN': '取消',
+        "ja-JP": "キャンセル",
         en: 'Cancel',
     },
 });

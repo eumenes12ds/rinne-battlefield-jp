@@ -1,3 +1,4 @@
+import { migrateStatData, canonicalParts, migrateAtPath } from '@/card_protocol';
 import {
     cleanUpMetadata,
     generateSchema,
@@ -670,7 +671,7 @@ export function parseParameters(paramsString: string): string[] {
     return params;
 }
 
-export function pathFix(path: string): string {
+function originalPathFix(path: string): string {
     if (!path) return path;
 
     // 1. 处理 [] 内的内容，区分数字索引 / 字符串 key
@@ -825,6 +826,7 @@ export async function updateVariables(
     variables: MvuData
 ): Promise<boolean> {
     // 拷贝一份变量，用于提供给 variable_ended
+    variables.stat_data = migrateStatData(variables.stat_data);
     const variables_before_update: MvuData = klona(variables);
     // 深拷贝变量对象，生成状态快照，用于记录显示数据
     const out_status: MvuData = klona(variables);
@@ -1628,7 +1630,7 @@ export async function updateVariables(
         variables,
         variables_before_update
     );
-    if (error_info && useDataStore().settings.通知.变量更新出错) {
+    if (error_info && useDataStore().settings.通知.変数更新エラー) {
         toastr.warning(
             tr('runtime.variableUpdate.errorDetail', {
                 detail: _.escape(error_info.content),
@@ -1731,7 +1733,7 @@ export async function handleVariablesInMessage(message_id: number) {
         }
         return data;
     };
-    if (settings.兼容性.更新到聊天变量) {
+    if (settings.互換性.チャット変数に更新) {
         await updateVariablesWith(updater, { type: 'chat' });
     }
     await updateVariablesWith(updater, { type: 'message', message_id: message_id });
@@ -1742,3 +1744,5 @@ export async function handleVariablesInMessage(message_id: number) {
         });
     }
 }
+
+export function pathFix(path: string): string { const fixed = originalPathFix(path); if (!fixed) return fixed; return canonicalParts(_.toPath(fixed)).map((part: string) => '[' + JSON.stringify(part) + ']').join(''); }

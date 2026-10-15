@@ -87,8 +87,11 @@ function encode(value: any, previous: any, node: Node, japanese: boolean): any {
     return result;
 }
 
-export const decodeMvuSettings = (value: unknown): any => decode(value, schema);
-export function encodeMvuSettings(value: unknown, previous: any): any {
-    const japanese = own(previous, '追加モデル解析設定') || ['AI出力に従う', '追加モデル解析'].includes(previous?.更新方式);
-    return encode(value, previous, schema, japanese);
+// Legacy Chinese/shared settings are read only at this boundary. New storage is Japanese.
+export function decodeMvuSettings(value: unknown): any {
+    const result = encode(decode(value, schema), {}, schema, true);
+    result.更新方式 = '主AI追従出力';
+    if (result.追加モデル解析設定) result.追加モデル解析設定.自動リクエスト有効 = false;
+    return result;
 }
+export const encodeMvuSettings = (value: unknown, _previous?: unknown): any => decodeMvuSettings(value);

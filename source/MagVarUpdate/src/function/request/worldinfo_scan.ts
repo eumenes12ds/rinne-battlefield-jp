@@ -120,7 +120,7 @@ function makeProbe(world: string, uid: number): Entry {
  * @param lores 宿主提供的四组临时 lore 数组；本函数会原地插入探针或执行普通过滤。
  */
 export async function onWorldinfoEntriesLoaded(lores: LoreEntries) {
-    if (!useDataStore().settings.兼容性.额外模型解析非阻塞) {
+    if (!useDataStore().settings.互換性.追加モデル解析を非同期化) {
         await filterEntries(lores);
         return;
     }

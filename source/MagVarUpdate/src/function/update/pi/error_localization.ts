@@ -364,11 +364,11 @@ export function getPiRequestFailureToastMessage(error: unknown, responseFormat: 
         codeOf(localized) === 'provider'
     ) {
         switch (responseFormat) {
-            case '工具调用':
+            case "ツール呼び出し":
                 return tr('runtime.pi.toolRequestRejected');
-            case '格式化输出':
+            case "フォーマット出力":
                 return tr('runtime.pi.structuredOutputRequestRejected');
-            case '格式化输出(v4兼容)':
+            case "フォーマット出力(v4互換)":
                 return tr('runtime.pi.jsonObjectRequestRejected');
         }
     }

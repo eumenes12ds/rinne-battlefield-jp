@@ -90,10 +90,10 @@ export function transitionPiApiKey(
     let custom_api_key = caches.customApiKey;
     const api_keys = { ...caches.apiKeys };
 
-    if (previous.source === '自定义') {
+    if (previous.source === "カスタム") {
         custom_api_key = active_api_key;
     } else if (
-        previous.source === '更多' &&
+        previous.source === "その他" &&
         previous.authType === 'api_key' &&
         previous.keyScope !== ''
     ) {
@@ -101,9 +101,9 @@ export function transitionPiApiKey(
     }
 
     const next_api_key =
-        next.source === '自定义'
+        next.source === "カスタム"
             ? custom_api_key
-            : next.source === '更多' && next.authType === 'api_key' && next.keyScope !== ''
+            : next.source === "その他" && next.authType === 'api_key' && next.keyScope !== ''
               ? (api_keys[next.keyScope] ?? '')
               : '';
 

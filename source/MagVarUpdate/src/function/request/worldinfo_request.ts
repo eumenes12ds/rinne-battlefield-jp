@@ -59,7 +59,7 @@ export function stripWorldinfoRequestMarkers(data: {
 
 /** 取消时立即结束配置等待；底层世界书读取即使稍后返回，也不会继续登记请求。 */
 async function createRequestFilterContext(
-    request_settings: MvuSettings['额外模型解析配置'],
+    request_settings: MvuSettings["追加モデル解析設定"],
     signal?: AbortSignal
 ): Promise<EntryFilterContext> {
     signal?.throwIfAborted();
@@ -92,14 +92,14 @@ async function createRequestFilterContext(
  */
 export async function registerWorldinfoRequest(
     generation_id: string,
-    request_settings: MvuSettings['额外模型解析配置'],
+    request_settings: MvuSettings["追加モデル解析設定"],
     signal?: AbortSignal
 ): Promise<() => void> {
     const store = useDataStore();
     if (
         !store.should_enable ||
         !store.runtimes.is_during_extra_analysis ||
-        !store.settings.兼容性.额外模型解析非阻塞
+        !store.settings.互換性.追加モデル解析を非同期化
     ) {
         return () => {};
     }
