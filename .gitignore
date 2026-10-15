@@ -2,3 +2,8 @@
 **/artifact/
 **/coverage/
 **/.env*
+
+/source/MagVarUpdate/node_modules/
+/source/MagVarUpdate/slash-runner/
+/source/MagVarUpdate/artifact/
+/source/MagVarUpdate/coverage/

@@ -1,3 +1,4 @@
+import { normalizeMvuSettings } from '@/settings_contract';
 import { compileEntryCommentRegex } from '@/function/request/entry_comment_regex';
 import { tr } from '@/i18n';
 import { parseString } from '@util/common';
@@ -84,7 +85,7 @@ function removeEmptyKnownValues(draft: CharacterSettingsOverride): CharacterSett
 export function normalizeCharacterSettingsOverride(
     draft: CharacterSettingsOverride
 ): CharacterSettingsOverride {
-    return CharacterSettingsOverrideSchema.parse(removeEmptyKnownValues(draft));
+    return CharacterSettingsOverrideSchema.parse(removeEmptyKnownValues(normalizeMvuSettings(draft)));
 }
 
 function makeAdditionalPropertiesExplicit(schema: unknown): unknown {
@@ -125,7 +126,7 @@ export function parseCharacterSettingsOverrideContent(content: string): Characte
 
     // schema 仅供角色卡编辑器展示，不属于实际覆盖配置。
     const { schema: _embedded_schema, ...draft } = document as Record<string, unknown>;
-    return normalizeCharacterSettingsOverride(CharacterSettingsOverrideSchema.parse(draft));
+    return normalizeCharacterSettingsOverride(CharacterSettingsOverrideSchema.parse(normalizeMvuSettings(draft)));
 }
 
 export function recoverCharacterSettingsOverridePassthrough(
@@ -137,7 +138,7 @@ export function recoverCharacterSettingsOverridePassthrough(
     }
 
     // 丢弃可能损坏的已知字段，只抢救能够安全原样写回的未知扩展字段。
-    const recovered = klona(document) as Record<string, unknown>;
+    const recovered = klona(normalizeMvuSettings(document)) as Record<string, unknown>;
     delete recovered.schema;
     delete recovered.更新方式;
 

@@ -1,3 +1,4 @@
+import { normalizeMvuButtons } from '@/settings_contract';
 import { migrateMvuData } from '@/card_protocol';
 import { createEmptyGameData, loadInitVarData } from '@/function/initvar/variable_init';
 import { cleanUpMetadata, reconcileAndApplySchema } from '@/function/schema';
@@ -491,6 +492,7 @@ export const buttons: Button[] = [
 let prev_states: ScriptButton[] = [];
 
 export function initButtons() {
+    replaceScriptButtons(normalizeMvuButtons(getScriptButtons()));
     appendInexistentScriptButtons(buttons.map(button => ({ name: button.name, visible: false })));
     const stop_events = buttons.map(button =>
         controlledStoppableEventOn(getButtonEvent(button.name), button.function)
