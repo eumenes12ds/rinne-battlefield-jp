@@ -5046,7 +5046,7 @@ Schema、不正な状態、因果参照、明確な日付の衝突はハード�
                             const input=JSON.stringify({
                                 输入语义:{
                                     世界书:"任意の設定/原作との差異/時間資料。既に発生した事実ではなく、世界ブックがなくても正常に推演しなければならない。",
-                                    当前变量:"世界進行専用のホットデータ投影。世界、人物能力、完全な資産台帳、アクティブな伝播、直近の因果偏移、および「直近の原始アンカー + より古いルート要約」から成る階層的な長期歴史記憶を含む。原始履歴は永久にMVUに残り、上位の要約に取り込まれた旧ノードは再びホットコンテキストへ入らない。資産はWorldResult.资产と同一のトップレベル台帳で双方向に同期する。提供されていない任務/ショップ/純決算データはこのエンジンの責務ではない。",
+                                    当前变量:"世界進行専用のホットデータ投影。世界、人物能力、完全な資産台帳、アクティブな伝播、直近の因果偏移、および「直近の原始アンカー + より古いルート要約」から成る階層的な長期歴史記憶を含む。元の履歴は永久にMVUに残り、上位の要約に取り込まれた旧ノードは再びホットコンテキストへ入らない。資産はWorldResult.资产と同一のトップレベル台帳で双方向に同期する。提供されていない任務/ショップ/純決算データはこのエンジンの責務ではない。",
                                     正文楼层:"すでに演出されたストーリー。現在の事実と時間スパンを確認するために用い、舞台裏の日常として語り直さない。",
                                     程序结构修复:"エンジンがすでに行った確定的な訂正。出力でプログラムが降格/修正した旧エラーを復元してはならない。",
                                     时间线调度:"プログラムが算出したマクロ境界と期限付き再検証要求。意味的な推演はモデルが担い、スケジュールプロトコルを再定義しない。",
@@ -5295,7 +5295,7 @@ JSONのみを出力：{"要約":"..."}`;
             const engine=this.engine,snapshot=engine.snapshot(),next=copy(snapshot.raw),stat=next.stat_data,backend=stat?.世界?.[PATH];
             if(!plain(backend))throw new Error("世界バックエンドが存在しません");
             const bucketName=kind==='summary'?'历史总结':'历史',bucket=backend[bucketName];
-            if(!plain(bucket)||!plain(bucket[name]))throw new Error((kind==='summary'?"長期歴史総括":"近期歴史アンカー")+"が存在しません："+name);
+            if(!plain(bucket)||!plain(bucket[name]))throw new Error((kind==='summary'?"長期履歴の要約":"直近の履歴アンカー")+"が存在しません："+name);
             const updated=build(copy(bucket[name]));
             if(!plain(updated))throw new Error("歴史編集の結果が無効です");
             bucket[name]=updated;
@@ -5319,13 +5319,13 @@ JSONのみを出力：{"要約":"..."}`;
             const time=String(record?.時間||'').trim(),fact=String(record?.事实||'').trim();
             if(!fact)throw new Error("歴史的事実は空にできません");
             const related=this.related(record?.关联事件);
-            return this.commitEdit('anchor',name,current=>({...current,時間:time,事实:fact,关联事件:related}),"近期歴史アンカーを修正しました");
+            return this.commitEdit('anchor',name,current=>({...current,時間:time,事实:fact,关联事件:related}),"直近の履歴アンカーを修正しました");
         }
         async saveSummary(name,record){
             const summary=String(record?.要約||'').trim();
             if(!summary)throw new Error("長期歴史要約は空にできません");
             const start=String(record?.起始时间||'').trim(),end=String(record?.结束时间||'').trim();
-            return this.commitEdit('summary',name,current=>({...current,要約:summary,起始时间:start,结束时间:end}),"長期歴史総括を修正しました");
+            return this.commitEdit('summary',name,current=>({...current,要約:summary,起始时间:start,结束时间:end}),"長期履歴の要約を修正しました");
         }
     }
     class WorldStateProjector {
@@ -7282,7 +7282,7 @@ JSONのみを出力：{"要約":"..."}`;
     },null,2);
     const WORLD_PROMPT_INPUT_SEMANTICS=JSON.stringify({
         世界书:"任意の設定/原作との差異/時間資料。既に発生した事実ではなく、世界ブックがなくても正常に推演しなければならない。",
-        当前变量:"世界進行専用のホットデータ投影。世界、人物能力、完全な資産台帳、アクティブな伝播、直近の因果偏移、および「直近の原始アンカー + より古いルート要約」から成る階層的な長期歴史記憶を含む。原始履歴は永久にMVUに残り、上位の要約に取り込まれた旧ノードは再びホットコンテキストへ入らない。資産はWorldResult.资产と同一のトップレベル台帳で双方向に同期する。提供されていない任務/ショップ/純決算データはこのエンジンの責務ではない。",
+        当前变量:"世界進行専用のホットデータ投影。世界、人物能力、完全な資産台帳、アクティブな伝播、直近の因果偏移、および「直近の原始アンカー + より古いルート要約」から成る階層的な長期歴史記憶を含む。元の履歴は永久にMVUに残り、上位の要約に取り込まれた旧ノードは再びホットコンテキストへ入らない。資産はWorldResult.资产と同一のトップレベル台帳で双方向に同期する。提供されていない任務/ショップ/純決算データはこのエンジンの責務ではない。",
         正文楼层:"すでに演出されたストーリー。現在の事実と時間スパンを確認するために用い、舞台裏の日常として語り直さない。",
         程序结构修复:"エンジンがすでに行った確定的な訂正。出力でプログラムが降格/修正した旧エラーを復元してはならない。",
         时间线调度:"プログラムが算出したマクロ境界と期限付き再検証要求。意味的な推演はモデルが担い、スケジュールプロトコルを再定義しない。",
@@ -7887,8 +7887,8 @@ JSONのみを出力：{"要約":"..."}`;
                     let html='';
                     if(showRadar&&exists(radar.現在モード))html+=section("干渉モード",'<article class="we-card"><p>'+text(radar.現在モード)+'</p></article>');
                     const historyMemory=projectWorldHistoryMemory(state);
-                    html+=section("近期歴史アンカー",entries(historyMemory.近期锚点).reverse().map(([n,r])=>'<article class="we-card"><div class="we-meta">'+text(r.時間)+'</div><p>'+text(r.事实)+'</p>'+fields({关联事件:r.关联事件})+'</article>').join('')||empty("未収納の直近アンカーはありません"),(historyMemory.统计?.原始锚点总数||0)+" 件の原始履歴 · 現在のホットルートノードのみ表示");
-                    html+=section("長期歴史総括",(historyMemory.长期总结||[]).slice().reverse().map(r=>'<article class="we-card"><div class="we-card-top"><h3>'+text(r.名称)+'</h3>'+pill('L'+text(r.階層),'dim')+'</div><div class="we-meta">'+text([r.起始时间,r.结束时间].filter(Boolean).join(' → '))+'</div><p>'+text(r.要約)+'</p></article>').join('')||empty("長期の履歴要約はまだありません","履歴アンカーが蓄積されると自動で階層圧縮されます；下層の事実はMVUに保持されたままです。"),(historyMemory.统计?.总结节点总数||0)+" 件の要約ノード · 原始履歴は削除されません");
+                    html+=section("直近の履歴アンカー",entries(historyMemory.近期锚点).reverse().map(([n,r])=>'<article class="we-card"><div class="we-meta">'+text(r.時間)+'</div><p>'+text(r.事实)+'</p>'+fields({关联事件:r.关联事件})+'</article>').join('')||empty("未収納の直近アンカーはありません"),(historyMemory.统计?.原始锚点总数||0)+" 件の元の履歴 · 現在のホットルートノードのみ表示");
+                    html+=section("長期履歴の要約",(historyMemory.长期总结||[]).slice().reverse().map(r=>'<article class="we-card"><div class="we-card-top"><h3>'+text(r.名称)+'</h3>'+pill('L'+text(r.階層),'dim')+'</div><div class="we-meta">'+text([r.起始时间,r.结束时间].filter(Boolean).join(' → '))+'</div><p>'+text(r.要約)+'</p></article>').join('')||empty("長期の履歴要約はまだありません","履歴アンカーが蓄積されると自動で階層圧縮されます；下層の事実はMVUに保持されたままです。"),(historyMemory.统计?.总结节点总数||0)+" 件の要約ノード · 元の履歴は削除されません");
                     return html;
                 
         }
@@ -7914,7 +7914,7 @@ JSONのみを出力：{"要約":"..."}`;
                         :(terminalReady?"主神端末の追加モデルを使用":"主神端末の追加モデルはまだ準備できていません");
                     html+=section("画面文字サイズ","<div class=\"we-setting-row\"><div class=\"we-setting-copy\"><b>画面文字サイズ</b><small>色調は主神端末に追従；ここでは世界進行自身の文字サイズのみを調整します。</small></div><div class=\"we-setting-actions\">"+fontButtons+'</div></div>',"色調は主神端末に追従 · 既定は標準 16px");
                     const historyToProse=engine.config.sendHistoryToProse===true;
-                    html+=section('历史记忆',"<div class=\"we-setting-row\"><div class=\"we-setting-copy\"><b>本文へ履歴記憶を提供</b><small>有効にすると、本文AIが“直近の原始アンカー + より古い長期要約”を追加で読み取ります；無効でも影響するのは本文のみで、世界進行自身は常に完全な階層履歴を使用します。</small></div><div class=\"we-setting-actions\"><button class=\"we-setting-btn we-switch "+(historyToProse?'on':'')+'" data-action="history-prose-toggle"><span>'+text(historyToProse?"有効":"無効")+'</span><span class="we-switch-track"><i></i></span></button></div></div>',"既定はオフ · 原始履歴の事実はオフにしても削除されません");
+                    html+=section('历史记忆',"<div class=\"we-setting-row\"><div class=\"we-setting-copy\"><b>本文へ履歴記憶を提供</b><small>有効にすると、本文AIが“直近の原始アンカー + より古い長期要約”を追加で読み取ります；無効でも影響するのは本文のみで、世界進行自身は常に完全な階層履歴を使用します。</small></div><div class=\"we-setting-actions\"><button class=\"we-setting-btn we-switch "+(historyToProse?'on':'')+'" data-action="history-prose-toggle"><span>'+text(historyToProse?"有効":"無効")+'</span><span class="we-switch-track"><i></i></span></button></div></div>',"既定はオフ · 元の履歴の事実はオフにしても削除されません");
                     html+=section("モデル接続",
                         "<div class=\"we-setting-row\"><div class=\"we-setting-copy\"><b>現在の呼び出し元</b><small>"+text(sourceState)+'</small></div><div class="we-setting-actions"><span class="we-source-badge">'+text(engine.apiSourceLabel())+'</span></div></div>'
                         +"<div class=\"we-api-grid\"><label>シミュレーションの温度<input class=\"we-setting-input\" data-world-temperature type=\"number\" min=\"0\" max=\"2\" step=\"0.05\" value=\""+text(temperature)+"\"></label><label>予備モデル（任意）<input class=\"we-setting-input\" data-fallback-model list=\"we-world-fallback-models\" value=\""+text(fallbackModel)+"\" placeholder=\"主モデルが連続失敗した際に切り替え\"><datalist id=\"we-world-fallback-models\">"+modelOptions+"</datalist></label></div><p class=\"we-muted\">温度の初期値は 0.3 です。予備モデルは空欄なら無効です。指定した場合、主モデルが「モデルごとの最大試行回数」に達しても失敗した時に予備モデルへ切り替えます。専用 API と新版の主神端末追加モデルの両方で、モデルの指定を変更できます。</p>"
@@ -8350,7 +8350,7 @@ JSONのみを出力：{"要約":"..."}`;
             const text=v=>escape(v==null?'':v);
             const exists=v=>v!==''&&v!=null&&(!Array.isArray(v)||v.length)&&(!plain(v)||Object.keys(v).length);
             const pill=(v,kind='')=>'<span class="we-pill '+kind+'">'+text(uiLabel(v))+'</span>';
-            const empty=(title,desc="初回の推演後、根拠のある世界記録がここに表示されます。")=>'<div class="we-empty"><b>'+text(title)+'</b>'+text(desc)+'</div>';
+            const empty=(title,desc="最初の進行処理後、根拠のある世界記録がここに表示されます。")=>'<div class="we-empty"><b>'+text(title)+'</b>'+text(desc)+'</div>';
             const value=v=>Array.isArray(v)?(v.every(x=>!plain(x))?'<div class="we-chips">'+v.map(x=>pill(x,'dim')).join('')+'</div>':v.map(x=>'<div class="we-card">'+fields(x)+'</div>').join('')):plain(v)?fields(v):text(v);
             const fields=obj=>'<dl>'+Object.entries(obj||{}).filter(([,v])=>exists(v)).map(([k,v])=>'<dt>'+text(uiLabel(k))+'</dt><dd>'+value(v)+'</dd>').join('')+'</dl>';
             const details=(id,obj,title="完全な記録を表示")=>Object.values(obj).some(exists)?'<details data-detail="'+text(id)+'"'+(opened.has(id)?' open':'')+'><summary>'+text(title)+'</summary>'+fields(obj)+'</details>':'';
@@ -8491,7 +8491,7 @@ JSONのみを出力：{"要約":"..."}`;
                 }
                 const marked=new Map();
                 calendarCandidates.forEach(([,e])=>{const key=parseDate(e.時間||e.开始时间)?.key;if(key)marked.set(key,(marked.get(key)||0)+1);});
-                let cells=['一','二','三','四',"金","土",'日'].map(x=>'<span>'+x+'</span>').join('')+'<span></span>'.repeat(first);
+                let cells=['月','火','水','木','金','土','日'].map(x=>'<span>'+x+'</span>').join('')+'<span></span>'.repeat(first);
                 for(let d=1;d<=count;d++){const key=y+'-'+m+'-'+d;cells+='<button data-action="date" data-date="'+key+'" aria-label="'+key+'" aria-pressed="'+(engine.selectedDate===key)+'" title="'+key+' · '+(marked.get(key)||0)+" 件の一致イベント\" class=\""+(today.key===key?'today ':'')+(marked.has(key)?'has-event ':'')+(engine.selectedDate===key?'selected':'')+'">'+d+'</button>';}
                 return "<div class=\"we-calendar\"><div class=\"we-calhead\"><button class=\"we-btn\" data-action=\"month\" data-step=\"-1\" aria-label=\"前月\">‹</button><strong>"+y+' 年 '+m+" 月</strong><button class=\"we-btn\" data-action=\"month\" data-step=\"1\" aria-label=\"翌月\">›</button></div><div class=\"we-days\">"+cells+'</div><div class="we-meta"><span>'+text(customMonths.length?(w.暦法?.名称||"作品暦")+" · 今月 "+count+" 日":"グレゴリオ暦表示 · 今月 "+count+" 日")+"</span><span>金枠 · 現在の日付</span><span>緑の点 · 予定済みイベント</span></div></div>";
             };
@@ -8825,14 +8825,14 @@ JSONのみを出力：{"要約":"..."}`;
         mountHistoryControls(){
             const engine=this.engine;if(engine.tab!=='运行记录'||!engine.panel)return;
             const backend=engine.services.history.backend(),memory=projectWorldHistoryMemory(backend);
-            const recentNames=Object.entries(memory.近期锚点||{}).reverse().map(([name])=>name),recentSection=this.section("近期歴史アンカー");
+            const recentNames=Object.entries(memory.近期锚点||{}).reverse().map(([name])=>name),recentSection=this.section("直近の履歴アンカー");
             Array.from(recentSection?.querySelectorAll('.we-card')||[]).forEach((card,index)=>{
                 const name=recentNames[index];if(!name||card.querySelector('.we-history-actions'))return;
                 card.dataset.historyName=name;card.dataset.historyKind='anchor';
                 const actions=engine.host.document.createElement('div');actions.className='we-history-actions';
                 actions.innerHTML='<button type="button" data-action="history-anchor-edit" data-history-name="'+this.escape(name)+"\">編集</button>";card.appendChild(actions);
             });
-            const summaryNames=(memory.长期总结||[]).slice().reverse().map(item=>item.名称),summarySection=this.section("長期歴史総括");
+            const summaryNames=(memory.长期总结||[]).slice().reverse().map(item=>item.名称),summarySection=this.section("長期履歴の要約");
             Array.from(summarySection?.querySelectorAll('.we-card')||[]).forEach((card,index)=>{
                 const name=summaryNames[index];if(!name||card.querySelector('.we-history-actions'))return;
                 card.dataset.historyName=name;card.dataset.historyKind='summary';

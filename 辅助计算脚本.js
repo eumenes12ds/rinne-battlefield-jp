@@ -1535,7 +1535,9 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         ATTR_NAMES.forEach(a => {
             let m = calcModifier(finalBase[a]);
             if (Number.isFinite(modifierCap)) m = Math.min(m, modifierCap);
-            attr[`${a}修正`] = m;
+            const modifierKey = ({ 筋力: '力量', 体力: '体质' }[a] || a) + '修正';
+            attr[modifierKey] = m;
+            if (modifierKey !== `${a}修正`) delete attr[`${a}修正`];
         });
 
         // —— 3. 装備 + 形態の派生/判定加値を集計する（いずれも真属性の数値を使用） ——

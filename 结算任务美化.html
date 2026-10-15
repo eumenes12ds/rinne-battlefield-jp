@@ -1811,7 +1811,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
               const n = String(name || '');
               if (/評価|评估|難易度|难度|安定|稳定/.test(n)) return 'assess';
               if (/烙印|回放|再生|传闻|噂|风格/.test(n)) return 'story';
-              if (/法则|战利品|遗物|遺物/.test(n)) return 'loot';
+              if (/法則|法则|戦利品|战利品|遗物|遺物/.test(n)) return 'loot';
               if (/收益|核算|スペースコイン|空间币/.test(n)) return 'income';
               if (/演进|暗流|最终|因果/.test(n)) return 'epilogue';
               return 'generic';
@@ -1850,7 +1850,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
               if (/^[\*【]*(?:ヒント|提示)[：:]/.test(body)) { push('notice', { text: stripDecor(body.replace(/^[\*【]*(?:ヒント|提示)[：:]?\s*/, '').replace(/[\*】]*$/, '')) }); curSub = ''; continue; }
               if ((m = body.match(/^\*{0,2}(?:インスタンスの烙印|副本烙印)\s*[｜|]?\s*(.+)$/))) { push('brand', { name: stripDecor(m[1]) }); continue; }
-              if (/主神权限凭证/.test(body) && body.replace(/\*/g, '').length < 30) { curSub = '主神权限凭证'; cardSec = ''; push('cert', {}); continue; }
+              if (/主神権限証憑|主神权限凭证/.test(body) && body.replace(/\*/g, '').length < 30) { curSub = '主神权限凭证'; cardSec = ''; push('cert', {}); continue; }
               if (/(?:世界結晶|世界结晶)/.test(body) && body.replace(/[*【】（）()：:]/g, '').length < 30) { curSub = '世界結晶'; cardSec = ''; push('relic', { label: '世界結晶 · クリア記念品', name: '', type: '', effect: '', desc: '' }); continue; }
               if (/(?:世界遺物・特別褒賞|世界遗物特别嘉奖)/.test(body) && body.replace(/\*/g, '').length < 30) { curSub = '世界遺物'; cardSec = ''; push('relicGold', { label: '世界遺物 · 特別褒賞', name: '', type: '', effect: '', desc: '', origin: '' }); continue; }
 
@@ -1907,8 +1907,8 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                   if (card) { card.effect = (card.effect ? card.effect + '\n' : '') + k + '：' + v; push('para', { text: k + '：' + v }); continue; }
                 }
 
-                if (curStage && curStage.type === 'income' && /合计|上限|实际计入/.test(k)) { push('sum', { name: k, v: v }); continue; }
-                if (/总收益/.test(k)) { const nm = v.match(/-?[\d,，\.]+\s*万?/); push('total', { num: nm ? parseCnNum(nm[0]) : null, text: v, debt: /负债/.test(v) }); continue; }
+                if (curStage && curStage.type === 'income' && /合計|合计|上限|実際計上|实际计入/.test(k)) { push('sum', { name: k, v: v }); continue; }
+                if (/総収益|总收益/.test(k)) { const nm = v.match(/-?[\d,，\.]+\s*万?/); push('total', { num: nm ? parseCnNum(nm[0]) : null, text: v, debt: /負債|负债/.test(v) }); continue; }
                 if (/稳定|安定/.test(k) && /→|->/.test(v)) { const pm = v.match(/(\d+(?:\.\d+)?)\s*%\s*(?:→|->)\s*(\d+(?:\.\d+)?)\s*%/); if (pm) { push('stab', { from: parseFloat(pm[1]), to: parseFloat(pm[2]) }); continue; } }
                 if (/^注/.test(k)) { push('note', { text: k + '：' + v }); continue; }
                 if (curStage && curStage.type === 'income' && isList && !/^注/.test(k) && /->|→|强制执行(?:惩罚|罰則)/.test(v)) { push('punish', { name: k.replace(/[[\]]/g, ''), desc: v.replace(/^强制执行(?:惩罚|罰則)\s*(?:->|→)?\s*/, '') }); continue; }
@@ -2077,7 +2077,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 return '<div class="st-calc-row"><span class="st-calc-src">[' + escapeHtml(srcTxt) + ']</span><span class="st-calc-formula">' + escapeHtml(it.formula) + '</span><span class="st-calc-sum">= ' + escapeHtml(it.result) + '</span></div>';
               }
               case 'punish': return '<div class="st-punish"><span class="t">⚠ ' + escapeHtml(it.name) + '</span><span class="d">' + escapeHtml(it.desc) + '</span></div>';
-              case 'sum': return '<div class="st-sum-row' + (/计入/.test(it.name) ? ' final' : '') + '"><span class="k">' + escapeHtml(it.name) + '</span><span class="v">' + escapeHtml(it.v) + '</span></div>';
+              case 'sum': return '<div class="st-sum-row' + (/計上|计入/.test(it.name) ? ' final' : '') + '"><span class="k">' + escapeHtml(it.name) + '</span><span class="v">' + escapeHtml(it.v) + '</span></div>';
               case 'total': {
                 const neg = it.num != null && it.num < 0;
                 const numText = it.num != null ? fmtNum(it.num) : it.text;

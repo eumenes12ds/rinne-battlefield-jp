@@ -3,9 +3,9 @@
     "path": "辅助计算脚本.js",
     "source": "Frank0200/lunhui-jsDelivr@v1.0.15-JP",
     "upstreamSha256": "c26c59f9457bd0901fe2d78bc5d5b7ef2f97c287760bd713fea613828e35744c",
-    "sha256": "4deda7c76033f5888879c99403880c7d2642290bff81bea1850542acf5edf47b",
-    "bytes": 137012,
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/辅助计算脚本.js"
+    "sha256": "e128ebc5c8601948775cd5bc8c7365594c043b54d03a66cb528414d8148baa01",
+    "bytes": 137177,
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/辅助计算脚本.js"
   },
   {
     "path": "悬浮球状态栏.js",
@@ -13,39 +13,39 @@
     "upstreamSha256": "88ccf1dfb6bc7018401d36959846bb26fd99ff97c03fefb3fa4d29addba8dde5",
     "sha256": "f240567f7a6a3c581b84bb09c8134eb4d5ab8a8d0c6c4f46cb68a93bde770b9d",
     "bytes": 735852,
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/悬浮球状态栏.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/悬浮球状态栏.js"
   },
   {
     "path": "世界推进系统.js",
     "source": "Unspoken-MomoTea/Battlefield-of-Reincarnation@f2583b3cdf6ab880a254dfe405b33dbafe302f54",
     "upstreamSha256": "471b5029895c7c9df9c7185219c6a4e1d886a982f21d3140e4c2de53abc55ccc",
-    "sha256": "ba2b88a7e45836509cef2774bae347c067eeaec4cda73ee6369ae94e489f24c9",
-    "bytes": 846137,
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/世界推进系统.js"
+    "sha256": "6c458db68483207d9baedd7d9f435db698109207c86653ad12e93242bbee105f",
+    "bytes": 846167,
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/世界推进系统.js"
   },
   {
     "path": "开局.html",
     "source": "Frank0200/lunhui-jsDelivr@v1.0.15-JP",
     "upstreamSha256": "9429cf8550926676c20aef073122ac00289695e090df0ca9c301835b3e21569e",
-    "sha256": "efb73414e9dfbca407e16ff039abd04ff59a8af6564ea0f7ba4b65f34954b4ac",
-    "bytes": 224435,
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/开局.html"
+    "sha256": "bdecf5d4310bcdbc6a5d3b4476d8d944c282bff0aa94dd43e17b3cfeb3c02061",
+    "bytes": 224723,
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/开局.html"
   },
   {
     "path": "结算任务美化.html",
     "source": "Frank0200/lunhui-jsDelivr@v1.0.15-JP",
     "upstreamSha256": "29fe19de0d737b3965889cdb31927c41c1bc292e924e1c6e178577b5d51e87f2",
-    "sha256": "de4fb2fa48b05670ef4d8961f60eac8b63d0179a00b5556bf68da05252e7ec75",
-    "bytes": 164428,
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/结算任务美化.html"
+    "sha256": "27144d70c5ef75c8cb6dd877cd4b0144dc39fc86b5c68f9a549aa4ac02cf3af3",
+    "bytes": 164508,
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/结算任务美化.html"
   },
   {
     "path": "bundle.js",
     "source": "Frank0200/lunhui-jsDelivr@v1.0.15-JP",
     "upstreamSha256": "12c8cd1c71aa3c22f207972808b2fd2148eb7e2b0a628f3b66bddc35591f66ff",
-    "sha256": "bc5d277f05979e48e183a2e1e58f7a862476aecba79f30b0d97bfbcd49318862",
+    "sha256": "663113a2fad51304170afcb02aff4f75c878cc0a84759e98921d91223046e4a2",
     "bytes": 618860,
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/bundle.js",
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/bundle.js",
     "buildSource": "source/MagVarUpdate (Japanese UI plus settings boundary compatibility)"
   },
   {
@@ -54,8 +54,8 @@
     "upstreamSha256": "78c40f52d81022d9d769a923a49e673b8babb562656051a7d0410b6b19f45184",
     "sha256": "5044e33bcd5b006f358da3313d7927e968b6ed3d13a73a4e01da64be538057bc",
     "bytes": 4737,
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/mvu_zod.js",
-    "buildSource": "source/tavern_resource"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/mvu_zod.js",
+    "buildSource": "source/MagVarUpdate/vendor-source/tavern_resource"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@google/genai@2.21.0/+esm",
@@ -67,7 +67,7 @@
     "imports": [
       "vendor/npm/p-retry/4.6.2/9a1acf5b11af.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_google_genai/2.21.0/8c6d4f2ea110.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_google_genai/2.21.0/8c6d4f2ea110.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/+esm",
@@ -83,7 +83,7 @@
       "vendor/npm/typebox/1.3.7/4ff040ae9f2d.js",
       "vendor/npm/typebox/1.3.7/f50275382a20.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/0ce69f9aa4e2.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/0ce69f9aa4e2.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/ant-ling.models/+esm",
@@ -93,7 +93,7 @@
     "upstreamSha256": "85f9bd749253eb26b546bc3127c0c6c44c31af5729e14863329ea9e3b8fb404b",
     "bytes": 1774,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/c9722c9a17d0.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/c9722c9a17d0.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/anthropic.models/+esm",
@@ -103,7 +103,7 @@
     "upstreamSha256": "a2e14751f67703f04abe9ac4ad233e16797503251b723bce2e8beb4882352fc9",
     "bytes": 5643,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/548fa92ee146.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/548fa92ee146.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/baseten.models/+esm",
@@ -113,7 +113,7 @@
     "upstreamSha256": "37408d9116ff6379244728191bc844a0b531bae65602e77c1de2b867a4f1128b",
     "bytes": 12918,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/3ec55e16f04d.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/3ec55e16f04d.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/cerebras.models/+esm",
@@ -123,7 +123,7 @@
     "upstreamSha256": "27b4058b1313ec7cf975d9ded1d0d5c5e067654f4f236be918c3d3d4544fd0ba",
     "bytes": 1253,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/63ea1c7ef29d.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/63ea1c7ef29d.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/deepseek.models/+esm",
@@ -133,7 +133,7 @@
     "upstreamSha256": "33308c4ef75345d6f2807ff797fa718e6e2b31e7d729382d46844eacdeebc59e",
     "bytes": 1960,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/c16a8021413a.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/c16a8021413a.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/fireworks.models/+esm",
@@ -143,7 +143,7 @@
     "upstreamSha256": "30c39de53b2ab1b43c28bbffe62eb928c884fbda816e4cd1e1ec274996f4be62",
     "bytes": 10395,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/2dbb96b90410.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/2dbb96b90410.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/github-copilot.models/+esm",
@@ -153,7 +153,7 @@
     "upstreamSha256": "111b239658a681ec7d80c03bfd4a41825af69acdbded9c2b3fc93798a19e64b5",
     "bytes": 16722,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/572b548ac669.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/572b548ac669.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/google.models/+esm",
@@ -163,7 +163,7 @@
     "upstreamSha256": "64a30b32c1b22e861cb6e41637a9a5012398f1120cfe828b0e02462056080153",
     "bytes": 8064,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/29d2270e9109.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/29d2270e9109.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/groq.models/+esm",
@@ -173,7 +173,7 @@
     "upstreamSha256": "d28a3e140d28e9ca3c9a377198d31991a9d260e5e4eb0ee59ec77e8c1d93ef23",
     "bytes": 2836,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/6cca1de34616.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/6cca1de34616.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/huggingface.models/+esm",
@@ -183,7 +183,7 @@
     "upstreamSha256": "8547bd86bf6db674a6d2374a49d408495c343298d3f55f3289ff7b5af6512d18",
     "bytes": 25324,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/ba44fc7db929.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/ba44fc7db929.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/kimi-coding.models/+esm",
@@ -193,7 +193,7 @@
     "upstreamSha256": "ca8cc53e57cad0d758f6567245b38c4cbf6df55e5e6cf4f54329f1081e0e3824",
     "bytes": 1890,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/31f3eeeab543.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/31f3eeeab543.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/minimax.models/+esm",
@@ -203,7 +203,7 @@
     "upstreamSha256": "b0fbfa819b7042ece7a87bbd0fb8147bc25040df1d39f1631f15e2576b0c738e",
     "bytes": 1253,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/49b5c374d50e.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/49b5c374d50e.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/minimax-cn.models/+esm",
@@ -213,7 +213,7 @@
     "upstreamSha256": "d38417a974d6437f024842354712774c7fe238e0b033f701559c09255dd16ba5",
     "bytes": 1277,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/0ea46903fd6e.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/0ea46903fd6e.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/mistral.models/+esm",
@@ -223,7 +223,7 @@
     "upstreamSha256": "859f8ef86ffda353308951c8cdf7f38250b70549225f56fd6a4145bf3d555b31",
     "bytes": 9139,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/99eb735c4ec1.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/99eb735c4ec1.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/moonshotai.models/+esm",
@@ -233,7 +233,7 @@
     "upstreamSha256": "de448381afd928beb8bd39cc2a2f202f93cd7ce6dc8d87101dc75ec07177ad2b",
     "bytes": 4922,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/13538c7cd964.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/13538c7cd964.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/moonshotai-cn.models/+esm",
@@ -243,7 +243,7 @@
     "upstreamSha256": "6e767a53a5d94f6b59dd7d35a4782b205f654ccc4e0ff792f6e73ebd2ff9bc17",
     "bytes": 4961,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/1493efabfa3e.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/1493efabfa3e.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/nvidia.models/+esm",
@@ -253,7 +253,7 @@
     "upstreamSha256": "583e1946cebec0b212b5da2b2b0a04382d9c4b00702f67b7310ff2401ed50375",
     "bytes": 10674,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/e9ea9bd4ab2b.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/e9ea9bd4ab2b.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/openai.models/+esm",
@@ -263,7 +263,7 @@
     "upstreamSha256": "8eacfd16faac329c100e0876eb59f0e8d20314b3d8f048bf79d4359f3d9f5f9d",
     "bytes": 16099,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/120c4e7ff557.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/120c4e7ff557.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/openai-codex.models/+esm",
@@ -273,7 +273,7 @@
     "upstreamSha256": "d86c3b16ec21896b459a145dfbbf2d5d717b46796092fecc29fd1454d46bc83d",
     "bytes": 4147,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/e6f5e32b70c9.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/e6f5e32b70c9.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/opencode.models/+esm",
@@ -283,7 +283,7 @@
     "upstreamSha256": "b4467f94b5964ba32301d4bba544828fa5518b6978c951aaafdfafe6e48be3ae",
     "bytes": 26702,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/75182e966b21.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/75182e966b21.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/opencode-go.models/+esm",
@@ -293,7 +293,7 @@
     "upstreamSha256": "b31ec28bd63a96db13b75ba38871f8551f97d80de3953ec231d6a6fabe4456be",
     "bytes": 11362,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/4c4c45b82afb.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/4c4c45b82afb.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/openrouter.models/+esm",
@@ -303,7 +303,7 @@
     "upstreamSha256": "cf79274dff5481a59ab2c484a5869f6f2513f0809c273decda8a1da2758213d1",
     "bytes": 147239,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/483e5a8662bc.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/483e5a8662bc.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/qwen-token-plan.models/+esm",
@@ -313,7 +313,7 @@
     "upstreamSha256": "aa8accab18586d6d2ad8a54f27edafc4af05f1a59e8386c871c937d1432633ea",
     "bytes": 8591,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/38588cb89259.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/38588cb89259.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/qwen-token-plan-cn.models/+esm",
@@ -323,7 +323,7 @@
     "upstreamSha256": "7bc43d045d9f6f46909309fc24831fc1d1d2779ffae5709961a5f274fac8d574",
     "bytes": 8582,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/6f846826eba8.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/6f846826eba8.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/qwen-token-plan-individual.models/+esm",
@@ -333,7 +333,7 @@
     "upstreamSha256": "4cfa7e9e5917388f01e1dc1513c29e7d908787d4c44beff139f2353b3e3e5145",
     "bytes": 4840,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/f26ff12ab637.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/f26ff12ab637.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/together.models/+esm",
@@ -343,7 +343,7 @@
     "upstreamSha256": "de7902074f624a66ab53a729811da18b1ca8c6400d8599612e64a5e4a8f9471f",
     "bytes": 11256,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/4c45c0edb21f.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/4c45c0edb21f.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/vercel-ai-gateway.models/+esm",
@@ -353,7 +353,7 @@
     "upstreamSha256": "c18922df4d018923db455213a12616799722767c05e6956b154f42e649b98a6a",
     "bytes": 71764,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/a2acebc98a3b.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/a2acebc98a3b.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/xai.models/+esm",
@@ -363,7 +363,7 @@
     "upstreamSha256": "9c140362d812492e5116c5addc65358029cb87dbfa8e6995d6f153261407d8bf",
     "bytes": 1526,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/3238cc3d60f7.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/3238cc3d60f7.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/xiaomi.models/+esm",
@@ -373,7 +373,7 @@
     "upstreamSha256": "c96030047c7d949893a5cd48c618ad9a2b2e3ccfeaca7e8899ee4ad9a4a1d33f",
     "bytes": 1500,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/31a214e3c3b8.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/31a214e3c3b8.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/xiaomi-token-plan-ams.models/+esm",
@@ -383,7 +383,7 @@
     "upstreamSha256": "b2b80b8b91c383ea4ce28978c75aea6a271343223f85f9b8520580e2becbb464",
     "bytes": 1197,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/ea56c884aa0d.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/ea56c884aa0d.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/xiaomi-token-plan-cn.models/+esm",
@@ -393,7 +393,7 @@
     "upstreamSha256": "e139f8f4e3ed62dc4cc89e37381a229efe38f601f0f4b333e71d79d1eef3ad40",
     "bytes": 1190,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/afb7f897288b.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/afb7f897288b.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/xiaomi-token-plan-sgp.models/+esm",
@@ -403,7 +403,7 @@
     "upstreamSha256": "d74b21cac1346e4e136e0847dc944ad77cb59809e559413a38f6f112827d18ee",
     "bytes": 1197,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/620ee9c893a0.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/620ee9c893a0.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/zai.models/+esm",
@@ -413,7 +413,7 @@
     "upstreamSha256": "0fbc01b6f1762577742bb178191ec28a2188e82f917f270d51ac81c103a93540",
     "bytes": 3703,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/7231d227c0ee.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/7231d227c0ee.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/providers/zai-coding-cn.models/+esm",
@@ -423,7 +423,7 @@
     "upstreamSha256": "79c860adedbd5a843bf558023bdfee2547d2729037a162367f72f8fee4521b4a",
     "bytes": 5106,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/61783653d721.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/61783653d721.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/api/openai-responses.lazy/+esm",
@@ -435,7 +435,7 @@
     "imports": [
       "vendor/npm/_earendil-works_pi-ai/0.85.1/8c8011d5bace.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/aaa7a57c30ae.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/aaa7a57c30ae.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/api/openai-completions.lazy/+esm",
@@ -447,7 +447,7 @@
     "imports": [
       "vendor/npm/_earendil-works_pi-ai/0.85.1/ddc9ca1e6efb.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/7430196d15ba.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/7430196d15ba.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/api/anthropic-messages.lazy/+esm",
@@ -459,7 +459,7 @@
     "imports": [
       "vendor/npm/_earendil-works_pi-ai/0.85.1/00e7f5f030d5.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/69c45eb700a8.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/69c45eb700a8.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/api/google-generative-ai.lazy/+esm",
@@ -471,7 +471,7 @@
     "imports": [
       "vendor/npm/_earendil-works_pi-ai/0.85.1/10fdc8d6c96a.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/8b6f1cddcf3b.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/8b6f1cddcf3b.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/api/mistral-conversations.lazy/+esm",
@@ -483,7 +483,7 @@
     "imports": [
       "vendor/npm/_earendil-works_pi-ai/0.85.1/644ded18d04a.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/490099630583.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/490099630583.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/api/openai-codex-responses.lazy/+esm",
@@ -495,7 +495,7 @@
     "imports": [
       "vendor/npm/_earendil-works_pi-ai/0.85.1/382b6f58a7ce.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/af58a5153f70.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/af58a5153f70.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/api/google-shared/+esm",
@@ -507,7 +507,7 @@
     "imports": [
       "vendor/npm/_google_genai/1.52.0/ed035d55da89.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/81ae09caa1bb.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/81ae09caa1bb.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/api/simple-options/+esm",
@@ -517,7 +517,7 @@
     "upstreamSha256": "032b14ee605ca3f4a0892fd0486f2a0161e0ab5e5326c81e07280a6250eb3063",
     "bytes": 3417,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/f638cd799279.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/f638cd799279.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@intlify/core-base/+esm",
@@ -531,7 +531,7 @@
       "vendor/npm/_intlify_message-compiler/11.4.12/f7a84aaa900c.js",
       "vendor/npm/_intlify_message-compiler/11.4.12/f7a84aaa900c.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_intlify_core-base/11.4.12/857ab6a12acd.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_intlify_core-base/11.4.12/857ab6a12acd.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@intlify/shared/+esm",
@@ -541,7 +541,7 @@
     "upstreamSha256": "96d7a40d7aaff3ca2860b4977bdcdd6e95c35ec89aed10a439c5ce801466e9e3",
     "bytes": 5162,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_intlify_shared/11.4.12/73fefb391a84.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_intlify_shared/11.4.12/73fefb391a84.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/jsonrepair/+esm",
@@ -551,7 +551,7 @@
     "upstreamSha256": "d74e6d2d78d2b12a8b32482657f5efa7691d09534551eb700a32ee741ffba362",
     "bytes": 8231,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/jsonrepair/3.15.0/3c7c77923670.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/jsonrepair/3.15.0/3c7c77923670.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/compare-versions/+esm",
@@ -561,7 +561,7 @@
     "upstreamSha256": "72aca95e36fb70155e5f43546fe668c010fe82fd13e5a45d39427b26fed0a6f6",
     "bytes": 2377,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/compare-versions/6.1.1/83b186a3f907.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/compare-versions/6.1.1/83b186a3f907.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/json5/+esm",
@@ -571,7 +571,7 @@
     "upstreamSha256": "39805a3d9701b8ed20e892ccf86223f928382aa17edfc2361e6c5c76a473d3b2",
     "bytes": 27327,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/json5/2.2.3/4067dc802db6.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/json5/2.2.3/4067dc802db6.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/klona/+esm",
@@ -581,7 +581,7 @@
     "upstreamSha256": "e6bb95d703905b5d1eed18561ba26568159f383f4b1f7a351de864c26ce8366b",
     "bytes": 1153,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/klona/2.0.6/bbebd2a5b26f.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/klona/2.0.6/bbebd2a5b26f.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/mathjs/+esm",
@@ -602,7 +602,7 @@
       "vendor/npm/seedrandom/3.0.5/aab5c8a1fb17.js",
       "vendor/npm/tiny-emitter/2.1.0/e38d2d8ba494.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/mathjs/15.2.0/736ffcf81743.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/mathjs/15.2.0/736ffcf81743.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/compare-versions@6.1.1/+esm",
@@ -612,7 +612,7 @@
     "upstreamSha256": "72aca95e36fb70155e5f43546fe668c010fe82fd13e5a45d39427b26fed0a6f6",
     "bytes": 2377,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/compare-versions/6.1.1/79316a62dd5f.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/compare-versions/6.1.1/79316a62dd5f.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/json5@2.2.3/+esm",
@@ -622,7 +622,7 @@
     "upstreamSha256": "39805a3d9701b8ed20e892ccf86223f928382aa17edfc2361e6c5c76a473d3b2",
     "bytes": 27327,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/json5/2.2.3/b0d644ab0704.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/json5/2.2.3/b0d644ab0704.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/jsonrepair@3.15.0/+esm",
@@ -632,7 +632,7 @@
     "upstreamSha256": "d74e6d2d78d2b12a8b32482657f5efa7691d09534551eb700a32ee741ffba362",
     "bytes": 8231,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/jsonrepair/3.15.0/0b90418a01d7.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/jsonrepair/3.15.0/0b90418a01d7.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/zod/v4/core/+esm",
@@ -642,7 +642,7 @@
     "upstreamSha256": "1bd3b454a789837ccbb8c37700042e466d3cb12dfa7549bfcc93b10f021519b9",
     "bytes": 409375,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/zod/4.6.5/34b445af0a4e.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/zod/4.6.5/34b445af0a4e.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/klona@2.0.6/+esm",
@@ -652,7 +652,7 @@
     "upstreamSha256": "e6bb95d703905b5d1eed18561ba26568159f383f4b1f7a351de864c26ce8366b",
     "bytes": 1153,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/klona/2.0.6/1de46fb58e87.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/klona/2.0.6/1de46fb58e87.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/p-retry@4.6.2/+esm",
@@ -664,7 +664,7 @@
     "imports": [
       "vendor/npm/retry/0.13.1/9303ab6c0cc5.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/p-retry/4.6.2/9a1acf5b11af.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/p-retry/4.6.2/9a1acf5b11af.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/typebox@1.3.7/+esm",
@@ -674,7 +674,7 @@
     "upstreamSha256": "68477e358c5dfe0279a8d160297259976715038bb65e66ada8dcb5328d0320aa",
     "bytes": 76488,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/typebox/1.3.7/4fe29aa1e75c.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/typebox/1.3.7/4fe29aa1e75c.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/partial-json@0.1.7/+esm",
@@ -684,7 +684,7 @@
     "upstreamSha256": "f7d1dcbdc45780ff1c525bded427414e49604498ee9c509139e1fca873413aba",
     "bytes": 4597,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/partial-json/0.1.7/6a73b4143fd8.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/partial-json/0.1.7/6a73b4143fd8.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/typebox@1.3.7/compile/+esm",
@@ -694,7 +694,7 @@
     "upstreamSha256": "5466fd8853f6ff3bba904124011b743230ac841b7ce5af8e243eebfa0573bb0b",
     "bytes": 116167,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/typebox/1.3.7/4ff040ae9f2d.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/typebox/1.3.7/4ff040ae9f2d.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/typebox@1.3.7/value/+esm",
@@ -704,7 +704,7 @@
     "upstreamSha256": "8ec08c78bd8af06e882ac1b2f2b5016b9633c8b9761fd6b0ce8f8df3e22f4db5",
     "bytes": 105667,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/typebox/1.3.7/f50275382a20.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/typebox/1.3.7/f50275382a20.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/dist/api/openai-responses.js/+esm",
@@ -717,7 +717,7 @@
       "vendor/npm/openai/6.40.0/dbb6625e04b1.js",
       "vendor/npm/partial-json/0.1.7/6a73b4143fd8.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/8c8011d5bace.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/8c8011d5bace.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/dist/api/openai-completions.js/+esm",
@@ -730,7 +730,7 @@
       "vendor/npm/openai/6.40.0/dbb6625e04b1.js",
       "vendor/npm/partial-json/0.1.7/6a73b4143fd8.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/ddc9ca1e6efb.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/ddc9ca1e6efb.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/dist/api/anthropic-messages.js/+esm",
@@ -743,7 +743,7 @@
       "vendor/npm/_anthropic-ai_sdk/0.123.0/544cffe64b19.js",
       "vendor/npm/partial-json/0.1.7/6a73b4143fd8.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/00e7f5f030d5.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/00e7f5f030d5.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/dist/api/google-generative-ai.js/+esm",
@@ -755,7 +755,7 @@
     "imports": [
       "vendor/npm/_google_genai/1.52.0/ed035d55da89.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/10fdc8d6c96a.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/10fdc8d6c96a.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/dist/api/mistral-conversations.js/+esm",
@@ -767,7 +767,7 @@
     "imports": [
       "vendor/npm/partial-json/0.1.7/6a73b4143fd8.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/644ded18d04a.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/644ded18d04a.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@earendil-works/pi-ai@0.85.1/dist/api/openai-codex-responses.js/+esm",
@@ -779,7 +779,7 @@
     "imports": [
       "vendor/npm/partial-json/0.1.7/6a73b4143fd8.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_earendil-works_pi-ai/0.85.1/382b6f58a7ce.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_earendil-works_pi-ai/0.85.1/382b6f58a7ce.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@google/genai@1.52.0/+esm",
@@ -791,7 +791,7 @@
     "imports": [
       "vendor/npm/p-retry/4.6.2/9a1acf5b11af.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_google_genai/1.52.0/ed035d55da89.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_google_genai/1.52.0/ed035d55da89.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@intlify/shared@11.4.12/+esm",
@@ -801,7 +801,7 @@
     "upstreamSha256": "96d7a40d7aaff3ca2860b4977bdcdd6e95c35ec89aed10a439c5ce801466e9e3",
     "bytes": 5162,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_intlify_shared/11.4.12/297996712f6c.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_intlify_shared/11.4.12/297996712f6c.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@intlify/message-compiler@11.4.12/+esm",
@@ -813,7 +813,7 @@
     "imports": [
       "vendor/npm/_intlify_shared/11.4.12/297996712f6c.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_intlify_message-compiler/11.4.12/f7a84aaa900c.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_intlify_message-compiler/11.4.12/f7a84aaa900c.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@babel/runtime@7.29.2/helpers/extends/+esm",
@@ -823,7 +823,7 @@
     "upstreamSha256": "ec0d3fce0e9fd17f25cea2126048308d34bc56cd8674f2d307cf2e59bb1cd303",
     "bytes": 506,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_babel_runtime/7.29.2/bf80c6b002df.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_babel_runtime/7.29.2/bf80c6b002df.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/typed-function@4.2.2/+esm",
@@ -833,7 +833,7 @@
     "upstreamSha256": "496e19fc7e1be28fc1a59bab8ca1c9e15abaf5c50d3db21aea84dadc32c06cba",
     "bytes": 17539,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/typed-function/4.2.2/b922ce65cd73.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/typed-function/4.2.2/b922ce65cd73.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/decimal.js@10.6.0/+esm",
@@ -843,7 +843,7 @@
     "upstreamSha256": "a969cf2e76c317b9daf06d5277bdbb0bda6a3c81003665ce50ae2a93dfbbdfaa",
     "bytes": 32660,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/decimal.js/10.6.0/4d80640c12ef.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/decimal.js/10.6.0/4d80640c12ef.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/complex.js@2.4.3/+esm",
@@ -853,7 +853,7 @@
     "upstreamSha256": "fe58c08f8da2db62493f8d64adfca5b58d4b86b92602e9c5769d7130f6b14ec0",
     "bytes": 9774,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/complex.js/2.4.3/35f968ba5718.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/complex.js/2.4.3/35f968ba5718.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/fraction.js@5.3.4/+esm",
@@ -863,7 +863,7 @@
     "upstreamSha256": "8d8064193de7ee5c75b91a57f7afdecb3f14c2fd4d06f5381e865ef627dda9d8",
     "bytes": 7092,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/fraction.js/5.3.4/2c735a2ad99f.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/fraction.js/5.3.4/2c735a2ad99f.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@babel/runtime@7.29.2/helpers/defineProperty/+esm",
@@ -873,7 +873,7 @@
     "upstreamSha256": "09c0881fe5a60458dbbaa467e4e5d256ac00eb75124d403506ae1c8d6b6022c7",
     "bytes": 962,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_babel_runtime/7.29.2/6f3c58f84969.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_babel_runtime/7.29.2/6f3c58f84969.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/javascript-natural-sort@0.7.1/+esm",
@@ -883,7 +883,7 @@
     "upstreamSha256": "8c35c7db497edbd016a087f02e65118f4c07e75ab1785561cf78de6446f6a3f9",
     "bytes": 1301,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/javascript-natural-sort/0.7.1/80e5a7b4c056.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/javascript-natural-sort/0.7.1/80e5a7b4c056.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/escape-latex@1.2.0/+esm",
@@ -893,7 +893,7 @@
     "upstreamSha256": "2f53a679867f4ab8eae49b93671bd7ef11e39027808a8ad4b2fea783d3064eda",
     "bytes": 1205,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/escape-latex/1.2.0/11b53fec3cef.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/escape-latex/1.2.0/11b53fec3cef.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/seedrandom@3.0.5/+esm",
@@ -903,7 +903,7 @@
     "upstreamSha256": "bff06d8dbe428efed7c3f061399890de74b6afddab70344e4b68a95055744d48",
     "bytes": 8174,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/seedrandom/3.0.5/aab5c8a1fb17.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/seedrandom/3.0.5/aab5c8a1fb17.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/tiny-emitter@2.1.0/+esm",
@@ -913,7 +913,7 @@
     "upstreamSha256": "0a23e30943430ad037b6b144f01d6fcb6fb38c8eff8610dcfa1354e274f0c9ae",
     "bytes": 1022,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/tiny-emitter/2.1.0/e38d2d8ba494.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/tiny-emitter/2.1.0/e38d2d8ba494.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/retry@0.13.1/+esm",
@@ -923,7 +923,7 @@
     "upstreamSha256": "c08b7e43af5736b2be45918f688966fa38362e21d04f2f59276cd5f9359d4542",
     "bytes": 3971,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/retry/0.13.1/9303ab6c0cc5.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/retry/0.13.1/9303ab6c0cc5.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/openai@6.40.0/+esm",
@@ -933,7 +933,7 @@
     "upstreamSha256": "e6f4ca808d3c1f015bdd3118dd91983abe6835c31b4683d1b43577da469d584d",
     "bytes": 156006,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/openai/6.40.0/dbb6625e04b1.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/openai/6.40.0/dbb6625e04b1.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@anthropic-ai/sdk@0.123.0/+esm",
@@ -955,7 +955,7 @@
       "vendor/npm/_anthropic-ai_sdk/0.123.0/ba9b0d7728f7.js",
       "vendor/npm/_anthropic-ai_sdk/0.123.0/b0f6155414b9.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_anthropic-ai_sdk/0.123.0/544cffe64b19.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_anthropic-ai_sdk/0.123.0/544cffe64b19.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/standardwebhooks@1.1.1/+esm",
@@ -968,7 +968,7 @@
       "vendor/npm/_stablelib_base64/1.0.1/d0bc12bf01af.js",
       "vendor/npm/fast-sha256/1.3.0/55bcf9e9c91f.js"
     ],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/standardwebhooks/1.1.1/f742742453d9.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/standardwebhooks/1.1.1/f742742453d9.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@anthropic-ai/sdk@0.123.0/internal/node.browser.mjs/+esm",
@@ -978,7 +978,7 @@
     "upstreamSha256": "f24e3ab98fd6d0ab0ade14c8f5e9d89401ead75b41a8348ac42f2ba4d4ea2aff",
     "bytes": 659,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_anthropic-ai_sdk/0.123.0/ba9b0d7728f7.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_anthropic-ai_sdk/0.123.0/ba9b0d7728f7.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@anthropic-ai/sdk@0.123.0/tools/agent-toolset/node.browser.mjs/+esm",
@@ -988,7 +988,7 @@
     "upstreamSha256": "145a355d4c1a456097cf6b8c279e5a35e0a5d6ba8e1023d5dacece52558fa8d5",
     "bytes": 2049,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_anthropic-ai_sdk/0.123.0/b0f6155414b9.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_anthropic-ai_sdk/0.123.0/b0f6155414b9.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/@stablelib/base64@1.0.1/+esm",
@@ -998,7 +998,7 @@
     "upstreamSha256": "f73196ffc4a79754831b6f54d27f902257b2ac8eb280786bae6d8be6057e20dc",
     "bytes": 4102,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/_stablelib_base64/1.0.1/d0bc12bf01af.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/_stablelib_base64/1.0.1/d0bc12bf01af.js"
   },
   {
     "url": "https://testingcf.jsdelivr.net/npm/fast-sha256@1.3.0/+esm",
@@ -1008,7 +1008,7 @@
     "upstreamSha256": "9433f59580a920b8b3ebd603b4f2c2b39fe132b0f9dbab89367c85c5f65db376",
     "bytes": 6605,
     "imports": [],
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/npm/fast-sha256/1.3.0/55bcf9e9c91f.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/npm/fast-sha256/1.3.0/55bcf9e9c91f.js"
   },
   {
     "path": "vendor/perfect-debounce/2.1.0/index.js",
@@ -1016,7 +1016,7 @@
     "url": "https://cdn.jsdelivr.net/npm/perfect-debounce/+esm",
     "sha256": "7f1a14751ff296f4b4a9442e22ef12810f05213836800f9cdf972174119f9555",
     "bytes": 994,
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/perfect-debounce/2.1.0/index.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/perfect-debounce/2.1.0/index.js"
   },
   {
     "path": "vendor/hookable/5.5.3/index.js",
@@ -1024,7 +1024,7 @@
     "url": "https://cdn.jsdelivr.net/npm/hookable/+esm",
     "sha256": "1a4687d2af2ef91ddfa94cbebda54d4c73c505c96285f68890ec6c94c625cbd0",
     "bytes": 4260,
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/hookable/5.5.3/index.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/hookable/5.5.3/index.js"
   },
   {
     "path": "vendor/birpc/2.9.0/index.js",
@@ -1032,6 +1032,6 @@
     "url": "https://cdn.jsdelivr.net/npm/birpc/+esm",
     "sha256": "95d99d7c49130db75af0b4de6384276471b6c2500ed3a67fde1343aeaddd76dc",
     "bytes": 3961,
-    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.1/vendor/birpc/2.9.0/index.js"
+    "delivery": "https://cdn.jsdelivr.net/gh/eumenes12ds/rinne-battlefield-jp@v2026.10.16.2/vendor/birpc/2.9.0/index.js"
   }
 ]

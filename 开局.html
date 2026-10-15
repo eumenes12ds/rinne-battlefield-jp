@@ -510,7 +510,8 @@
         .p-item-info i { color: var(--accent-dark); margin-right: 4px; }
         .p-item-info .val { color: var(--text); font-weight: 500; }
         .p-item-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
-    </style>
+    @media(max-width:480px){.confirm-wrapper{padding:12px 10px}.points-grid{gap:6px}.point-box{padding:10px 4px;min-width:0}.point-box .p-value{font-size:1.05rem;white-space:nowrap;word-break:normal}.point-box .p-label{font-size:.72rem}}
+</style>
 </head>
 <body>
     <div class="wizard-layout">
@@ -1866,7 +1867,7 @@
         let partnerText = '未選択';
         if (selectedPartner === 'custom' && useCustomPartnerFlag) {
             const n = $('cp-name').value.trim() || 'カスタムパートナー';
-            partnerText = `${n} (${$('cp-tier').value}級 / ${$('cp-gender').value})`;
+            partnerText = `${n} (${$('cp-tier').value}級 / ${$('cp-gender').selectedOptions[0].text})`;
         }
         let plotText = '未選択';
         if (singleWorldEnabled) {
@@ -1937,9 +1938,9 @@
     function updateSummary() {
         // --- 1. 基本データの取得 ---
         const name = $('f-name').value.trim() || '';
-        const identity = $('f-identity').value;
+        const identity = $('f-identity').selectedOptions[0].text;
         const race = $('f-race').value.trim() || '人類';
-        const gender = $('f-gender').value;
+        const gender = $('f-gender').selectedOptions[0].text;
         const age = $('f-age').value;
         const tier = 'Ⅰ 級'; // 初期生命階層はⅠで固定、加点では変わらない
         const bloodTier = 'F 級'; // 初期血統品質はFで固定、加点では変わらない
