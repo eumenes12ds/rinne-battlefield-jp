@@ -1139,10 +1139,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
      *     - 各 血統[name].层级 または .品質 が 世界.位格 に対応する品質字母を超える → capQuality へ押し戻す
      *   マッピング: Ⅰ↔F Ⅱ↔E Ⅲ↔D Ⅳ↔C Ⅴ↔B Ⅵ↔A Ⅶ↔S Ⅷ↔SS Ⅸ↔SSS ( ROMAN_TO_QUALITY / TIER_ORDER) を再利用
      */
-    const NATIVE_SPECIAL_IDENTITY_SET = {
-        '輪廻者': 1, "輪廻者": 1, "輪廻者": 1, "守護者": 1, "夢織り": 1, "簒奪者": 1, "簒奪者": 1,
-        '守護者': 1, '簒奪者': 1, '夢織り': 1
-    };
+    const NATIVE_SPECIAL_IDENTITY_SET = { '輪廻者': 1, '転移者': 1, '守護者': 1, '夢織り': 1, '簒奪者': 1, '残魂': 1 };
     function clampNativeNpcToWorldTier(statData, statDataBefore) {
         if (!statData) return;
         const rel = statData.関係リスト;
@@ -1209,15 +1206,20 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             const life = LIFE_TIER_ORDER.indexOf(normalizeLifeTier(npc.階層));
             const baseRank = life >= 0 ? life : 0;
             if (!npc.状態 || typeof npc.状態 !== 'object') npc.状態 = {};
+            // Input-only alias for the calculator's historical difficulty marker.
+            if (Object.prototype.hasOwnProperty.call(npc.状態, '额外强化')) {
+                if (!Object.prototype.hasOwnProperty.call(npc.状態, '追加強化')) npc.状態.追加強化 = npc.状態['额外强化'];
+                delete npc.状態['额外强化'];
+            }
             if (steps > 0) {
                 // 追加強化は難易度処理済みのマーカーも兼ね、同一の新規敵が書き戻しのたびに連続で昇格しないようにする。
-                if (npc.状態.额外强化) continue;
+                if (npc.状態.追加強化) continue;
                 const extraRule = {
                     正常: { qualityOffset: 0, attrTier: 'E', attrs: DERIVED_ATTRS },
                     困難: { qualityOffset: 0, attrTier: 'C', attrs: boostedAttrs },
                     挑戦: { qualityOffset: 1, attrTier: 'B', attrs: boostedAttrs }
                 }[mode];
-                npc.状態.额外强化 = {
+                npc.状態.追加強化 = {
                     タイプ: 'バフ',
                     品質: TIER_ORDER[Math.min(8, baseRank + extraRule.qualityOffset)],
                     持続: '持続',
@@ -1254,7 +1256,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             for (const kind of ['血統', '技能', '状態', '形態庫']) {
                 for (const item of Object.values(npc[kind] || {})) {
                     // 追加強化は難易度専用の固定値を使用し、汎用の +2/+4/+6 強化には入らない。
-                    if (kind === '状態' && item === npc.状態.额外强化) continue;
+                    if (kind === '状態' && item === npc.状態.追加強化) continue;
                     upgrade(item, kind);
                 }
             }
@@ -1307,7 +1309,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     function getActiveForm(char) {
         const cur = char.現在形態;
         if (!cur || typeof cur !== 'object') return null;
-        if (cur.激活 !== true) return null;
+        if (cur.有効 !== true) return null;
         const name = cur.名称;
         if (!name) return null;
         const entry = char.形態庫 && char.形態庫[name];
@@ -1419,7 +1421,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         // ★ バックエンドガード: 現在の形態が未発動のとき, 名称を自動で空にする(残留した不正データにより getActiveForm が誤判定するのを防ぐ)
         try {
             const cur = char.現在形態;
-            if (cur && typeof cur === 'object' && cur.激活 !== true && cur.名称) {
+            if (cur && typeof cur === 'object' && cur.有効 !== true && cur.名称) {
                 cur.名称 = '';
                 // if (label) console.log(`[属性再計算] ${label}: 現在の形態が未発動のため, 残留した名称を空にした`);
             }
@@ -1432,7 +1434,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         const 状態 = char.状態 || {};
         // 前フレームの対応するサブコレクション（resolveRealAttr が品質変化を判定するため。未変更なら旧乱数を再利用する）
         const 血統Before = (charBefore && charBefore.血統) || {};
-        const 装备Before = (charBefore && charBefore.装備) || {};
+        const 装備Before = (charBefore && charBefore.装備) || {};
         const 状態Before = (charBefore && charBefore.状態) || {};
 
         // —— 0. 形態の発動判定（発動後は形態の真属性を血統へ加算する）——
@@ -1485,7 +1487,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         Object.entries(装備).forEach(([ename, e]) => {
             if (!e || typeof e !== 'object' || e.状態 !== 1) return;
             if (!e.原始属性 || typeof e.原始属性 !== 'object') return;
-            const eb = 装备Before[ename];
+            const eb = 装備Before[ename];
             const re = resolveRealAttr(e, 'equip', eb, effectiveTier, effectiveTierBefore);
             ATTR_NAMES.forEach(a => { equipSix[a] += safeNum(re[a]); });
         });
@@ -1548,7 +1550,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         Object.entries(装備).forEach(([wname, e]) => {
             if (!e || typeof e !== 'object' || e.状態 !== 1) return;
             if (!e.原始属性) return;
-            const eb = 装备Before[wname];
+            const eb = 装備Before[wname];
             const re = resolveRealAttr(e, 'equip', eb, effectiveTier, effectiveTierBefore);
             if (safeNum(e.タイプ, 0) === 0) {
                 // 武器: ATK/MATKは個別に記録し, その他の属性(DEF/MDEF/AP/判定)は引き続きbonusに計上する
@@ -1976,15 +1978,15 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 // console.log(`[功法突破] おめでとう！${skillName} が ${currentTier}へ突破！`);
                 
                 // 進階時にスキルのダメージ係数を自動で強化する
-                if (skill.効果 && skill.効果['基础伤害倍率']) {
-                    skill.効果['基础伤害倍率'] = (parseFloat(skill.効果['基础伤害倍率']) + 0.5) + "x";
+                if (skill.効果 && skill.効果["基礎ダメージ倍率"]) {
+                    skill.効果["基礎ダメージ倍率"] = (parseFloat(skill.効果["基礎ダメージ倍率"]) + 0.5) + "x";
                 }
             }
 
             // データを書き戻す
             skill.掌握程度 = currentTier;
             skill.熟練度 = currentExp;
-            skill.升阶阈值 = threshold;
+            skill.昇格閾値 = threshold;
         });
     }
 

@@ -1,6 +1,6 @@
 # 輪廻戦場 再構築版 V3.7.1-JP runtime
 
-Japanese card-owned runtime assets. Release: v2026.10.16.4. Creative Workshop, its test script, asset-library integration, update endpoints and workshop UI are excluded. Remote model-list probes are disabled. Normal shop and crafting actions remain.
+Japanese card-owned runtime assets. Release: v2026.10.16.5. Creative Workshop, its test script, asset-library integration, update endpoints and workshop UI are excluded. Remote model-list probes are disabled. Normal shop and crafting actions remain.
 
 ## Sources and licensing
 
@@ -19,3 +19,5 @@ The maintained runtime files are `補助計算.js`, `ステータスパネル.js
 JSON Pointer paths are canonicalized before command extraction, preserving literal dots and brackets in entity names. Open attribute maps migrate only declared attribute names; unknown values remain intact. The main-output schema accepts old settings shapes and always normalizes them to the fixed mode.
 
 This repository contains runtime assets and source only. Character cards, worldbook prose, account data, credentials, chats and test-session records are not published here.
+
+The five opening identities have distinct canonical values and descriptions. Single-world mode uses 転移者. Old identity, active-form and asset-type values migrate at the schema boundary. World-time ownership and narrative-time synchronization are independent fields, and all 24 selected worldbook entries use the Japanese worldbook name.

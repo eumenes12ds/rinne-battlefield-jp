@@ -948,8 +948,8 @@
             "守護者": { title:'守護者 · 秩序と守衛', rows:[ {label:'行動準則', val:'秩序を守り、残魂と畸変の源を排除し、世界崩壊を阻止する。'}, {label:'主神形態', val:'純白光球。'} ], ability:'専用能力 · 平和維持活動：被害ゼロ/世界の高安定度で極めて高いボーナスを得る。' },
             "簒奪者": { title:'簒奪者 · 混沌と略奪', rows:[ {label:'行動準則', val:'秩序の礎を覆し、核心の気運を奪う。'}, {label:'主神形態', val:'暗紅の核心。'} ], ability:'専用能力 · 首狩り略奪：ハイリスク・ハイリターン。世界崩壊の代償を顧みず略奪する。' },
             "夢織り": { title:'夢織り · 認知と魂', rows:[ {label:'行動準則', val:'鍵となる因果を捻じ曲げ、極端な感情と信仰を刈り取る。'}, {label:'主神形態', val:'温和な暖色。'} ], ability:'専用能力 · 黒幕：認知操作。二重スパイの立場を好む。' },
-            "簒奪者": { title:"簒奪者 · 失敗者の影", rows:[ {label:'行動準則', val:'原住民に奪舎し、現役の輪廻者をおびき寄せて殺し、赦免と引き換える。'}, {label:'生存状態', val:'安定した実体を持たず、極度に危険。'} ], ability:'専用能力 · 絶対偽装：任務はその世界のいずれかの輪廻者小隊の主線を破壊するか全滅させることに強制変更される。' },
-            "輪廻者": { title:"輪廻者 · 自由意志", rows:[ {label:'行動準則', val:'陣営の束縛を無視し、自由に探索する。'} ], ability:'専用ルールのボーナスはないが、極めて高い因果自由度を持つ。' }
+            "残魂": { title:"残魂 · 失敗者の影", rows:[ {label:'行動準則', val:'原住民に奪舎し、現役の輪廻者をおびき寄せて殺し、赦免と引き換える。'}, {label:'生存状態', val:'安定した実体を持たず、極度に危険。'} ], ability:'専用能力 · 絶対偽装：任務はその世界のいずれかの輪廻者小隊の主線を破壊するか全滅させることに強制変更される。' },
+            "転移者": { title:"転移者 · 自由意志", rows:[ {label:'行動準則', val:'陣営の束縛を無視し、自由に探索する。'} ], ability:'専用ルールのボーナスはないが、極めて高い因果自由度を持つ。' }
         },
 
         // ==========================================
@@ -1759,7 +1759,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             <button class="tab-button ${c.key===activePlotCat?'active':''}" onclick="switchPlotCat('${c.key}')">${c.label}</button>`).join('');
     }
     // 単一世界の身分上書き：単一世界に入ると身分を「穿越者」に強制しドロップダウンをロック；離れると元の選択へ戻して解除する
-    const IDENTITY_SINGLE_WORLD = "輪廻者";
+    const IDENTITY_SINGLE_WORLD = "転移者";
     function applySingleWorldIdentityOverride() {
         const idEl = $('f-identity');
         if (!idEl) return;
@@ -2359,7 +2359,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
 
         let partnerNode = null;
         if (selectedPartner === 'custom' && useCustomPartnerFlag) {
-            partnerNode = { 姓名:$('cp-name').value.trim(), 階層:$('cp-tier').value, 種族:$('cp-race').value.trim(), 身分:[$('f-identity').value, $('cp-gender').value], 登場:true, 仲間:true, 好み:$('cp-like').value.trim(), 外見:$('cp-app').value.trim(), 背景:$('cp-bg').value.trim() };
+            partnerNode = { 名前:$('cp-name').value.trim(), 階層:$('cp-tier').value, 種族:$('cp-race').value.trim(), 身分:[$('f-identity').value, $('cp-gender').value], 登場:true, 仲間:true, 好み:$('cp-like').value.trim(), 外見:$('cp-app').value.trim(), 背景:$('cp-bg').value.trim() };
         }
 
         const wsLocked = (() => { const el=$('ws-lock'); return el ? el.checked : false; })();
@@ -2444,7 +2444,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
                 // パートナー注入(陣営は最終確認時のキャラ陣営を採用し, 作成後に陣営を変えて不整合になるのを防ぐ)
                 if (partnerNode && Array.isArray(partnerNode.身分)) partnerNode.身分[0] = $('f-identity').value;
-                if (partnerNode) _set(c, `stat_data.関係リスト.${partnerNode.姓名}`, partnerNode);
+                if (partnerNode) _set(c, `stat_data.関係リスト.${partnerNode.名前}`, partnerNode);
 
                 // 世界信息精准注入
                 if (singleWorldEnabled) {
@@ -2515,7 +2515,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
         let partnerText = "協働実体なし";
         if (partnerNode) {
-            const pName = partnerNode.姓名 || '名称未設定';
+            const pName = partnerNode.名前 || '名称未設定';
             const pTier = partnerNode.階層 || 'Ⅰ';
             const pRace = partnerNode.種族 || '不明';
             const pId = (partnerNode.身分 && partnerNode.身分[0]) || '未設定';
@@ -2560,7 +2560,7 @@ ${worldText}
 没入感の高い開幕シーンを生成すること。
 初回降臨時は、キャラクターが記入した【種族】特性に基づき、「${bloodlineName}」のために 1~2 個の【${tier}級】強度制限に合う専用血統効果を設計し、物語の中で覚醒の異象を演出すること！
 ${envInstruction}
-${partnerNode ? `[協働実体補完指令]：キャラクターのそばには専属パートナー「${partnerNode.姓名 || '名称未設定'}」が存在する。この実体は現在、基本概念（階層、陣営、背景ストーリー、好み）のみを持ち、具体的な戦闘データを欠いている。その資料と【${partnerNode.階層 || '不明'}級】の強度制限に基づき、**空白の戦術モジュールを自動で推演し補完すること**：
+${partnerNode ? `[協働実体補完指令]：キャラクターのそばには専属パートナー「${partnerNode.名前 || '名称未設定'}」が存在する。この実体は現在、基本概念（階層、陣営、背景ストーリー、好み）のみを持ち、具体的な戦闘データを欠いている。その資料と【${partnerNode.階層 || '不明'}級】の強度制限に基づき、**空白の戦術モジュールを自動で推演し補完すること**：
 1. 人設に合い、階層制限に適合する【血統】と【技能】を付与する。
 2. 1~2 件の階層に合う【初期装備/武器】を装備させる。
 【物語上の要件】：開幕シーンでは、時間アンカーに沿ってパートナーとキャラクターの登場関係を合理的に配置すること。登場時には、外見の細部と動作描写を通じて、パートナーに補完された外見や着装などを自然に示し、その性格、現在のキャラクターへの信頼状態、および本心を明確に提示すること。` : ''}`;

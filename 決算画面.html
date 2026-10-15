@@ -1074,7 +1074,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
               const task = list[key] || {};
               return {
                 key: key,
-                name: String(task.名称 || task.任务名 || task.タイトル || key || ('昇格試練·' + (index + 1))),
+                name: String(task.名称 || task.任務名 || task.タイトル || key || ('昇格試練·' + (index + 1))),
                 status: String(task.状態 || '').trim()
               };
             });
@@ -1228,7 +1228,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             const dict = stat && stat.任務 && stat.任務.インスタンス実績 && typeof stat.任務.インスタンス実績 === 'object' ? stat.任務.インスタンス実績 : {};
             return Object.keys(dict).map(function(key) {
               const x = dict[key] || {};
-              return { name:String(x.名称 || x.成就名 || key), desc:String(x.説明 || x.説明 || ''), difficulty:String(x.難易度 || ''), reward:String(x.報酬 || ''), status:String(x.状態 || '').trim() };
+              return { name:String(x.名称 || x.実績名 || key), desc:String(x.説明 || x.説明 || ''), difficulty:String(x.難易度 || ''), reward:String(x.報酬 || ''), status:String(x.状態 || '').trim() };
             });
           }
 
@@ -1850,7 +1850,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
               if (/^[\*【]*(?:ヒント|提示)[：:]/.test(body)) { push('notice', { text: stripDecor(body.replace(/^[\*【]*(?:ヒント|提示)[：:]?\s*/, '').replace(/[\*】]*$/, '')) }); curSub = ''; continue; }
               if ((m = body.match(/^\*{0,2}(?:インスタンスの烙印|副本烙印)\s*[｜|]?\s*(.+)$/))) { push('brand', { name: stripDecor(m[1]) }); continue; }
-              if (/主神権限証憑|主神权限凭证/.test(body) && body.replace(/\*/g, '').length < 30) { curSub = '主神权限凭证'; cardSec = ''; push('cert', {}); continue; }
+              if (/主神権限証憑|主神权限凭证/.test(body) && body.replace(/\*/g, '').length < 30) { curSub = "主神権限証憑"; cardSec = ''; push('cert', {}); continue; }
               if (/(?:世界結晶|(?:世界结晶|世界結晶))/.test(body) && body.replace(/[*【】（）()：:]/g, '').length < 30) { curSub = '世界結晶'; cardSec = ''; push('relic', { label: '世界結晶 · クリア記念品', name: '', type: '', effect: '', desc: '' }); continue; }
               if (/(?:世界遺物・特別褒賞|世界遗物特别嘉奖)/.test(body) && body.replace(/\*/g, '').length < 30) { curSub = '世界遺物'; cardSec = ''; push('relicGold', { label: '世界遺物 · 特別褒賞', name: '', type: '', effect: '', desc: '', origin: '' }); continue; }
 
