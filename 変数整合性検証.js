@@ -1,5 +1,5 @@
 // 輪廻戦場JP: 純粋な検証関数。通信、タイマー、モデル呼出しは行わない。
-export const ledgerVersion = '1.0.1';
+export const ledgerVersion = '1.1.0';
 const own = (o,k) => o != null && Object.prototype.hasOwnProperty.call(o,k);
 const clone = value => value === undefined ? undefined : JSON.parse(JSON.stringify(value));
 const finite = value => typeof value === 'number' && Number.isFinite(value);
@@ -83,6 +83,16 @@ function touches(path,target) {
     return path===target || target.startsWith(path+'/') || path.startsWith(target+'/');
 }
 function issue(code,path,detail) { return {種別:code,パス:path||'',説明:detail}; }
+function declaredChanges(record) {
+    // 新形式は全ての業務ルートを扱う。旧人物変化も読み取り専用の互換入力として照合する。
+    return [...(Array.isArray(record?.変数変化)?record.変数変化:[]),...(Array.isArray(record?.人物変化)?record.人物変化:[])];
+}
+function allowedChange(p) {
+    const keys=parts(p);
+    return keys && keys.length>1 && ['世界','キャラ','任務','関係リスト','資産','システム状態','噂'].includes(keys[0])
+        && !keys.some(k=>k.startsWith('_')) && !['決算履歴','変数検証','最終属性','真属性'].some(k=>keys.includes(k))
+        && !(keys[0]==='世界'&&['バックステージ','安定'].includes(keys[1]));
+}
 export function prepareValidation(before,commands,text,turnKey) {
     const analysis=parseBlock(text,'Analysis');
     const record=analysis && typeof analysis==='object'&&!Array.isArray(analysis)?analysis:null;
@@ -91,8 +101,9 @@ export function prepareValidation(before,commands,text,turnKey) {
     const deny=new Set();
     if(!record)context.issues.push(issue('形式不足','','構造化されたAnalysisがない。本文から変化を推測して補完しない。'));
     else {
-        if(typeof record.最終地点!=='string'||!record.最終地点.trim())context.issues.push(issue('地点未記載','/世界/地点','最終地点を明記する必要がある。'));
-        for(const k of ['取引','人物変化','戦闘精算','根拠'])if(!Array.isArray(record[k]))context.issues.push(issue('形式不足',k,'配列が必要。'));
+        if(!Array.isArray(record.変数変化)&&!Array.isArray(record.人物変化))context.issues.push(issue('形式不足','変数変化','配列が必要。旧人物変化は互換入力として読み取る。'));
+        if(!Array.isArray(record.変数変化)&&(typeof record.最終地点!=='string'||!record.最終地点.trim()))context.issues.push(issue('地点未記載','/世界/地点','旧形式には最終地点が必要。新形式は変数変化とJSONPatchの実パスへ記録する。'));
+        for(const k of ['取引','戦闘精算','根拠'])if(!Array.isArray(record[k]))context.issues.push(issue('形式不足',k,'配列が必要。'));
         const seen=new Set();
         for(const t of Array.isArray(record.取引)?record.取引:[]) {
             const p=t?.対象パス,id=t?.イベントID;
@@ -130,7 +141,7 @@ export function prepareValidation(before,commands,text,turnKey) {
 function hasPatch(context,path) {return context.patches.some(p=>touches(p.path||p.to||'',path));}
 export function finishValidation(context,after) {
     if(!context||!after?.システム状態)return;
-    const issues=[...context.issues],before=context.before,record=context.record;
+    const issues=[...context.issues],notes=[],before=context.before,record=context.record;
     // AIが同名フィールドを出しても、履歴は直前の確定値からのみ構築する。
     const history=clone(before?.システム状態?.決算履歴||{});
     for(const t of context.transactions) {
@@ -143,10 +154,19 @@ export function finishValidation(context,after) {
         }
     }
     if(record) {
-        if(record.最終地点!==after.世界?.地点)issues.push(issue('地点不一致','/世界/地点','最終地点と保存予定の現在地点が一致しない。'));
-        for(const change of Array.isArray(record.人物変化)?record.人物変化:[]) {
-            if(!change||!parts(change.対象パス)||!/^\/関係リスト\//.test(change.対象パス)) {issues.push(issue('人物形式','','人物変化の対象パスが不正。'));continue;}
-            if(!own(change,'終了値')||!matchesDeclared(readPointer(after,change.対象パス),change.終了値))issues.push(issue('人物未反映',change.対象パス,'明示された人物の終了値と計算後の保存値が一致しない。自動追加された未指定フィールドは比較しない。'));
+        if(typeof record.最終地点==='string'&&record.最終地点!==after.世界?.地点) {
+            const applied=context.patches.some(p=>p.path==='/世界/地点'&&['replace','insert','add'].includes(p.op)&&p.value===after.世界?.地点);
+            // 旧形式の二重記載に食い違いがあっても、適用済みpatchを「未反映」と断定しない。
+            // 類似地名を推測して同一視せず、双方の文字列を残して要確認とする。
+            if(applied)notes.push(issue('地点記述差','/世界/地点',`旧Analysis: ${record.最終地点} / 保存済み: ${after.世界?.地点}。地点更新は反映済み。表記差か行先の矛盾かは本文の確認が必要。`));
+            else issues.push(issue('地点不一致','/世界/地点','旧Analysisの最終地点と保存値が異なり、一致する地点更新も確認できない。'));
+        }
+        for(const change of declaredChanges(record)) {
+            if(!change||!allowedChange(change.対象パス)) {issues.push(issue('変数形式',change?.対象パス,'変数変化の対象パスが不正または読み取り専用。'));continue;}
+            const current=readPointer(after,change.対象パス);
+            if(change.操作==='remove') {
+                if(current!==undefined||!context.patches.some(p=>p.op==='remove'&&touches(p.path||'',change.対象パス)))issues.push(issue('変数未反映',change.対象パス,'明示された削除を確認できない。'));
+            } else if(!own(change,'終了値')||!matchesDeclared(current,change.終了値))issues.push(issue('変数未反映',change.対象パス,'明示された終了値と計算後の保存値が一致しない。自動追加された未指定フィールドは比較しない。'));
         }
         for(const battle of Array.isArray(record.戦闘精算)?record.戦闘精算:[]) {
             if(!battle||typeof battle!=='object')continue;
@@ -170,6 +190,6 @@ export function finishValidation(context,after) {
         if(expected!==undefined&&!equal(expected,actual))issues.push(issue('計算後不一致',target,'明示した更新値と計算後の値が一致しない。'));
     }
     after.システム状態.決算履歴=history;
-    after.システム状態.変数検証={状態:issues.length?'不一致':'一致',応答ID:context.turnKey,不一致:issues.slice(0,100)};
+    after.システム状態.変数検証={状態:issues.length?'不一致':notes.length?'要確認':'一致',応答ID:context.turnKey,不一致:issues.slice(0,100),注意:notes.slice(0,100),検証範囲:'申告された変更と保存値の照合。本文の未申告の出来事は未検証。'};
     return after.システム状態.変数検証;
 }
