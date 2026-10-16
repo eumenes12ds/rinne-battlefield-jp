@@ -1,5 +1,5 @@
 // 輪廻戦場JP: 純粋な検証関数。通信、タイマー、モデル呼出しは行わない。
-export const ledgerVersion = '1.0.0';
+export const ledgerVersion = '1.0.1';
 const own = (o,k) => o != null && Object.prototype.hasOwnProperty.call(o,k);
 const clone = value => value === undefined ? undefined : JSON.parse(JSON.stringify(value));
 const finite = value => typeof value === 'number' && Number.isFinite(value);
@@ -15,6 +15,14 @@ export function readPointer(root,pointer) {
     return p.reduce((o,k)=>own(o,k)?o[k]:undefined,root);
 }
 const equal=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+export function matchesDeclared(actual,expected) {
+    if(expected===null||typeof expected!=='object')return equal(actual,expected);
+    if(Array.isArray(expected))return Array.isArray(actual)&&actual.length===expected.length&&expected.every((v,i)=>matchesDeclared(actual[i],v));
+    if(!actual||typeof actual!=='object'||Array.isArray(actual))return false;
+    const keys=Object.keys(expected);
+    if(!keys.length)return Object.keys(actual).length===0;
+    return keys.every(k=>own(actual,k)&&matchesDeclared(actual[k],expected[k]));
+}
 const statuses = n => Object.keys(n?.状態 || {});
 export function unitKind(n) {
     return n?.単位種別 === '集団' || (!n?.単位種別 && num(n?.数量,1)>1) ? '集団' : '個体';
@@ -138,7 +146,7 @@ export function finishValidation(context,after) {
         if(record.最終地点!==after.世界?.地点)issues.push(issue('地点不一致','/世界/地点','最終地点と保存予定の現在地点が一致しない。'));
         for(const change of Array.isArray(record.人物変化)?record.人物変化:[]) {
             if(!change||!parts(change.対象パス)||!/^\/関係リスト\//.test(change.対象パス)) {issues.push(issue('人物形式','','人物変化の対象パスが不正。'));continue;}
-            if(!own(change,'終了値')||!equal(readPointer(after,change.対象パス),change.終了値))issues.push(issue('人物未反映',change.対象パス,'人物変化の終了値と保存値が一致しない。'));
+            if(!own(change,'終了値')||!matchesDeclared(readPointer(after,change.対象パス),change.終了値))issues.push(issue('人物未反映',change.対象パス,'明示された人物の終了値と計算後の保存値が一致しない。自動追加された未指定フィールドは比較しない。'));
         }
         for(const battle of Array.isArray(record.戦闘精算)?record.戦闘精算:[]) {
             if(!battle||typeof battle!=='object')continue;

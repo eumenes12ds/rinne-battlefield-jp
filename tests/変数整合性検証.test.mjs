@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {syncGroupPool,isDead,isIncapacitated,prepareValidation,finishValidation,clearRecordBonuses} from '../変数整合性検証.js';
+import {syncGroupPool,isDead,isIncapacitated,prepareValidation,finishValidation,clearRecordBonuses,matchesDeclared} from '../変数整合性検証.js';
 const fixture=()=>({世界:{地点:'駅'},キャラ:{スペースコイン:80,アイテム:{薬:{数量:1}}},関係リスト:{},システム状態:{}});
 const record=()=>({最終地点:'駅',取引:[],人物変化:[],戦闘精算:[],根拠:[]});
 const wrap=r=>'<Analysis>'+JSON.stringify(r)+'</Analysis>';
@@ -12,3 +12,4 @@ test('consumption ending at zero survives automatic empty-item cleanup',()=>{con
 test('known duplicate transaction is blocked without blocking unrelated movement',()=>{const b=fixture(),r=record(),p='/キャラ/アイテム/薬/数量';b.システム状態.決算履歴={服薬1:{確定:true}};r.取引=[{イベントID:'服薬1',対象パス:p,開始数量:1,増減:-1,終了数量:0}];const cmd=commands([{op:'delta',path:p,value:-1},{op:'replace',path:'/世界/地点',value:'道'}]);prepareValidation(b,cmd,wrap(r),'chat:4');assert.equal(cmd.length,1);assert.equal(JSON.parse(cmd[0].full_match).path,'/世界/地点');});
 test('missing movement is diagnosed without invented state',()=>{const b=fixture(),r=record();r.最終地点='道';const c=prepareValidation(b,[],wrap(r),'chat:2');assert(finishValidation(c,b).不一致.some(x=>x.種別==='地点不一致'));assert.equal(b.世界.地点,'駅');});
 test('attack miss and morale death report distinct issues',()=>{const b=fixture(),r=record();r.戦闘精算=[{対象パス:'/キャラ',判定種別:'攻撃',判定値:29,DC:32,損害:2},{対象パス:'/キャラ',判定種別:'戦意',結果:'死亡',死亡数:1}];const c=prepareValidation(b,[],wrap(r),'chat:2'),out=finishValidation(c,b);assert(out.不一致.some(x=>x.種別==='失敗命中損害'));assert(out.不一致.some(x=>x.種別==='戦意死亡'));});
+test('NPC defaults and object order do not cause false mismatch',()=>{assert(matchesDeclared({HP_MAX:50,HP:50,EP:12,状態:{}},{状態:{},HP:50}));assert(!matchesDeclared({HP:104},{HP:52}));assert(!matchesDeclared({状態:{気絶:{}}},{状態:{}}));const b=fixture(),r=record();r.人物変化=[{対象パス:'/関係リスト/旅人',終了値:{HP:50,登場:true}}];const c=prepareValidation(b,[],wrap(r),'chat:2');b.関係リスト.旅人={登場:true,HP:50,HP_MAX:50,数量:1};assert.equal(finishValidation(c,b).状態,'一致');});

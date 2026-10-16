@@ -3,7 +3,7 @@ import {unitKind, isDead, isIncapacitated, syncGroupPool, clearRecordBonuses, pr
 (function () {
     'use strict';
 
-    var CALCULATOR_VERSION = '1.1.0';
+    var CALCULATOR_VERSION = '1.1.1';
     var CALCULATOR_HOST = (function () {
         var host = window;
         try {
