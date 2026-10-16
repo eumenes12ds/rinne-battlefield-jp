@@ -1,3 +1,4 @@
+import {unitKind, isDead, stateLabel} from './変数整合性検証.js';
 /* * ==========================================================================
  * [輪廻空間] 主神端末システム UI (Samsara Destiny UI) v2
  * 再構築の特徴：
@@ -3071,13 +3072,8 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
     }
 
     /* ===== 13b. NPC死亡検出 + 遺物取得(転送テンプレートを流用, 方向: NPC→キャラクター, 二次確認なし) ===== */
-    function isNpcDead(n) {
-        if (!n || typeof n !== 'object') return false;
-        var hp = safeNum(n.HP, 0);
-        if (hp <= 0) return true;
-        var isExplicitlyDead = n.状態 && Object.keys(n.状態).some(function(key) { return key.indexOf('死亡') >= 0; });
-        return !!isExplicitlyDead;
-    }
+    function isNpcDead(n) { return isDead(n); }
+
     var lootTarget = null;
     var lootCart = { 装備: {}, アイテム: {} };
     function openLootModal(npcName) {
@@ -5835,12 +5831,10 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
                 allGrid += npcRow('身分', idStr);
                 allGrid += npcRow('好感', favor);
                 var qty = safeNum(n.数量, 1);
-                if (qty > 1) {
-                    allGrid += npcRow('THP', thp);
-                    allGrid += npcRow('数量', 'x'+qty);
-                } else {
-                    allGrid += npcRow('HP', hp+'/'+hpmax);
-                }
+                allGrid += npcRow('HP', hp+'/'+hpmax);
+                allGrid += npcRow(unitKind(n)==='集団'?'集団生命':'一時防護', thp);
+                if (unitKind(n)==='集団') allGrid += npcRow('人数', qty);
+                allGrid += npcRow('状態', stateLabel(n));
                 card += '<div class="sam-npc-grid">'+allGrid+'</div>';
                 // 長文は全幅
                 if (looks) card += npcRow('外見', looks);
@@ -5854,13 +5848,15 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
                 grid += '<div class="sam-npc-row"><span class="k">職業:</span> <span class="v" style="flex:1;">'+jobStrHtml+'</span></div>';
                 grid += npcRow('階層', tierRoman, 'sam-npc-tier q-'+q);
                 grid += npcRow('好感度', favor);
+                grid += npcRow('状態', stateLabel(n));
+                if (unitKind(n)==='集団') grid += npcRow('人数', safeNum(n.数量,0));
                 card += '<div class="sam-npc-grid">'+grid+'</div>';
                 if (n.仲間 === true) card += renderNpcTierProgressBar(n, it.key);
                 // プログレスバー HP/EP/THP
                 card += '<div class="sam-npc-sec"></div>';
                 card += npcBar('HP', hp, hpmax, 'var(--sam-hp)');
                 card += npcBar('EP', ep, epmax, 'var(--sam-ep)');
-                card += npcThpRow(thp);
+                card += npcThpRow(thp, unitKind(n)==='集団');
                 // 外見(服装を含む)
                 if (looks || dress) {
                     card += '<div class="sam-npc-sec"></div>';
@@ -5896,9 +5892,9 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             + '</div>';
     }
     /* NPC THP行: 数値のみ(一時シールド/追加耐久, 上限なし・プログレスバーなし) */
-    function npcThpRow(cur) {
+    function npcThpRow(cur, group) {
         return '<div class="sam-npc-thp-row">'
-            + '<span class="lbl">THP (一時シールド/追加耐久)</span>'
+            + '<span class="lbl">'+(group?'THP (集団生命)':'THP (一時防護)')+'</span>'
             + '<span class="num">'+cur+'</span>'
             + '</div>';
     }
@@ -6698,7 +6694,7 @@ saveVariableApiMode('主AI追従出力'); return '主AI追従出力';
             } else {
                 if (hpmax > 0) html += npcBar('HP', hp, hpmax, 'var(--sam-hp)');
                 if (epmax > 0) html += npcBar('EP', ep, epmax, 'var(--sam-ep)');
-                if (thp > 0) html += npcThpRow(thp);
+                if (thp > 0) html += npcThpRow(thp, unitKind(n)==='集団');
             }
             html += '</div>';
         }
