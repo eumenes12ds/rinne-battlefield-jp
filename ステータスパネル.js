@@ -1960,6 +1960,16 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             })) queueInlineStatus();
         });
         inlineObserver.observe(chat, {childList:true, subtree:true, attributes:true, attributeFilter:['mesid','is_user','is_system']});
+        // 再入室時は本文の描画が playing への切替より先に完了することがある。
+        // 本文が変化しない場合にも宿主の画面切替で再配置し、退出時は駐車領域へ戻す。
+        var shellObserver = new GS_PARENT.MutationObserver(queueInlineStatus);
+        shellObserver.observe(document.body, {attributes:true, attributeFilter:['class']});
+        shellObserver.observe(document.documentElement, {attributes:true, attributeFilter:['class']});
+        GS_PARENT.addEventListener('kiosk:chat-target-updated', queueInlineStatus);
+        trackStatusBarSubscription({stop: function() {
+            shellObserver.disconnect();
+            GS_PARENT.removeEventListener('kiosk:chat-target-updated', queueInlineStatus);
+        }});
         queueInlineStatus();
     }
 
