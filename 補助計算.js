@@ -1,8 +1,9 @@
-// 補助計算スクリプトの唯一の開発ソースは src/Calculator から生成。
+// JP版の保守ソース。元プロジェクトのsrc/Calculatorは本配布物に含まれない。
+import {unitKind, isDead, isIncapacitated, syncGroupPool, clearRecordBonuses, prepareValidation, finishValidation} from './変数整合性検証.js';
 (function () {
     'use strict';
 
-    var CALCULATOR_VERSION = '1.0.1';
+    var CALCULATOR_VERSION = '1.1.0';
     var CALCULATOR_HOST = (function () {
         var host = window;
         try {
@@ -264,6 +265,12 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
      * 同一の AI 本文フロアで発生する世界進行、UI、schema などの追加変数書き戻しは、状態やクールダウンを重複して消費してはならない。
      */
     let lastTurnMessageKey = '';
+    const pendingValidation = new WeakMap();
+    function captureValidation(raw, commands, text) {
+        const key = currentAssistantTurnKey();
+        if (!raw?.stat_data || !key || key === lastTurnMessageKey || isUIMutationActive()) return;
+        pendingValidation.set(raw, prepareValidation(raw.stat_data, commands, text, key));
+    }
 
     function currentAssistantTurnKey() {
         try {
@@ -303,6 +310,8 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             const statDataBefore = rawVariablesBefore?.stat_data;
 
             if (!statData) return;
+            const validationContext = pendingValidation.get(rawVariables);
+            pendingValidation.delete(rawVariables);
             // F5_QUEST_KEY_COMPAT: イベント payload は生データなので、ガードの前に正規名へ移行する。
             normalizeLegacyQuestKeys(statData);
             if (statDataBefore) normalizeLegacyQuestKeys(statDataBefore);
@@ -349,6 +358,8 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             }
 
             // 全キャラクターの属性を再計算（before を渡し、NPC 集団の THP/数量 同期判定に用いる）
+            clearRecordBonuses(statData.キャラ);
+            Object.values(statData.関係リスト || {}).forEach(clearRecordBonuses);
             recalcAllCharacters(statData, statDataBefore);
 
             // ★ キャラクター昇格判定：五維階位の累計≥24 → システム状態.試練可能=true/false
@@ -403,6 +414,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                 // 消費型ターンロジックが完全に実行された後にのみ本フロアを記憶し、例外時は同一フロアでの再試行を許可する。
                 lastTurnMessageKey = turnMessageKey;
             }
+            if (validationContext) finishValidation(validationContext, statData);
 
         } finally {
             isProcessing = false;
@@ -503,12 +515,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             const matches = Object.keys(bucket).filter(item => nameKey(item) === key);
             return matches.length === 1 ? matches[0] : '';
         };
-        const relationDead = (npc) => {
-            if (!npc || typeof npc !== 'object') return false;
-            if (typeof npc.HP === 'number' && npc.HP <= 0) return true;
-            const statuses = npc.状態 && typeof npc.状態 === 'object' ? Object.keys(npc.状態) : [];
-            return statuses.some(key => String(key).includes('死亡'));
-        };
+        const relationDead = (npc) => isDead(npc);
 
         const report = { 死亡: [], 関係削除: [], 背景状態削除: [] };
         for (const [alienName, alien] of Object.entries(roster)) {
@@ -1331,83 +1338,16 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
      * ルール（NPCのみ）:
      *   - 新規実体 / 前フレームなし：常に [数量] を信頼し、THP = HP_MAX*(数量-1) を強制する
      *     （AI は誤った HP で THP を事前入力することが多く、クライアント側で必ず上書きする）
-     *   - 既存実体で THP が前フレームより減少：THP から人数を逆算する
-     *   - 増援（数量が増加）：新しい編成に合わせて THP を満タンにする
+     *   - 既存実体は残存HP/THPから人数を一度だけ算出する。ゼロ化・離脱では回復しない
+     *   - 増援（数量が増加）：増援分だけを現在の残存生命に加算する
      *   - 個々のメンバーの属性/HP_MAX は人数を掛けない；THP は「残りのメンバー」の生命プールを表す
      * @param {object} char 現在の NPC
      * @param {object|null} charBefore 前フレームの NPC（未指定可）
      * @param {string} label ログ識別子
      */
     function syncNpcGroupThp(char, charBefore, label) {
-        if (!char || typeof char !== 'object') return;
-        // 関係リストの NPC のみを処理する；キャラクターには「数量」の集団的な意味がない
-        if (!label || String(label).indexOf('NPC:') !== 0) return;
-        // 数量 フィールドのない旧データは単体として扱う
-        if (char.数量 === undefined || char.数量 === null) return;
-
-        const maxHp = Math.max(1, safeNum(char.HP_MAX, 1));
-        let qty = Math.max(1, Math.floor(safeNum(char.数量, 1)));
-        let thp = Math.max(0, Math.floor(safeNum(char.THP, 0)));
-        const isNew = !(charBefore && typeof charBefore === 'object');
-        const thpBefore = isNew ? 0 : Math.max(0, safeNum(charBefore.THP, 0));
-        const qtyBefore = (!isNew && charBefore.数量 != null)
-            ? Math.max(1, Math.floor(safeNum(charBefore.数量, 1)))
-            : qty;
-        const fullPool = function(n) { return maxHp * (Math.max(1, n) - 1); };
-
-        // 単体（数量<=1）：THP は通常のシールドにすぎず、集団編成には関与しない
-        if (qty <= 1) {
-            if (char.数量 !== 1 && char.数量 !== undefined) char.数量 = 1;
-            return;
-        }
-
-        // 1) 新規集団：数量 に従って THP を強制的に満タンにし、AI が事前入力した誤った THP は無視する
-        //    例：AI が HP=30,THP=60,数量=3 と書いても、実際の HP_MAX=80 → THP=160,数量=3 とすべき
-        if (isNew) {
-            const pool = fullPool(qty);
-            // if (thp !== pool) {
-            //     console.log(
-            //         `[集団単位] ${label}: 新規プール充填 THP ${thp} → ${pool} ` +
-            //         `(数量=${qty}, HP_MAX=${maxHp})`
-            //     );
-            // } else {
-            //     console.log(
-            //         `[集団単位] ${label}: 新規プール充填 THP=${pool} ` +
-            //         `(数量=${qty}, HP_MAX=${maxHp})`
-            //     );
-            // }
-            char.THP = pool;
-            char.数量 = qty;
-            return;
-        }
-
-        // 2) 増援：AI が明示的に 数量 を増やした → 新しい編成で集団 THP プールを満タンにする
-        if (qty > qtyBefore) {
-            const need = fullPool(qty);
-            if (thp < need) {
-                // console.log(
-                //     `[集団単位] ${label}: 編成増援 数量 ${qtyBefore} → ${qty}, THP ${thp} → ${need}`
-                // );
-                char.THP = need;
-            }
-            char.数量 = qty;
-            return;
-        }
-
-        // 3) 離脱/ゼロ化後の再充填：数量>1 かつ現在と前フレームの THP がともに 0
-        if (thp === 0 && thpBefore === 0) {
-            const pool = fullPool(qty);
-            char.THP = pool;
-            char.数量 = qty;
-            // console.log(
-            //     `[集団単位] ${label}: 集団THP再充填=${pool} ` +
-            //     `(数量=${qty}, HP_MAX=${maxHp})`
-            // );
-            return;
-        }
-
-        // [無効化済み] THP の被ダメージ→数量減少ロジック: 数量は AI が管理し, バックエンドでは逆算しない
-        // THP が未変化、またはその他の場合: 現状維持とし, 数量 を書き換えない
+        if (!label || !String(label).startsWith('NPC:')) return;
+        syncGroupPool(char, charBefore);
     }
 
     /**
@@ -1608,7 +1548,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             }
         }
 
-        // —— 5.5 NPC 集団単位：THP プールの初期化 + THP からの数量逆算 ——
+        // —— 5.5 NPC 集団単位：初期化・増援・残存人数の一元管理 ——
         // HP_MAX の確定後に実行する必要がある；キャラクターはスキップ；数量<=1 のとき THP は通常のシールドのまま
         syncNpcGroupThp(char, charBefore || null, label);
 
@@ -2051,13 +1991,10 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
 
             // 2. 死亡の判定
             // 判定条件 A：HP がゼロ
-            const isHpDead = (typeof npc.HP === 'number' && npc.HP <= 0);
-            
-            // 判定条件 B：AI が状態に「死亡」を含む語を明示的に書いた（二重の保険）
-            const isExplicitlyDead = npc.状態 && Object.keys(npc.状態).some(key => key.includes('死亡'));
+            const confirmedDead = isDead(npc);
 
             // 3. いずれかの死亡条件を満たし、保護もない場合はメモリから直接抹消する
-            if (isHpDead || isExplicitlyDead) {
+            if (confirmedDead) {
                 delete statData.関係リスト[npcName];
                 console.log(`[戦死整理] 敵対または通行人の NPC "${npcName}" は死亡確認済み（蘇生価値なし）のため、バックエンドで自動削除した。`);
             }
@@ -2115,9 +2052,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
             const affinity = safeNum(npc.好感度, 0);
             if (affinity >= 0) return false;
             // 死亡判定: HP がゼロ または 状態に「死亡」を含む
-            const isHpDead = (typeof npc.HP === 'number' && npc.HP <= 0);
-            const isExplicitlyDead = npc.状態 && Object.keys(npc.状態).some(k => k.includes('死亡'));
-            if (isHpDead || isExplicitlyDead) return false;
+            if (isIncapacitated(npc)) return false;
             // 生存しており、なお戦闘能力を持つ敵対単位
             return true;
         }
@@ -2169,20 +2104,11 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
                     // console.log(`[戦闘システム] キャラクターの THP を離脱時にゼロにした`);
                 }
 
-                // 2. すべてのNPCの一時生命値をクリアする
-                //    注意：このフレームの recalc は完了済み；集団単位の THP はゼロ化された後、同一フレームで 数量 に従って再充填する必要がある
+                // 個体の一時防護だけを清算する。集団生命は離脱を理由に増減しない。
                 if (statData.関係リスト) {
-                    Object.entries(statData.関係リスト).forEach(([npcName, npc]) => {
-                        if (!npc || npc.登場 === false) return;
+                    Object.values(statData.関係リスト).forEach(npc => {
+                        if (!npc || npc.登場 === false || unitKind(npc) === '集団') return;
                         if (typeof npc.THP !== 'undefined') npc.THP = 0;
-                        // 集団：THP をゼロにした後、現在の 数量 に従って再充填する（人数は戦闘中に THP から逆算済みのため、満員には戻さない）
-                        const qty = Math.max(1, Math.floor(safeNum(npc.数量, 1)));
-                        if (qty > 1) {
-                            const maxHp = Math.max(1, safeNum(npc.HP_MAX, 1));
-                            const pool = maxHp * (qty - 1);
-                            npc.THP = pool;
-                            // console.log(`[戦闘システム] 集団 NPC:${npcName} の離脱時再充填 THP=${pool} (数量=${qty})`);
-                        }
                     });
                 }
             }
@@ -2261,6 +2187,7 @@ var LEGACY_KEY_PREFERRED = {"关系リスト":true};
         await waitGlobalInitialized('Mvu');
         if (CALCULATOR_HOST.SamsaraCalculatorRuntime !== CALCULATOR_RUNTIME) return;
         initializeTurnMessageBaseline();
+        trackCalculatorSubscription(eventOn(Mvu.events.COMMAND_PARSED, captureValidation));
         var subscription = eventOn(Mvu.events.VARIABLE_UPDATE_ENDED, onUpdateData);
         trackCalculatorSubscription(subscription);
         try { CALCULATOR_HOST.__補助計算_loaded__ = true; CALCULATOR_HOST.dispatchEvent(new Event('rinne-calculator-ready')); } catch (_) {}

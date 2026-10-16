@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {syncGroupPool,isDead,isIncapacitated,prepareValidation,finishValidation,clearRecordBonuses} from '../変数整合性検証.js';
+const fixture=()=>({世界:{地点:'駅'},キャラ:{スペースコイン:80,アイテム:{薬:{数量:1}}},関係リスト:{},システム状態:{}});
+const record=()=>({最終地点:'駅',取引:[],人物変化:[],戦闘精算:[],根拠:[]});
+const wrap=r=>'<Analysis>'+JSON.stringify(r)+'</Analysis>';
+const commands=ps=>ps.map(p=>({reason:'json_patch',full_match:JSON.stringify(p)}));
+test('group casualties remain zero and reinforcement adds only new members',()=>{let before={単位種別:'集団',HP:40,HP_MAX:40,THP:0,数量:2},after={...before,HP:0};syncGroupPool(after,before);assert.equal(after.THP,0);assert.equal(after.数量,0);assert(isDead(after));before={...before,THP:13};after={...before,数量:3};syncGroupPool(after,before);assert.equal(after.THP,53);});
+test('remaining group pool is alive; unconscious individual cannot fight',()=>{assert(!isDead({単位種別:'集団',HP:0,THP:40}));const n={HP:20,状態:{気絶:{}}};assert(!isDead(n));assert(isIncapacitated(n));});
+test('only explicitly marked records lose bonuses',()=>{const a={状態:{記念:{用途:'記録',原始属性:{筋力:'D'},真属性:{筋力:2}},増益:{原始属性:{筋力:'D'}}}};clearRecordBonuses(a);assert.deepEqual(a.状態.記念.原始属性,{});assert.equal(a.状態.増益.原始属性.筋力,'D');});
+test('consumption ending at zero survives automatic empty-item cleanup',()=>{const b=fixture(),r=record(),p='/キャラ/アイテム/薬/数量';r.取引=[{イベントID:'服薬1',対象パス:p,開始数量:1,増減:-1,終了数量:0}];const c=prepareValidation(b,commands([{op:'delta',path:p,value:-1}]),wrap(r),'chat:2'),a=structuredClone(b);delete a.キャラ.アイテム.薬;assert.equal(finishValidation(c,a).状態,'一致');assert(a.システム状態.決算履歴.服薬1.確定);});
+test('known duplicate transaction is blocked without blocking unrelated movement',()=>{const b=fixture(),r=record(),p='/キャラ/アイテム/薬/数量';b.システム状態.決算履歴={服薬1:{確定:true}};r.取引=[{イベントID:'服薬1',対象パス:p,開始数量:1,増減:-1,終了数量:0}];const cmd=commands([{op:'delta',path:p,value:-1},{op:'replace',path:'/世界/地点',value:'道'}]);prepareValidation(b,cmd,wrap(r),'chat:4');assert.equal(cmd.length,1);assert.equal(JSON.parse(cmd[0].full_match).path,'/世界/地点');});
+test('missing movement is diagnosed without invented state',()=>{const b=fixture(),r=record();r.最終地点='道';const c=prepareValidation(b,[],wrap(r),'chat:2');assert(finishValidation(c,b).不一致.some(x=>x.種別==='地点不一致'));assert.equal(b.世界.地点,'駅');});
+test('attack miss and morale death report distinct issues',()=>{const b=fixture(),r=record();r.戦闘精算=[{対象パス:'/キャラ',判定種別:'攻撃',判定値:29,DC:32,損害:2},{対象パス:'/キャラ',判定種別:'戦意',結果:'死亡',死亡数:1}];const c=prepareValidation(b,[],wrap(r),'chat:2'),out=finishValidation(c,b);assert(out.不一致.some(x=>x.種別==='失敗命中損害'));assert(out.不一致.some(x=>x.種別==='戦意死亡'));});
